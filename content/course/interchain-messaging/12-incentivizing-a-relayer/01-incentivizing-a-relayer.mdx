@@ -1,21 +1,28 @@
 ---
-title: Incentivizing a Relayer
-description: Learn how to add Relayer Incentives.
-updated: 2024-06-09
-authors: [andyvargtz]
-icon: Book
+title: リレイヤーへのインセンティブ付与  
+description: リレイヤーにインセンティブを提供する方法を学ぶ  
+updated: 2024-06-09  
+authors: [andyvargtz]  
+icon: Book  
+
 ---
 
-You already mastered how to send messages from one chain to another, but we have been working under the assumption that all messages will be picked by the Relayers. That is not always true, and external Relayers might want to have something in exchange for their services.
+## **リレイヤーへのインセンティブの必要性**  
 
-Relayer fees are an optional way to incentivize relayers to deliver a Interchain Messaging message to its destination chain. They are not strictly necessary, and may be omitted if a relayer is willing to relay messages with no fee, such as with a self-hosted relayer. If the relayer is not self hosted though, user will need to incentivize them, since they need to pay the transaction fees on the destination chain
+これまでに、1 つのチェーンから別のチェーンへメッセージを送信する方法を習得しました。しかし、全てのメッセージがリレイヤーによって必ず送信されるとは限りません。外部のリレイヤーは、自分たちのサービスに対する報酬を求めることがあります。  
 
-## What you will learn
+リレイヤー手数料は、Interchain Messaging のメッセージを目的のチェーンに確実に送信するためのインセンティブとなります。必須ではありませんが、**リレイヤーが手数料なしでメッセージを送信する場合を除き、適切なインセンティブを提供する必要があります**。特に、**外部のリレイヤーは送信先のチェーンでのトランザクション手数料を支払う必要があるため、報酬なしでは対応しない可能性があります**。  
 
-- What is the data flow for fees
-- How to calculate an adecuate incentive amount
-- How to implement those incentives
+---
 
-## Excersises
+## **このセクションで学べること**  
 
-In this section you will apply the learned knowledge by calculating and adding fees to our basic send-receive contracts used in the [Interchain Messaging Basics chapter](/course/interchain-messaging/04-icm-basics/01-icm-basics).
+- **リレイヤー手数料のデータフロー** を理解する  
+- **適切なインセンティブ金額の計算方法** を学ぶ  
+- **リレイヤーへのインセンティブを実装する方法** を習得する  
+
+---
+
+## **実践演習**  
+
+このセクションでは、学んだ知識を活用し、手数料の計算と追加を実践します。**[Interchain Messaging の基本](https://example.com/interchain-messaging-basics)** で使用した **基本的な送受信コントラクト** に手数料を組み込んでみましょう。

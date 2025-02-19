@@ -1,40 +1,53 @@
 ---
-title: Send a Message
-description: Send your first Cross-Chain message with Teleporter.
-updated: 2024-05-31
-authors: [martineckardt]
-icon: Terminal
+title: メッセージの送信  
+description: Teleporter を使って、初めてのクロスチェーンメッセージを送信する  
+updated: 2024-05-31  
+authors: [martineckardt]  
+icon: Terminal  
 ---
+
 import { Step, Steps } from 'fumadocs-ui/components/steps';
 
-The final step, is to send the message between the two chains. Assuming everything went smooth so far, your local C-chain and your Avalanche L1 will have their corresponding parts of the sender/receiver deployed on them.
+これから、**2つのチェーン間でメッセージを送信** します。  
+これまでの手順が正しく実行されていれば、**ローカル C-Chain と Avalanche L1 に、それぞれの送信・受信コントラクトがデプロイされている状態** になっています。  
 
-<Steps>
-<Step>
+<Steps>  
 
-### Send a Message
+<Step>  
+
+### **メッセージを送信する**  
+
+以下のコマンドを実行し、**C-Chain の送信コントラクトを使って、Avalanche L1 にメッセージを送信** します。  
 
 ```bash
 cast send --rpc-url local-c --private-key $PK $SENDER_ADDRESS "sendMessage(address,string)" $RECEIVER_ADDRESS "Hello"
 ```
 
-A relayer launched when you deployed the Avalanche L1 will now take the message and deliver it to the destination.
+このコマンドを実行すると以下の処理を行います。
 
-</Step>
-<Step>
+- **C-Chain の送信コントラクト** が **TeleporterMessenger** を介してメッセージを送信。
+- **リレイヤー** がメッセージを取得し、指定された **Avalanche L1 の受信コントラクト** に送付。
 
-### Verify Message was Received
+</Step>  
 
-Now let's check if the "Hello" string sent from our C-chain was actually stored properly on the `lastMessage` variable on our Avalanche L1. Run the following command replacing the receiver contract address.
+<Step>  
+
+### **メッセージが受信されたか確認する**  
+
+次に、C-Chain から送信した `"Hello"` という文字列が、**Avalanche L1 の受信コントラクトの `lastMessage` 変数に正しく保存されているか確認** します。  
+以下のコマンドを実行してください。  
 
 ```bash
 cast call --rpc-url myblockchain $RECEIVER_ADDRESS "lastMessage()(string)"
 ```
 
-If the output says `Hello` then the message was successfully delivered and processed.
+このコマンドを実行すると、受信コントラクトの `lastMessage` 変数の値が取得されます。  
+出力が `Hello` となっていれば、**メッセージは正常に配信され、処理が完了したことを意味します**。  
 
-</Step>
-</Steps>
+</Step>  
 
+</Steps>  
 
-Congratulations 🎉 You have just sent your first cross-chain message. This will be one of many to come!
+🎉 **おめでとうございます！**  
+初めてのクロスチェーンメッセージの送信が完了しました！  
+これが、これから送る **数多くのクロスチェーンメッセージの第一歩** になります。  

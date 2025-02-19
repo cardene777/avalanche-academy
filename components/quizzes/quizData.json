@@ -588,232 +588,232 @@
       "chapter": "Governance Models"
     },
     "301": {
-      "question": "What is the role of a message in cross-blockchain communication?",
+      "question": "クロスブロックチェーン通信におけるメッセージの役割は何ですか？",
       "options": [
-          "To process the data on the destination chain.",
-          "To contain source, destination, and encoded data with a signature.",
-          "To originate communication from the source chain.",
-          "To validate the message authenticity on the source chain."
+          "宛先チェーン上でデータを処理する。",
+          "送信元チェーン情報、宛先チェーン情報、エンコードされたデータ、署名を含むデータ。",
+          "送信元チェーンから通信を開始する。",
+          "送信元上でメッセージの正当性を検証する。"
       ],
       "correctAnswers": [
           1
       ],
-      "hint": "Messages carry essential information between chains, including source and destination details.",
-      "explanation": "A message in cross-blockchain communication contains the source, destination, and encoded data along with a signature that guarantees its authenticity. This ensures that the information being transferred is accurate and can be trusted by the destination chain.",
+      "hint": "メッセージは、送信元チェーンや宛先チェーンの情報を含む重要なデータをブロックチェーン間で送受信します。",
+      "explanation": "クロスブロックチェーン通信におけるメッセージは、送信元チェーン、宛先チェーン、エンコードされたデータ、正当性を保証する署名を含みます。これにより、送付される情報が正確であり、宛先チェーンで信頼できることが保証されます。",
       "chapter": "Interchain Messaging"
     },
     "302": {
-      "question": "How does a multi-chain system achieve greater scalability compared to single-chain networks?",
-      "options": [
-          "By increasing the gas limit on a single chain.",
-          "By running independent chains in parallel, allowing for combined throughput.",
-          "By implementing more complex smart contracts on a single chain.",
-          "By reducing the number of validators in the network."
-      ],
-      "correctAnswers": [
-          1
-      ],
-      "hint": "Multi-chain systems utilize parallelism to enhance overall network performance.",
-      "explanation": "A multi-chain system achieves greater scalability by running independent chains in parallel. This parallelism allows the network to handle a higher combined throughput of transactions, as each chain can process its own set of transactions simultaneously without being bottlenecked by a single chain's limitations.",
-      "chapter": "Interchain Messaging"
+        "question": "マルチチェーンシステムは、シングルチェーンネットワークと比べてどのようにスケーラビリティを向上させていますか？",
+        "options": [
+            "単一のチェーンのガスリミットを増やす。",
+            "独立したチェーンを並列に実行し、合計スループットを向上させる。",
+            "単一のチェーン上でより複雑なスマートコントラクトを実装する。",
+            "ネットワーク内のバリデータの数を減らす。"
+        ],
+        "correctAnswers": [
+            1
+        ],
+        "hint": "マルチチェーンシステムは、並列処理を活用してネットワーク全体のパフォーマンスを向上させます。",
+        "explanation": "マルチチェーンシステムは、独立したチェーンを並列に実行することでスケーラビリティを向上させます。この並列処理により、各チェーンが独自のトランザクションを処理でき、単一チェーンの制約に縛られることなくネットワーク全体の合計スループットを向上させることができます。",
+        "chapter": "Interchain Messaging"
     },
     "303": {
-      "question": "Which Solidity functions are used for encoding and decoding data?",
-      "options": [
-          "serializeData() and deserializeData()",
-          "encodeData() and decodeData()",
-          "abi.encode() and abi.decode()",
-          "bytes.encode() and bytes.decode()"
-      ],
-      "correctAnswers": [
-          2
-      ],
-      "hint": "These functions are part of Solidity's ABI encoding and decoding utilities.",
-      "explanation": "In Solidity, `abi.encode()` is used to encode data into a bytes array, and `abi.decode()` is used to decode a bytes array back into its original types. These functions are essential for handling complex data structures in smart contracts.",
-      "chapter": "Encoding & Decoding"
+        "question": "Solidity でデータのエンコードとデコードに使用される関数はどれですか？",
+        "options": [
+            "serializeData() と deserializeData()",
+            "encodeData() と decodeData()",
+            "abi.encode() と abi.decode()",
+            "bytes.encode() と bytes.decode()"
+        ],
+        "correctAnswers": [
+            2
+        ],
+        "hint": "これらの関数は Solidity の ABI エンコーディングとデコーディングの機能の一部です。",
+        "explanation": "Solidity では、abi.encode()を使用してデータをバイト配列にエンコードし、abi.decode()を使用して元のデータ型にデコードします。これらの関数は、スマートコントラクト内で複雑なデータ構造を処理するために使用されます。",
+        "chapter": "エンコーディング & デコーディング"
     },
     "304": {
-      "question": "What is the name of the function used by a dApp to send a cross-chain message in the Interchain Messaging contract?",
-      "options": [
-          "sendCrossChainMessage()",
-          "sendCrossMessage()",
-          "initiateCrossChainCommunication()",
-          "sendMessageCrossChain()"
-      ],
-      "correctAnswers": [
-          0
-      ],
-      "hint": "This function is part of the ITeleporterMessenger interface used for sending messages between chains.",
-      "explanation": "The `sendCrossChainMessage()` function is used by dApps to send cross-chain messages through the Interchain Messaging contract. It takes a `TeleporterMessageInput` struct as input, which includes details such as the destination chain ID, destination address, fee information, required gas limit, allowed relayers, and the encoded message.",
-      "chapter": "Sending a Message"
+        "question": "Interchain Messaging コントラクトで dApp がクロスチェーンメッセージを送信するために使用する関数の名前は何ですか？",
+        "options": [
+            "sendCrossChainMessage()",
+            "sendCrossMessage()",
+            "initiateCrossChainCommunication()",
+            "sendMessageCrossChain()"
+        ],
+        "correctAnswers": [
+            0
+        ],
+        "hint": "この関数は、チェーン間でメッセージを送信するための ITeleporterMessenger インターフェースの一部です。",
+        "explanation": "sendCrossChainMessage()関数は、dApp が Interchain Messaging コントラクトを介してクロスチェーンメッセージを送信するために使用されます。この関数は TeleporterMessageInput 構造体を引数として受け取り、送信先チェーン ID、送信先アドレス、手数料情報、必要なガス上限、許可されたリレイヤー、エンコードされたメッセージなどの詳細を含みます。",
+        "chapter": "メッセージの送信"
     },
     "305": {
-      "question": "Which interface must a contract implement to receive messages from the Interchain Messaging contract?",
-      "options": [
-          "ITeleporterMessenger",
-          "ITeleporterReceiver",
-          "ITeleporterSender",
-          "IMessageHandler"
-      ],
-      "correctAnswers": [
-          1
-      ],
-      "hint": "This interface defines the necessary function for receiving cross-chain messages.",
-      "explanation": "To receive messages from the Interchain Messaging contract, a contract must implement the `ITeleporterReceiver` interface. This interface requires the implementation of the `receiveTeleporterMessage` function, which handles incoming messages.",
-      "chapter": "Receiving a Message"
+        "question": "Interchain Messaging コントラクトからメッセージを受信するために、コントラクトが実装しなければならないインターフェースはどれですか？",
+        "options": [
+            "ITeleporterMessenger",
+            "ITeleporterReceiver",
+            "ITeleporterSender",
+            "IMessageHandler"
+        ],
+        "correctAnswers": [
+            1
+        ],
+        "hint": "このインターフェースは、クロスチェーンメッセージを受信するための関数を定義しています。",
+        "explanation": "Interchain Messaging コントラクトからメッセージを受信するためには、ITeleporterReceiverインターフェースを実装する必要があります。このインターフェースにはreceiveTeleporterMessage関数が含まれており、受信したメッセージを処理するために使用されます。",
+        "chapter": "メッセージの受信"
     },
     "306": {
-      "question": "After encoding multiple values into a byte array using `abi.encode()`, what must you know to correctly decode the byte array in Solidity?",
+      "question": "abi.encode() を使用して複数の値をバイト配列にエンコードした後、それを Solidity で正しくデコードするために必要な情報は何ですか？",
       "options": [
-          "The length of the byte array",
-          "The contract's address",
-          "The types and order of the encoded values",
-          "The encoding algorithm used"
+          "バイト配列の長さ",
+          "コントラクトのアドレス",
+          "エンコードされた値の型と順番",
+          "使用されたエンコードアルゴリズム"
       ],
       "correctAnswers": [
           2
       ],
-      "hint": "Decoding requires knowledge of the original data structure used during encoding.",
-      "explanation": "To accurately decode a byte array in Solidity using `abi.decode()`, you must know the exact types and the order in which the values were encoded. This ensures that each segment of the byte array is interpreted correctly back into its original form.",
-      "chapter": "Encoding & Decoding"
+      "hint": "デコードには、エンコード時に使用された元のデータ構造の情報が必要です。",
+      "explanation": "abi.decode() を使用して Solidity でバイト配列を正しくデコードするには、エンコードされた値の型とその順番を正確に知る必要があります。これにより、バイト配列の各部分が適切に元の形式に変換されます。",
+      "chapter": "エンコーディング & デコーディング"
     },
     "307": {
-      "question": "Why are `abi.encode()` functions called twice when encoding a function call with multiple parameters in a cross-chain message?",
+      "question": "クロスチェーンメッセージ内で関数を呼び出す際、`abi.encode()` 関数が 2 回呼ばれるのはなぜですか？",
       "options": [
-          "To increase the security of the message.",
-          "To pack the function name and its parameters into a single bytes array.",
-          "To separate the message into two distinct byte arrays.",
-          "To comply with the Teleporter contract requirements."
+          "メッセージのセキュリティを向上させるため。",
+          "関数名とそのパラメータを 1 つのバイト配列にまとめるため。",
+          "メッセージを 2 つの異なるバイト配列に分割するため。",
+          "Teleporter コントラクトの要件に従うため。"
       ],
       "correctAnswers": [
           1
       ],
-      "hint": "Encoding the function name alongside its parameters ensures proper identification and handling on the receiving end.",
-      "explanation": "Calling `abi.encode()` twice allows you to first encode the function parameters and then encode the function name along with the encoded parameters. This ensures that the receiving contract can decode the function name to determine which internal function to execute with the provided parameters.",
-      "chapter": "Encoding the Function Name and Parameters"
+      "hint": "関数名とそのパラメータを一緒にエンコードすることで、受信側が正しく識別・処理できるようになります。",
+      "explanation": "abi.encode() を 2 回呼び出すことで最初に関数のパラメータをエンコードし、その後、関数名とエンコードされたパラメータをまとめてエンコードします。これにより、受信側のコントラクトが関数名をデコードして、適切な内部関数を特定して提供されたパラメータで処理できるようになります。",
+      "chapter": "関数名とパラメータのエンコード"
     },
     "308": {
-      "question": "How does the TeleporterRegistry contract track different versions of the TeleporterMessenger contracts?",
+      "question": "TeleporterRegistry コントラクトは、異なるバージョンの TeleporterMessenger コントラクトをどのように管理していますか？",
       "options": [
-          "By maintaining an array of contract addresses.",
-          "By using separate variables for each version.",
-          "By maintaining a mapping of version numbers to contract addresses.",
-          "By storing all contract addresses in a single bytes array."
+          "コントラクトアドレスの配列を維持する。",
+          "各バージョンごとに別々の変数を使用する。",
+          "バージョン番号とコントラクトアドレスのマッピングを維持する。",
+          "すべてのコントラクトアドレスを 1 つのバイト配列に保存する。"
       ],
       "correctAnswers": [
           2
       ],
-      "hint": "The registry uses a key-value structure to associate versions with their corresponding contract addresses.",
-      "explanation": "The TeleporterRegistry contract tracks different versions of the TeleporterMessenger contracts by maintaining a mapping of version numbers to their respective contract addresses. This allows cross-Avalanche L1 dApps to request either the latest version or a specific version of the TeleporterMessenger as needed.",
-      "chapter": "How the ICM Registry works"
+      "hint": "レジストリはキーと値の構造を使用して、バージョンと対応するコントラクトアドレスを関連付けています。",
+      "explanation": "TeleporterRegistry コントラクトは、バージョン番号と対応するコントラクトアドレスをマッピングすることで、異なるバージョンの TeleporterMessenger コントラクトを管理しています。これにより、クロスチェーン Avalanche L1 dApp は最新バージョンまたは特定のバージョンの TeleporterMessenger を取得できます。",
+      "chapter": "ICM レジストリの仕組み"
     },
-   "309": {
-      "question": "What is the purpose of the `Recover` algorithm in some signature schemes?",
+    "309": {
+      "question": "一部の署名スキームにおける `Recover` アルゴリズムの目的は何ですか？",
       "options": [
-          "To generate a key pair.",
-          "To sign a message using the private key.",
-          "To recover the public key from a message and its signature.",
-          "To verify the integrity of a message."
+          "鍵ペアを生成するため。",
+          "秘密鍵を使ってメッセージに署名するため。",
+          "メッセージと署名から公開鍵を復元するため。",
+          "メッセージの完全性を検証するため。"
       ],
       "correctAnswers": [
           2
       ],
-      "hint": "The `Recover` algorithm helps to retrieve the public key used to create a signature.",
-      "explanation": "The `Recover` algorithm is used to retrieve the public key that corresponds to the private key used to create the signature for a given message. This allows for verification of the signature by matching the recovered public key with the sender's public key, ensuring the authenticity and integrity of the message.",
-      "chapter": "Signature Schemes"
+      "hint": "`Recover` アルゴリズムは、署名を作成する際に使用された公開鍵を復元するために使われます。",
+      "explanation": "Recover アルゴリズムは、特定のメッセージとその署名から、それを作成した秘密鍵に対応する公開鍵を復元するために使用されます。これにより、受信者は復元された公開鍵と送信者の公開鍵を照合することで、メッセージの真正性と完全性を確認できます。",  
+      "chapter": "署名スキーム"  
     },
     "310": {
-      "question": "What is a key advantage of the BLS multi-signature scheme in blockchain applications?",
-      "options": [
-          "It requires only one private key for all participants.",
-          "It eliminates the need for public keys.",
-          "It uses symmetric cryptography for enhanced security.",
-          "It supports signature and public key aggregation, resulting in compact signatures."
-      ],
-      "correctAnswers": [
-          3
-      ],
-      "hint": "The BLS scheme is known for its ability to aggregate multiple signatures into one.",
-      "explanation": "The BLS (Boneh-Lynn-Shacham) multi-signature scheme is highly efficient for blockchain applications due to its support for both signature and public key aggregation. This means multiple signatures can be compressed into a single short signature, and multiple public keys can be aggregated into one, reducing the storage and transmission overhead while maintaining security and integrity.",
-      "chapter": "Signature Schemes"
+      "question": "BLS マルチシグネチャスキームがブロックチェーンで特に優れている点は何ですか？",  
+      "options": [  
+          "すべての参加者が同じ秘密鍵を使用できる。",  
+          "公開鍵が不要になる。",  
+          "対称暗号を使用してセキュリティを強化している。",  
+          "署名と公開鍵の集約が可能であり、コンパクトな署名を生成できる。"  
+      ],  
+      "correctAnswers": [  
+          3  
+      ],  
+      "hint": "BLS スキームは、複数の署名を 1 つにまとめることができる点が特徴です。",  
+      "explanation": "BLS（Boneh-Lynn-Shacham）マルチシグネチャスキームは、署名と公開鍵の **集約** をサポートしているため、ブロックチェーンにおいて非常に効率的です。複数の署名を 1 つの短い署名にまとめることができ、また、複数の公開鍵を 1 つに統合できるため、ストレージや通信コストを削減しつつ高いセキュリティとデータの整合性を維持できます。",  
+      "chapter": "署名スキーム"  
     },
-    "311": {
-      "question": "What is the primary responsibility of the P-Chain in the Avalanche Network?",
-      "options": [
-          "Overseeing validator registration and staking operations for Avalanche L1s.",
-          "Managing the execution of smart contracts.",
-          "Handling transactions on the X-Chain.",
-          "Facilitating the transfer of assets between different chains."
-      ],
-      "correctAnswers": [
-          0
-      ],
-      "hint": "The P-Chain is responsible for validator and staking operations.",
-      "explanation": "In the Avalanche Network, the P-Chain is responsible for validator and Avalanche L1-level operations. This includes the creation of new blockchains and Avalanche L1s, the addition of validators to Avalanche L1s, staking operations, and other platform-level operations. By registering BLS public keys and managing staking, the P-Chain ensures the security and functionality of the network.",
-      "chapter": "P-Chain"
+    "311": {  
+      "question": "Avalanche ネットワークにおける P-Chain の主な役割は何ですか？",  
+      "options": [  
+          "Avalanche L1 のバリデーター登録とステーキング管理を行う。",  
+          "スマートコントラクトの実行を管理する。",  
+          "X-Chain 上のトランザクション処理を担当する。",  
+          "異なるチェーン間の資産移転を促進する。"  
+      ],  
+      "correctAnswers": [  
+          0  
+      ],  
+      "hint": "P-Chain はバリデーターの管理やステーキングを担当しています。",  
+      "explanation": "Avalanche ネットワークでは、P-Chain が **バリデーター管理や Avalanche L1 レベルのオペレーション** を担当しています。これには、新しいブロックチェーンや Avalanche L1 の作成、バリデーターの追加、ステーキングの管理、その他のプラットフォームレベルの操作が含まれます。BLS 公開鍵の登録やステーキング管理を通じて、P-Chain はネットワークのセキュリティと機能性を確保します。",  
+      "chapter": "P-Chain"  
     },
-    "312": {
-      "question": "Which component is responsible for relaying interchain messages to the destination chain in the Avalanche Network?",
-      "options": [
-          "Warp Precompile",
-          "Signature Verification",
-          "AWM Relayer",
-          "Message Initialization"
-      ],
-      "correctAnswers": [
-          2
-      ],
-      "hint": "This component checks outgoing messages and delivers them to the destination chain.",
-      "explanation": "The **AWM Relayer** is responsible for relaying interchain messages to the destination chain. It periodically checks the source Avalanche L1 for outgoing messages and delivers these by calling the Interchain Messaging contract on the destination Avalanche L1. This ensures that messages are efficiently transmitted between chains.",
-      "chapter": "Data Flow of an Interchain Message"
+    "312": {  
+      "question": "Avalanche ネットワークにおいて、クロスチェーンメッセージを宛先チェーンへリレーする役割を担うコンポーネントはどれですか？",  
+      "options": [  
+          "Warp Precompile",  
+          "署名の検証",  
+          "AWM リレイヤー",  
+          "メッセージの初期化"  
+      ],  
+      "correctAnswers": [  
+          2  
+      ],  
+      "hint": "このコンポーネントは送信元チェーンのメッセージを検出し、宛先チェーンに届ける役割を持ちます。",  
+      "explanation": "AWM リレイヤー は、クロスチェーンメッセージを宛先チェーンへリレーする役割を担います。AWM リレイヤーは送信元の Avalanche L1 を定期的にチェックし、新しいメッセージがあれば、宛先 Avalanche L1 の Interchain Messaging コントラクトを呼び出して送付します。これにより、チェーン間で効率的にメッセージが送信されます。",  
+      "chapter": "クロスチェーンメッセージのデータフロー"  
     },
-    "313": {
-      "question": "How does the AWM Relayer in the Avalanche Network detect new outgoing messages?",
-      "options": [
-        "By periodically polling the source chain or being triggered by notifications.",
-          "By receiving real-time alerts from validators.",
-          "By scanning transaction receipts on the destination chain.",
-          "By querying the latest block headers exclusively."
-      ],
-      "correctAnswers": [
-          0
-      ],
-      "hint": "The AWM Relayer uses either a regular checking mechanism or event-based triggers.",
-      "explanation": "The AWM Relayer detects new outgoing messages by either polling the source Avalanche L1 periodically for new messages or being triggered by notifications whenever a new outgoing message is detected by a node. This dual approach ensures that messages are efficiently picked up and relayed to the destination chain.",
-      "chapter": "Message Pickup"
+    "313": {  
+      "question": "Avalanche ネットワークの AWM リレイヤーは、新しい送信メッセージをどのように検出しますか？",  
+      "options": [  
+        "送信元チェーンを定期的にポーリングする、または通知によってトリガーされる。",  
+        "バリデータからリアルタイムのアラートを受信する。",  
+        "送信先チェーンのトランザクションレシートをスキャンする。",  
+        "最新のブロックヘッダーのみを照会する。"  
+      ],  
+      "correctAnswers": [  
+        0  
+      ],  
+      "hint": "AWM リレイヤーは、定期的なチェックまたはイベントベースのトリガーを使用します。",  
+      "explanation": "AWM リレイヤーは、新しい送信メッセージを検出するために、送信元の Avalanche L1 を定期的にポーリングするか、ノードによって新しい送信メッセージが検出されたときに通知を受け取る方法を使用します。この 2 つのアプローチにより、メッセージが効率的に取得されて送信先チェーンにリレーされます。",  
+      "chapter": "メッセージの取得"  
     },
-    "314": {
-      "question": "Why does the AWM Relayer not aggregate the BLS Public Keys off-chain and attach them to the message?",
-      "options": [
-          "Because aggregating off-chain would increase the message size significantly.",
-          "To prevent the AWM Relayer from creating fraudulent public keys and signatures, ensuring security.",
-          "Because the destination chain does not support off-chain aggregation.",
-          "To reduce the computational load on the AWM Relayer."
-      ],
-      "correctAnswers": [
-          1
-      ],
-      "hint": "Aggregating public keys off-chain could allow the relayer to fabricate signatures.",
-      "explanation": "The AWM Relayer does not aggregate the BLS Public Keys off-chain and attach them to the message to prevent security vulnerabilities. If aggregation were done off-chain, the relayer could create fake public keys and signatures, compromising the authenticity and integrity of the messages. By requiring each validator on the destination chain to perform the aggregation, the system ensures that the aggregated public key accurately represents the signing validators, maintaining trust and security in the cross-chain communication process.",
-      "chapter": "Signature Schemes"
+    "314": {  
+      "question": "なぜ AWM リレイヤーは BLS 公開鍵をオフチェーンで集約し、メッセージに添付しないのですか？",  
+      "options": [  
+          "オフチェーンで集約すると、メッセージサイズが大幅に増加するため。",  
+          "AWM リレイヤーが不正な公開鍵や署名を作成するのを防ぎ、セキュリティを確保するため。",  
+          "送信先チェーンがオフチェーンでの集約をサポートしていないため。",  
+          "AWM リレイヤーの計算負荷を軽減するため。"  
+      ],  
+      "correctAnswers": [  
+          1  
+      ],  
+      "hint": "公開鍵をオフチェーンで集約すると、リレイヤーが偽の署名を作成できる可能性があります。",  
+      "explanation": "AWM リレイヤーが BLS 公開鍵をオフチェーンで集約してメッセージに添付しないのは、セキュリティ上のリスクを防ぐためです。もしオフチェーンで集約を行うと、リレイヤーが不正な公開鍵や署名を作成できる可能性があり、メッセージの真正性や整合性が損なわれる恐れがあります。送信先チェーンの各バリデータが公開鍵を集約することで、集約された公開鍵が実際に署名したバリデータのものであることが保証され、クロスチェーン通信の信頼性とセキュリティが維持されます。",  
+      "chapter": "署名スキーム"  
     },
     "315": {
-      "question": "What is the primary purpose of depositing ERC-20 tokens into the Interchain Messaging contract in the Avalanche Network?",
+      "question": "Avalanche ネットワークの Interchain Messaging コントラクトに ERC-20 トークンをデポジットする主な目的は何ですか？",
       "options": [
-          "To pay for gas fees associated with transactions.",
-          "To serve as collateral for staking operations.",
-          "To incentivize the AWM Relayer by providing a reward for delivering messages.",
-          "To lock tokens and prevent them from being transferred."
+          "トランザクションに関連するガス代を支払うため。",
+          "ステーキング操作の担保として使用するため。",
+          "AWM リレイヤーにメッセージ配信の報酬を提供し、インセンティブを与えるため。",
+          "トークンをロックし、送付を防ぐため。"
       ],
       "correctAnswers": [
           2
       ],
-      "hint": "Depositing tokens serves as a financial incentive for relayers to perform their duties.",
-      "explanation": "Depositing ERC-20 tokens into the Interchain Messaging contract acts as a reward mechanism for the AWM Relayer. When a relayer successfully delivers a message, they can claim the deposited tokens as compensation for their efforts in ensuring reliable cross-chain communication. This incentivization helps maintain the efficiency and security of the messaging system.",
-      "chapter": "Fee Data Flow"
+      "hint": "トークンのデポジットは、リレイヤーが業務を遂行するための経済的インセンティブとして機能します。",
+      "explanation": "Interchain Messaging コントラクトに ERC-20 トークンをデポジットすることで、AWM リレイヤーに対する報酬メカニズムとして機能します。リレイヤーがメッセージを正常に配信すると、報酬としてデポジットされたトークンを請求できます。このインセンティブにより、クロスチェーンメッセージングの効率と安全性が維持されます。",
+      "chapter": "手数料のデータフロー"
     },
     "316": {
-      "question": "According to the Avalanche Network's fee incentivization model, how should the minimum fee amount be calculated to ensure that a Relayer makes at least a 10% profit?",
+      "question": "Avalanche ネットワークの手数料インセンティブモデルにおいて、リレイヤーが最低 10% の利益を確保するための最低手数料額はどのように計算されるべきですか？",
       "options": [
           "Fee = requiredGasLimit * gas_price_in_native_token",
           "Fee = (requiredGasLimit * gas_price_in_native_token) / 1.1",
@@ -823,9 +823,9 @@
       "correctAnswers": [
           3
       ],
-      "hint": "The fee should cover the costs and provide additional profit to the Relayer.",
-      "explanation": "To ensure the Relayer makes at least a 10% profit, the fee amount should be calculated as 1.1 times the cost. The cost is determined by multiplying the requiredGasLimit by the gas price in native tokens and the native token price. Therefore, the minimum fee should be 1.1 * (requiredGasLimit * gas_price_in_native_token * native_token_price).",
-      "chapter": "Determining the Fee"
+      "hint": "手数料はコストをカバーし、リレイヤーに追加の利益を提供する必要があります。",
+      "explanation": "リレイヤーが最低 10% の利益を得るためには、手数料額をコストの 1.1 倍として計算する必要があります。コストは requiredGasLimit に gas_price_in_native_token と native_token_price を掛けたものとして決定されるため、最低手数料は 1.1 * (requiredGasLimit * gas_price_in_native_token * native_token_price) となります。",
+      "chapter": "手数料の決定"
     },
     "401": {
       "question": "What advantage do custom blockchains on Avalanche offer in terms of gas tokens compared to the C-Chain?",

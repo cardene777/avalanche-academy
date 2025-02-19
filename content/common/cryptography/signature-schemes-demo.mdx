@@ -1,37 +1,35 @@
 import { GenerateKeysButton, SignMessageButton, VerifySignatureButton } from '@/components/signatureSchemes'
 import { Steps, Step } from 'fumadocs-ui/components/steps'
 
-Let's get our hands dirty and use a signature scheme. We'll take the following steps:
+署名スキームを実際に使ってみましょう。以下のステップを実行します。  
 
-- **Generate Key Pair**: We will generate a key pair consisting of a Public and a Secret Key.
-- **Sign Message**: We create a Signature by signing the Message with the Secret Key.
-- **Verify Signature**: We verify the Signature of a Message with the Public Key.
+- **鍵ペアの生成**: 公開鍵と秘密鍵のペアを作成します。  
+- **メッセージの署名**: 秘密鍵を使ってメッセージに署名し、署名データを生成します。  
+- **署名の検証**: 公開鍵を使って、メッセージの署名を検証します。  
 
-<Steps>
-<Step>
+<Steps>  
+<Step>  
 
-### Generate Keys
-Start by generating a Key Pair consisting of a Public and a Secret Key.
+### 鍵を生成する  
+まずは、公開鍵と秘密鍵のペアを生成します。  
 
-<GenerateKeysButton />
+<GenerateKeysButton />  
 
-</Step>
-<Step>
+</Step>  
+<Step>  
 
-### Sign a Message
+### メッセージに署名する  
+生成した秘密鍵を使って、メッセージに署名を行います。好きなメッセージを入力してください（例: "Hello"）。  
 
-Now use the generated Secret Key to sign a Message. Pick any message you want to sign, e.g. "Per consensum ad astra".
+<SignMessageButton />  
 
-<SignMessageButton />
+</Step>  
+<Step>  
 
-</Step>
-<Step>
+### 署名を検証する  
+公開鍵があれば、誰でも署名の正当性を確認できます。これにより、メッセージの **真正性、否認防止、完全性** が保証されます。  
 
-### Verify the Signature
+<VerifySignatureButton />  
 
-Anyone, that has access to your Public Key corresponding to the Private Key used for signing the message can now verify the signature of the Message. Therefore, the Authenticity, Non-Repudiation and Integrity of the Message can be trusted.
-
-<VerifySignatureButton />
-
-</Step>
-</Steps>
+</Step>  
+</Steps>  

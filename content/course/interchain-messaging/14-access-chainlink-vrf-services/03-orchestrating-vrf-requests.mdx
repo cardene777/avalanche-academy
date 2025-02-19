@@ -1,44 +1,47 @@
 ---
-title: Orchestrating VRF Requests Over Multiple Chains (Wrapper)
-description: Learn how the CrossChainVRFWrapper contract on a Chainlink-supported L1 handles cross-chain requests for VRF.
-updated: 2024-10-21
-authors: [0xstt]
-icon: BookOpen
+title: 複数チェーンにわたる VRF リクエストのオーケストレーション（Wrapper）  
+description: Chainlink をサポートする L1 上の `CrossChainVRFWrapper` コントラクトが、クロスチェーン VRF リクエストを処理する仕組みを学ぶ。  
+updated: 2024-10-21  
+authors: [0xstt]  
+icon: BookOpen  
 ---
 
-import { Step, Steps } from 'fumadocs-ui/components/steps';
+import { Step, Steps } from 'fumadocs-ui/components/steps';  
 
-The `CrossChainVRFWrapper` contract plays a critical role in handling requests for randomness from an unsupported L1. It is deployed on a **Chainlink-supported network** (like Avalanche Fuji) and serves as the intermediary that interacts with Chainlink VRF to request random words.
+`CrossChainVRFWrapper` コントラクトは、Chainlink VRF を直接サポートしていない L1 からのリクエストを処理する重要な役割を果たします。  
 
-Here’s how it functions as the provider for VRF services:
+このコントラクトは **Chainlink をサポートするネットワーク**（例：Avalanche Fuji）上にデプロイされ、Chainlink VRF と直接やり取りすることで、ランダム数のリクエストを処理します。  
 
-## Receives Cross-Chain Messages
+ここでは、`CrossChainVRFWrapper` がどのように VRF サービスを提供するのかを説明します。  
 
-<Steps>
-<Step>
+## クロスチェーンメッセージの受信  
 
-When the `CrossChainVRFConsumer` on the unsupported L1 initiates a request for randomness, it sends a cross-chain message via the `TeleporterMessenger` to the `CrossChainVRFWrapper` on the supported network.
+<Steps>  
+<Step>  
 
-</Step>
-<Step>
+`CrossChainVRFConsumer`（VRF をリクエストするコントラクト）が、Chainlink をサポートしていない L1 上でランダム数のリクエストを開始します。このリクエストは、`TeleporterMessenger` を介して `CrossChainVRFWrapper` に送信されます。  
 
-The `CrossChainVRFWrapper` verifies that the request came from an authorized address. This is essential to ensure that only verified consumers can request randomness.
+</Step>  
+<Step>  
 
-</Step>
-<Step>
+`CrossChainVRFWrapper` は、リクエストが承認されたアドレスからのものであることを検証します。これにより、未承認のコントラクトやアドレスがランダム数をリクエストできないようにします。  
 
-Upon receiving a valid request, the **VRFWrapper** calls **Chainlink VRF** and sends the request with the required parameters, such as the number of random words, request confirmations, and gas limits.
+</Step>  
+<Step>  
 
-</Step>
-<Step>
+リクエストが正当であることを確認した後、**VRFWrapper** は **Chainlink VRF** にリクエストを送信し、ランダム数を要求します。この際、リクエストには必要なパラメータ（ランダム数の個数、確認回数、ガスリミットなど）が含まれます。  
 
-The `CrossChainVRFWrapper` keeps track of all pending requests using a mapping, associating each request ID with its destination (the L1 where the `CrossChainVRFConsumer` resides). This ensures that the random words are returned to the correct destination once fulfilled.
+</Step>  
+<Step>  
 
-</Step>
-</Steps>
+`CrossChainVRFWrapper` は、すべての保留中のリクエストをマッピングして追跡し、各リクエスト ID を `CrossChainVRFConsumer` のある L1 に関連付けます。これにより、リクエストが完了した際に、正しいチェーンへランダム数を送信できます。  
 
-<Accordions>
-<Accordion title="Implementation">
+</Step>  
+</Steps>  
+
+<Accordions>  
+<Accordion title="実装">  
+
 ```solidity
 function receiveTeleporterMessage(
     bytes32 originChainID,
@@ -78,26 +81,28 @@ function receiveTeleporterMessage(
     });
 }   
 ```
-</Accordion>
-</Accordions>
 
-## Handles Callback from Chainlink VRF
+</Accordion>  
+</Accordions>  
 
-<Steps>
-<Step>
+## Chainlink VRF のコールバック処理  
 
-When **Chainlink VRF** fulfills the randomness request, the `CrossChainVRFWrapper` receives the random words through a callback function. This ensures that the request has been successfully processed.
+<Steps>  
+<Step>  
 
-</Step>
-<Step>
+**Chainlink VRF** がランダム数のリクエストを処理すると、`CrossChainVRFWrapper` はコールバック関数を介してランダム数を受け取ります。これにより、リクエストが正常に処理されたことが保証されます。  
 
-After receiving the random words, the `CrossChainVRFWrapper` encodes the result and sends it back as a cross-chain message to the `CrossChainVRFConsumer` on the unsupported L1. This is done using the `TeleporterMessenger`.
+</Step>  
+<Step>  
 
-</Step>
-</Steps>
+ランダム数を受信した後、`CrossChainVRFWrapper` はその結果をエンコードし、クロスチェーンメッセージとして `CrossChainVRFConsumer` に送信します。このメッセージの送信には `TeleporterMessenger` を使用します。  
 
-<Accordions>
-<Accordion title="Implementation">
+</Step>  
+</Steps>  
+
+<Accordions>  
+<Accordion title="実装">  
+
 ```solidity
 function fulfillRandomWords(uint256 requestId, uint256[] calldata randomWords) internal override {
     require(pendingRequests[requestId].destinationAddress != address(0), "Invalid request ID");
@@ -120,7 +125,6 @@ function fulfillRandomWords(uint256 requestId, uint256[] calldata randomWords) i
     delete pendingRequests[requestId];
 }
 ```
-</Accordion>
-</Accordions>
 
-In summary, the `CrossChainVRFWrapper` contract acts as the **bridge** between the unsupported L1 and Chainlink’s VRF services, ensuring that random words are requested, fulfilled, and delivered back across chains efficiently.
+</Accordion>  
+</Accordions>

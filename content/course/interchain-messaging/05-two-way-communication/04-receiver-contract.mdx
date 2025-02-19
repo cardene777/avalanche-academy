@@ -1,17 +1,21 @@
 ---
-title: Receiver Contract
-description: Adapt the receiver contract to send messages back
-updated: 2024-05-31
-authors: [martineckardt]
-icon: BookOpen
+title: 受信コントラクトの変更
+description: 受信コントラクトを変更し、送信者にメッセージを返信できるようにする
+updated: 2024-05-31  
+authors: [martineckardt]  
+icon: BookOpen  
 ---
 
-The receiver contract now has two tasks: 
+**受信コントラクトを次の 2 つの処理を実行できるように変更** します。  
 
-- **Receive a message from the sender**: Same as in the [last example](/course/interchain-messaging/04-icm-basics/05-receiving-a-message)
-- **Send a message back to the sender**: Now our receiver contract needs to be able to send a message back to the sender.
+- **送信者からのメッセージを受信する**（前回の[受信処理の実装](/course/interchain-messaging/04-icm-basics/05-receiving-a-message)と同様）  
+- **送信者にメッセージを返信する**（新しく追加する処理）  
 
-Therefore, we need to change the receiver contract to be able to send a message back. We will need to instantiate a `TeleporterMessenger` and call the `sendCrossChainMessage()` function. 
+そのため、**受信コントラクトが `TeleporterMessenger` をインスタンス化し、`sendCrossChainMessage()` を呼び出して返信** できるようにします。  
+
+---
+
+### **変更後の受信コントラクト**
 
 ```solidity title="contracts/interchain-messaging/send-roundtrip/receiverOnSubnet.sol"
 // (c) 2023, Ava Labs, Inc. All rights reserved.
@@ -51,3 +55,21 @@ contract ReceiverOnSubnet is ITeleporterReceiver {
 }
 ```
 
+---
+
+### **変更点のポイント**
+
+1. **`TeleporterMessenger` のインスタンス化（7行目）**  
+   - `ITeleporterMessenger` をインスタンス化し、**受信コントラクトがメッセージを送信できるようにする**。  
+
+2. **メッセージの受信処理（12行目）**  
+   - **送信者からのメッセージを受信し、デコードする**（`abi.decode(message, (string))`）。  
+   - **Interchain Messaging コントラクト以外からの呼び出しを拒否するため、`msg.sender` をチェック**。  
+
+3. **受信メッセージの処理と返信（18行目）**  
+   - 受信した文字列に `" World!"` を追加し、新しいメッセージ `response` を作成。  
+
+4. **返信メッセージの送信（21行目）**  
+   - `sendCrossChainMessage()` を呼び出し、**元の送信者へ返信を送信**。  
+   - `destinationBlockchainID` には **元の送信元チェーン ID（`sourceBlockchainID`）** を指定。  
+   - `destinationAddress` には **元の送信者アドレス（`originSenderAddress`）** を指定。

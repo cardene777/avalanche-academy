@@ -1,54 +1,65 @@
 ---
-title: Fee Data Flow
-description: Learn the logic behind the fee incentivization.
-updated: 2024-06-09
-authors: [andyvargtz]
-icon: BookOpen
+title: 手数料のデータフロー  
+description: 手数料インセンティブの仕組みを理解する  
+updated: 2024-06-09  
+authors: [andyvargtz]  
+icon: BookOpen  
+
 ---
 
-The basic idea of incentivizing an external AWM Relayer to relay our message is to deposit an amount of an ERC-20 token into the Interchain Messaging contract as a reward for whichever relayer delivers our message.
+## **手数料によるインセンティブの基本**  
 
-Let's see how the fees are transferred from the user at the very beginning of sending a Cross Chain message, up to the point where the relayer is able to claim the fee.
-![AWM Relayer with fees data flow](/common-images/teleporter/teleporter-fees-receipt.png)
+外部の AWM リレイヤーにメッセージを転送してもらうためには、**リレイヤーが報酬として受け取れるように、Interchain Messaging コントラクトに ERC-20 トークンをデポジット** する必要があります。  
 
+ここでは、**ユーザーがクロスチェーンメッセージを送信する最初の段階から、リレイヤーが手数料を受け取るまでの流れ** を見ていきます。  
 
-We are using the following emoji guide to show the actors of each action:
+![AWM リレイヤーの手数料データフロー](/common-images/teleporter/teleporter-fees-receipt.png)  
 
+**各アクターの役割を示す絵文字**  
 
-**👩 User**
+- **👩 ユーザー**  
+- **📜 クロスチェーン dApp**  
+- **👾 TeleporterMessenger（Interchain Messaging コントラクト）**  
+- **🛸 リレイヤー**  
 
-**📜 Cross-Chain dApp**
+---
 
-**👾 TeleporterMessenger**
+## **メッセージ送信前の準備**  
 
-**🛸 Relayer**
+- 👩 ユーザーは、手数料として使用する ERC-20 トークンの支払いを許可するため、**クロスチェーン dApp に対して ERC-20 コントラクトの`approve`処理を実行して、`transfer`権限を承認** する。  
 
-### Previous to Sending the Message:
+---
 
-- 👩 The message sender (user) requires to approve the Cross-Avalanche L1 dApp as a spender on the ERC20 contract to be used as fee.
+## **メッセージの送信プロセス**  
 
-### Sending the Message:
+1. 👩 ユーザーがメッセージを送信する。  
+2. 📜 **ユーザーのウォレットから手数料トークンがクロスチェーン dApp に送付される。**  
+3. 📜 **クロスチェーン dApp が Interchain Messaging コントラクト（TeleporterMessenger）に対し、手数料トークンの使用許可を与える。**  
+4. 👾 **Interchain Messaging コントラクトが手数料トークンを受け取り、保管する。**  
+5. 👾 メッセージに **一意の ID（messageID）を割り当て、手数料情報を記録する。**  
+6. 🛸 **リレイヤーは、メッセージをピックアップして転送できるようになる。**  
 
-- 👩 User sends a message.
-- 📜 Fee funds (previously approved) are transferred from the user's wallet to the Cross-Chain dApp.
-- 📜 Cross-Chain dApp approves the Interchain Messaging Contract to spend the ERC20 fee tokens.
-- 👾 Fee tokens are transferred into the Interchain Messaging Contract.
-- 👾 Interchain Messaging assigns a unique ID to the Message and keeps track of the fee Info.
-- 🛸 Relayer can now pick and deliver the Message.
+---
 
-### Message Delivered in the Destination Chain:
+## **メッセージの送信先チェーンでの処理**  
 
-- 👾 Interchain Messaging in the Destination Chain generates a receipt with the `messageID` and Relayer address who delivered the message.
-- Receipt is sent back to the Source Chain.
-- 🛸 Relayers can send the receipts back to the Source Chain themselves or wait until a new (unrelated) message is sent now from the once Destination Chain to the former Source chain. Messages include up to 5 pending receipts in a message.
+1. 👾 **送信先チェーンの Interchain Messaging コントラクトが `messageID` を含むレシートを生成し、メッセージを送信したリレイヤーのアドレスを記録する。**  
+2. 📜 レシートが元のチェーン（送信元）に送信される。  
+3. 🛸 **リレイヤーは、レシートを手動で送信することもできるし、新しいメッセージが送信されるのを待って、その中に最大 5 つのレシートを含めることもできる。**  
 
-### Once Message is Received in the Source Chain:
+---
 
-- 👾 The Interchain Messaging marks the `messageID` as received and increases the Relayer redeemable reward.
-- 🛸 The relayer can now claim its unlocked rewards.
+## **元のチェーン（送信元）での処理**  
 
-As you can see, there are just a few actions you as a cross-chain dApp developer need to implement so dApp works smoothly with fees, everything else is being done by the Interchain Messaging contract and the Relayer.
+1. 👾 **Interchain Messaging コントラクトが `messageID` を受信済みにマークし、リレイヤーの報酬をロック解除する。**  
+2. 🛸 **リレイヤーは、受け取るべき手数料を請求できるようになる。**  
 
-If you run your own relayer, you don't have to attach any fees.
+---
+
+## **開発者が実装すべき内容**  
+
+上記のプロセスを見ると、**クロスチェーン dApp 開発者が実装する必要があるのは、ユーザーが適切に手数料を支払えるようにする部分だけ** であることがわかります。それ以外の処理は **Interchain Messaging コントラクトとリレイヤーが自動的に処理** します。  
+
+**もし自分でリレイヤーを運用する場合は、手数料を設定する必要はありません。**  
 
 <Quiz quizId="315"/>

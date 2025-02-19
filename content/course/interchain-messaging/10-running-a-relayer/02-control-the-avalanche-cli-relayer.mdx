@@ -1,24 +1,27 @@
 ---
-title: Control the Avalanche CLI Relayer
-description: Stop and start an AWM relayer
-updated: 2024-05-31
-authors: [martineckardt]
-icon: BookOpen
+title: Avalanche CLI リレイヤーの制御  
+description: AWM リレイヤーの停止と起動方法を学ぶ  
+updated: 2024-05-31  
+authors: [martineckardt]  
+icon: BookOpen  
+
 ---
 
-When you deploy your own chain using Avalanche CLI in the Avalanche Starter-kit it offers you to run a relayer on launch. This will automatically run a relayer that delivers any message between the local Avalanche L1s. We will cover configuration in the next section, but for now you will need to learn some basic commands.
+Avalanche Starter-Kit を使用して Avalanche CLI で独自の L1 チェーンをデプロイすると、**起動時にリレイヤーを実行するオプションが提供されます。** これにより、ローカル環境で動作する Avalanche L1 間のメッセージを自動的に送信するリレイヤーが起動されます。  
 
-## Stopping the Relayer
+設定方法については次のセクションで詳しく説明しますが、ここでは基本的な操作方法を学びます。  
 
-If you want to stop the relayer, you can use the following command:
+## リレイヤーの停止  
+
+リレイヤーを停止したい場合は、以下のコマンドを実行します。  
 
 ```bash
 avalanche teleporter relayer stop
 ```
 
-## Starting the Relayer
+## リレイヤーの起動  
 
-If you want to start the relayer, you can use the following command:
+リレイヤーを再び起動する場合は、以下のコマンドを実行します。  
 
 ```bash
 avalanche teleporter relayer start

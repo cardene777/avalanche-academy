@@ -1,22 +1,90 @@
 ---
-title: Relayer Logs
-description: Get the logs and activity of the relayer
-updated: 2024-05-31
-authors: [martineckardt]
-icon: BookOpen
+title: リレイヤーログ  
+description: リレイヤーのログとアクティビティを確認する  
+updated: 2024-05-31  
+authors: [martineckardt]  
+icon: BookOpen  
+
 ---
 
-To analyze the relayer activity you can check the relayer logs. If you're using the Avalanche CLI, you can access them with the following command:
+## **リレイヤーのログを確認する**  
+
+リレイヤーの動作を分析するために、**リレイヤーログを確認** できます。Avalanche CLI を使用している場合、次のコマンドでアクセスできます。  
 
 ```bash
 avalanche teleporter relayer logs
 ```
 
-Alternatively the JSON logs can be located under "~/.avalanche-cli/runs/awm-relayer.log". Let's take a look at them:
+また、**JSON 形式のログファイル** は `~/.avalanche-cli/runs/awm-relayer.log` に保存されています。このファイルを開いて内容を確認するには、次のコマンドを実行してください。  
 
 ```bash
-code ~/.avalanche-cli/runs/awm-relayer.log 
+code ~/.avalanche-cli/runs/awm-relayer.log
 ```
+
+---
+
+## **ログの内容を解析する**  
+
+以下はリレイヤーのログの一例です。  
+
+```bash
+{"level":"info","timestamp":"2024-07-11T01:38:40.093Z","logger":"awm-relayer","caller":"main/main.go:94","msg":"Initializing awm-relayer"}
+{"level":"info","timestamp":"2024-07-11T01:38:40.093Z","logger":"awm-relayer","caller":"main/main.go:99","msg":"Set config options."}
+{"level":"info","timestamp":"2024-07-11T01:38:40.093Z","logger":"awm-relayer","caller":"main/main.go:102","msg":"Initializing destination clients"}
+{"level":"info","timestamp":"2024-07-11T01:38:40.094Z","logger":"awm-relayer","caller":"evm/destination_client.go:105","msg":"Initialized destination client","blockchainID":"epm5fG6Pn1Y5rBHdTe36aZYeLqpXugreyHLZB5dV81rVTs7Ku","evmChainID":"43112","nonce":0}
+```
+
+### **ログの重要な項目**  
+
+リレイヤーログには、さまざまな情報が記録されています。特に重要なポイントを解説します。  
+
+- **`Initializing awm-relayer`** → AWM リレイヤーの初期化  
+- **`Set config options`** → 設定オプションの読み込み  
+- **`Initializing destination clients`** → 宛先ブロックチェーン（L1）のクライアントを初期化  
+- **`Initialized destination client`** → 宛先ブロックチェーンへの接続が完了  
+
+この時点でリレイヤーが正常に動作を開始したことが確認できます。  
+
+---
+
+## **メッセージのリレー処理**  
+
+リレイヤーが**メッセージを送信** する際のログは次のようになります。  
+
+```bash
+{"level":"info","timestamp":"2024-07-11T01:43:59.040Z","logger":"awm-relayer","caller":"relayer/listener.go:406","msg":"Unpacked warp message","sourceBlockchainID":"epm5fG6Pn1Y5rBHdTe36aZYeLqpXugreyHLZB5dV81rVTs7Ku","originSenderAddress":"0x5DB9A7629912EBF95876228C24A848de0bfB43A9","destinationBlockchainID":"dXobeMTZB89Fy6E987aaRBDz2j8mVparqRRfvvmQDsH8haNJJ","destinationAddress":"0x52C84043CD9c865236f11d9Fc9F56aa003c1f922","warpMessageID":"2ZV5u7WPVozo386A3d8T5B81vAKvcSDdNsggpmHFvihy5Yut1S"}
+{"level":"info","timestamp":"2024-07-11T01:43:59.052Z","logger":"awm-relayer","caller":"relayer/application_relayer.go:320","msg":"Fetching aggregate signature from the source chain validators via AppRequest"}
+{"level":"info","timestamp":"2024-07-11T01:43:59.060Z","logger":"awm-relayer","caller":"relayer/application_relayer.go:461","msg":"Created signed message.","destinationBlockchainID":"dXobeMTZB89Fy6E987aaRBDz2j8mVparqRRfvvmQDsH8haNJJ"}
+{"level":"info","timestamp":"2024-07-11T01:43:59.060Z","logger":"awm-relayer","caller":"teleporter/message_handler.go:187","msg":"Sending message to destination chain","destinationBlockchainID":"dXobeMTZB89Fy6E987aaRBDz2j8mVparqRRfvvmQDsH8haNJJ","warpMessageID":"2ZV5u7WPVozo386A3d8T5B81vAKvcSDdNsggpmHFvihy5Yut1S","teleporterMessageID":"Hqr8jHV4NjTf4sbCoGqNJEuntm8QoWnDXdivFNLizAzFxRxm3"}
+{"level":"info","timestamp":"2024-07-11T01:43:59.063Z","logger":"awm-relayer","caller":"evm/destination_client.go:192","msg":"Sent transaction","txID":"0x291bc3a3784dd79871cf4f95ba8f3fb3519e25c73848ee27bc5ebd7e3fe178d5","nonce":0}
+```
+
+### **リレー処理の流れ**  
+
+1. **`Unpacked warp message`** → 送信されたメッセージを解析  
+2. **`Fetching aggregate signature`** → 送信元のバリデータから集約署名を取得  
+3. **`Created signed message`** → 署名されたメッセージを作成  
+4. **`Sending message to destination chain`** → 宛先のブロックチェーンへメッセージを送信  
+5. **`Sent transaction`** → 宛先の L1 にトランザクションを送信  
+
+これにより、メッセージが正常に転送されたことが確認できます。  
+
+---
+
+## **メッセージ配信の完了**  
+
+リレーが**正常に完了** すると、次のようなログが出力されます。  
+
+```bash
+{"level":"info","timestamp":"2024-07-11T01:43:59.266Z","logger":"awm-relayer","caller":"teleporter/message_handler.go:250","msg":"Delivered message to destination chain","destinationBlockchainID":"dXobeMTZB89Fy6E987aaRBDz2j8mVparqRRfvvmQDsH8haNJJ","warpMessageID":"2ZV5u7WPVozo386A3d8T5B81vAKvcSDdNsggpmHFvihy5Yut1S","teleporterMessageID":"Hqr8jHV4NjTf4sbCoGqNJEuntm8QoWnDXdivFNLizAzFxRxm3","txHash":"0x291bc3a3784dd79871cf4f95ba8f3fb3519e25c73848ee27bc5ebd7e3fe178d5"}
+{"level":"info","timestamp":"2024-07-11T01:43:59.266Z","logger":"awm-relayer","caller":"relayer/application_relayer.go:246","msg":"Finished relaying message to destination chain","destinationBlockchainID":"dXobeMTZB89Fy6E987aaRBDz2j8mVparqRRfvvmQDsH8haNJJ"}
+```
+
+- **`Delivered message to destination chain`** → メッセージが正常に送信された  
+- **`Finished relaying message`** → リレー処理が完了  
+
+このようなログが出力されていれば、**メッセージが無事に送信された** ことが確認できます。
+以下がログ全体になります。
 
 ```bash
 {"level":"info","timestamp":"2024-07-11T01:38:40.093Z","logger":"awm-relayer","caller":"main/main.go:94","msg":"Initializing awm-relayer"}

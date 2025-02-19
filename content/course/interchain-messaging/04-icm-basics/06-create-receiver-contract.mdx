@@ -1,20 +1,24 @@
 ---
-title: Receiver Contract
-description: Create a contract to receive messages with Teleporter.
-updated: 2024-05-31
-authors: [martineckardt]
-icon: Terminal
+title: 受信コントラクト（Receiver Contract）  
+description: Teleporter を使用してメッセージを受信するコントラクトを作成する  
+updated: 2024-05-31  
+authors: [martineckardt]  
+icon: Terminal  
 ---
+
 import { Step, Steps } from 'fumadocs-ui/components/steps';
 
-Now it's time to deploy our receiver contract to our L1. It will implement the callback for the `TeleporterMessenger` contract when the message is received, decoding our message and storing the last received string. 
+次は、**L1 にメッセージを受信するためのコントラクトをデプロイ** します。  
+このコントラクトは **TeleporterMessenger コントラクトからメッセージが届いた際に実行されるコールバック関数を実装し、受信メッセージをデコードして保存** します。  
 
-<Steps>
-<Step>
+<Steps>  
 
-### Read the Receiver Contract
+<Step>  
 
-The following contract is located inside `contracts/interchain-messaging/send-receive` directory. Read through the contract below and and understand what is happening:
+### **受信コントラクトを読む**  
+
+次のコントラクトは `contracts/interchain-messaging/send-receive` ディレクトリ内にあります。  
+どのような処理が行われているのか理解しましょう。  
 
 ```solidity title="contracts/interchain-messaging/send-receive/receiverOnSubnet.sol"
 // (c) 2023, Ava Labs, Inc. All rights reserved.
@@ -42,23 +46,45 @@ contract ReceiverOnSubnet is ITeleporterReceiver {
 }
 ```
 
-**The key things to understand:**
-- **Importing Interchain Messaging contracts (L8, L9):** We are importing the `ITeleporterMessenger` and `ITeleporterReceiver` interface we looked at in the previous activity.
-- **Inheriting from ITeleporterReceiver (L11):** We are inheriting the interface that will require us to implement the `receiveTeleporterMessage()` function.
-- **Defining the lastMessage variable (L14):** Setting the `lastMessage` variable as `public`, will make that variable readable from the outside without the need of a `getValue` function.
-- **Implementing receiveTeleporterMessage (L16):** We implement the function that will be called when the message is received. Please note that we are not checking who calls that function for now. So anyone can pretend to deliver messages for now.
-- **Decode message (L21):** We decode the message using `abi.decode(message, (string))`, which takes the bytes array as the first input and a tuple of the types of the encoded data in the message. Since our message only contains a single value, the tuple only has one value.
+#### **重要なポイント**  
 
-</Step>
-<Step>
+- **Interchain Messaging 関連のインポート（8行目、9行目）**  
 
-### Deploy Receiver Contract
+`ITeleporterMessenger` および `ITeleporterReceiver` インターフェースをインポートし、受信処理を実装できるようにします。  
 
-To deploy a contract using Foundry use the following command:
+- **`ITeleporterReceiver` を継承（11行目）**  
+
+`receiveTeleporterMessage()` 関数を実装するため、`ITeleporterReceiver` インターフェースを継承します。  
+
+- **`lastMessage` 変数の定義（14行目）**  
+
+`lastMessage` を `public` にすることで、外部からの読み取りを可能にしています。  
+¥これにより、特別な `getValue` 関数を実装せずに、最新のメッセージを取得できます。  
+
+- **`receiveTeleporterMessage` の実装（16行目）**  
+
+メッセージを受信した際に実行されるコールバック関数です。  
+**Interchain Messaging コントラクト以外の呼び出しを拒否** するため、`require` で `msg.sender` をチェックしています。  
+
+- **メッセージのデコード（21行目）**  
+
+`abi.decode(message, (string))` を使い、エンコードされた `bytes` データを `string` 型に変換しています。  
+ここでは単一の値（文字列）のみを扱うため、デコード時の型指定は `(string)` のみになっています。  
+
+</Step>  
+
+<Step>  
+
+### **受信コントラクトをデプロイする**  
+
+Foundry を使って、以下のコマンドでコントラクトをデプロイします。  
 
 ```bash
 forge create --rpc-url myblockchain --private-key $PK contracts/interchain-messaging/send-receive/receiverOnSubnet.sol:ReceiverOnSubnet
 ```
+
+実行すると、次のような出力が表示されます。  
+
 ```
 [⠊] Compiling...
 [⠢] Compiling 2 files with Solc 0.8.18
@@ -69,16 +95,20 @@ Deployed to: 0x52C84043CD9c865236f11d9Fc9F56aa003c1f922 // [!code highlight]
 Transaction hash: 0x48a1ffaa8aa8011f842147a908ff35a1ebfb75a5a07eb37ae96a4cc8d7feafd7
 ```
 
-<Step>
-</Step>
+</Step>  
 
-### Save Receiver Contract Address
+<Step>  
 
-Then save the receiver contract address in an environment variable:
+### **受信コントラクトのアドレスを保存する**  
+
+デプロイ後、受信コントラクトのアドレスを環境変数として保存しておきます。  
 
 ```bash
 export RECEIVER_ADDRESS=0x52C84043CD9c865236f11d9Fc9F56aa003c1f922
 ```
 
-</Step>
-</Steps>
+これで、**受信コントラクトが L1 にデプロイされ、メッセージを受信できるようになりました**。  
+
+</Step>  
+
+</Steps>  

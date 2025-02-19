@@ -1,9 +1,23 @@
 ---
-title: Adapt the Contracts
-description: Assignment - Modify the roundtrip messenger dApp
-updated: 2024-05-31
-authors: [martineckardt]
-icon: BookOpen
+title: コントラクトの変更  
+description: 課題 - ラウンドトリップメッセンジャー dApp を改良する  
+updated: 2024-05-31  
+authors: [martineckardt]  
+icon: BookOpen  
 ---
 
-Taking what you've learned in the previous chapter, adapt the sender to send a number instead of a string. The receiver should now multiply the number by 2 and send it back to the sender. The sender saves the result in a public variable.
+これまで学んだ内容を活かし、**送信データを文字列型（`string`）ではなく数値型（`uint`）に変更する** ようにコントラクトを修正しましょう。  
+
+---
+
+### **課題内容**  
+
+1. **送信コントラクト（Sender）を変更**  
+   - **送信データを `string` から `uint` に変更する**  
+   - **送信する数値を任意に設定できるようにする**  
+
+2. **受信コントラクト（Receiver）を変更**  
+   - **受け取った数値を 2 倍にして、送信者へ返信する**  
+
+3. **送信コントラクトで結果を保存**  
+   - **受け取った結果を `public` 変数として保存し、外部から取得できるようにする**  

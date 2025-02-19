@@ -1,4 +1,4 @@
-# Avalanche Academy
+# Avalanche Academy JP
 
 Avalanche Academy is a comprehensive learning platform designed to educate developers, enthusiasts, and industry professionals about the Avalanche ecosystem. It offers a variety of courses and resources to help users understand and leverage Avalanche's blockchain technology stack.
 

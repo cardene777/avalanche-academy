@@ -1,14 +1,18 @@
 ---
-title: Setting Incentives
-description: Learn where incentives details need to be included
+title: インセンティブの設定
+description: インセンティブの詳細をどこに含めるべきかを学ぶ
 updated: 2024-06-09
 authors: [andyvargtz]
 icon: BookOpen
 ---
 
-As we studied in previous lessons, the `sendCrossChainMessage` function takes `TeleporterMessageInput` struct as an input. The fields feeInfo in the `TeleporterMessageInput` will be a `TeleporterFeeInfo` struct formed by the ERC20 contract address in which the fee will be paid, as well as the amount of tokens to incentivize the relayer. This amount needs to be set in wei units. 
+これまでのレッスンで学んだように、`sendCrossChainMessage` 関数は `TeleporterMessageInput` 構造体を入力として受け取ります。  
+この `TeleporterMessageInput` 内の `feeInfo` フィールドには、リレイヤーのインセンティブとして支払われる ERC-20 トークンの情報が含まれます。  
+`feeInfo` は `TeleporterFeeInfo` 構造体で構成され、**支払いに使用する ERC-20 コントラクトアドレス** と、**リレイヤーへの報酬額（wei 単位）** を設定する必要があります。  
 
-Let's take a look at it:
+---
+
+### **コードの詳細**  
 
 ```solidity
 // (c) 2023, Ava Labs, Inc. All rights reserved.
@@ -38,6 +42,10 @@ interface ITeleporterMessenger {
     returns (bytes32);
 }
 ```
-As you can see, the `TeleporterMessageInput` now needs to include the ERC20 address that will pay the incentives and the amount, all this as part of the `TeleporterFeeInfo`
 
+---
 
+### **ポイント**
+- **`TeleporterFeeInfo`** には、  
+  **ERC-20 トークンのコントラクトアドレス** と **報酬額（wei 単位）** を設定する必要がある。  
+- **`TeleporterMessageInput`** 内の `feeInfo` に、 **リレイヤーへの支払い情報を含める** ことで、インセンティブ付きのメッセージ送信が可能になる。  

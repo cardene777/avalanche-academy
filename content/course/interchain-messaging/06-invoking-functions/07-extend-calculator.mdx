@@ -1,17 +1,24 @@
 ---
-title: Extend the Calculator
-description: Assignment- Extend calculator functionality
-updated: 2024-05-31
-authors: [martineckardt]
-icon: Terminal
+title: 計算関数の拡張  
+description: 課題 - 計算関数の機能を拡張する  
+updated: 2024-05-31  
+authors: [martineckardt]  
+icon: Terminal  
 ---
 
-Now let's add a third feature to the calculator: adding three numbers. We want you to practice handling different amounts of parameters depending on the action to perform, so your task will be to add a `tripleSum` function that sums up three values of the type uint. 
+新たな機能として **3 つの数値を加算する機能** を計算関数に追加しましょう。この課題では、**アクションごとに異なる数のパラメータを適切に処理する方法** を練習することが目的です。  
 
-You will need to:
+`tripleSum` という新しい関数を追加し、3 つの `uint` 型の数値を合計する機能を実装してください。
 
-- Add the `trippleSum` action to the enum file
-- Add a new encode helper and send function to the sender contract
-- Add a new route to the receiver and implement the `tripleSum` function
+### 実装する内容  
+- **`tripleSum` アクションを `enum` ファイルに追加する**
+- **エンコード用のヘルパー関数と `sendTripleSumMessage` 関数を送信コントラクトに追加する**
+- **受信コントラクトで `tripleSum` の処理を追加し、適切にルーティングする**
 
-Check out the solution under `/contracts/interchain-messaging/2c-invoking-functions` on the Avalanche-Starter-Kit
+### ヒント  
+- これまで学んだ **`abi.encode()` を使用して、異なる数のパラメータを適切にエンコードする** 必要があります。
+- 受信コントラクトでは、**メッセージをデコードして適切な関数に振り分けるロジック** を実装する必要があります。
+
+### 解答の確認方法  
+この課題の解答は **`/contracts/interchain-messaging/2c-invoking-functions`** にある **Avalanche-Starter-Kit** のリポジトリ内で確認できます。
+

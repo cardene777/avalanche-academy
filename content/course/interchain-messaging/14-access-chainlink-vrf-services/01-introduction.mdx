@@ -1,19 +1,26 @@
 ---
-title: Introduction
-description: Learn how to use ICM to access Chainlink VRF services on L1 networks that do not have direct Chainlink support.
-updated: 2024-10-21
-authors: [0xstt]
-icon: Book
+title: はじめに  
+description: ICM を活用して、Chainlink VRF をサポートしていない L1 ネットワークでランダム性を取得する方法を学びます。  
+updated: 2024-10-21  
+authors: [0xstt]  
+icon: Book  
 ---
 
-As decentralized applications (dApps) expand across multiple blockchains, some Layer 1 (L1) networks lack direct support from essential services like **Chainlink VRF (Verifiable Random Functions)**. This presents a significant challenge for developers who rely on verifiable randomness for use cases such as gaming, lotteries, NFT minting, and other decentralized functions that require unbiased, unpredictable random numbers.
+分散型アプリケーション（dApps）が複数のブロックチェーン上で拡大する中で、**Chainlink VRF（Verifiable Random Function）** のような重要なサービスを直接利用できない Layer 1（L1）ネットワークが存在します。  
 
-The challenge arises because not every L1 network has integrated with Chainlink, meaning developers on those chains are left without native access to VRF services. Without verifiable randomness, critical aspects of dApps, such as fairness and security, can be compromised.
+これは、ゲーム、抽選、NFT Mint、その他の分散型アプリケーションにおいて、公正で予測不可能なランダム性が求められるユースケースにとって大きな課題となります。  
 
-### Why ICM is Necessary
+### **なぜ ICM が必要なのか？**  
 
-To address this gap, **Interchain Messaging (ICM)** provides a solution by allowing L1 networks that don’t have direct Chainlink support to still access these services. Through ICM, any blockchain can request VRF outputs from a Chainlink-supported network (e.g., Fuji) and receive the results securely on their own L1. 
+全ての L1 ネットワークが Chainlink に統合されているわけではないため、Chainlink VRF を直接利用できない環境では、**検証可能なランダム性の確保が難しく** なります。これにより、公平性やセキュリティが損なわれる可能性があります。  
 
-This cross-chain solution unlocks the ability to use Chainlink VRF on unsupported networks, bypassing the need for native integration and ensuring that dApp developers can continue building secure and fair decentralized applications.
+この問題を解決するために、**Interchain Messaging（ICM）** を活用することで、Chainlink をサポートしていない L1 ネットワークでも Chainlink VRF のサービスを利用できるようになります。ICM を使用すると、L1 ネットワークは Chainlink がサポートされているネットワーク（例：Fuji）に対して VRF のリクエストを送り、結果を安全に受け取ることができます。  
 
-In the following sections, we will explore how to use ICM to access Chainlink VRF services across different chains by deploying two key smart contracts: one on the Chainlink-supported network and another on the target L1.
+このクロスチェーン ソリューションにより、Chainlink のネイティブ統合が不要になり、開発者は **安全かつ公平な分散型アプリケーション** を構築し続けることができます。  
+
+この章では、ICM を使用して Chainlink VRF を異なるチェーン間で利用する方法を解説し、以下の **2 つのスマートコントラクト** をデプロイする手順を紹介します。  
+
+- **Chainlink をサポートしているネットワーク上のコントラクト**（例：Fuji）  
+- **ターゲットとなる L1 ネットワーク上のコントラクト**  
+
+これにより、Chainlink VRF に対応していない L1 ネットワークでも **ICM を介してランダム性を取得** できるようになります。

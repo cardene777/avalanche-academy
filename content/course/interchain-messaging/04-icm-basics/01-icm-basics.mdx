@@ -1,31 +1,55 @@
 ---
-title: ICM Basics
-description: Learn about the Avalanche Interchain Messaging basics.
-updated: 2024-05-31
-authors: [martineckardt]
-icon: Book
+title: ICM の基本  
+description: Avalanche Interchain Messaging（ICM）の基本を学ぶ  
+updated: 2024-05-31  
+authors: [martineckardt]  
+icon: Book  
 ---
 
-<YouTube id="7QZ7_qZfQOA" />
+<YouTube id="7QZ7_qZfQOA" />  
 
-Teleporter enables you to send messages from one blockchain to another blockchain in the Avalanche network by simply calling the `sendCrossChainMessage` on the `TeleporterMessenger` contract. This invokes a smart contract on another Avalanche L1, where the called contract implements the `ITeleporterReceiver` interface to receive messages on the destination Avalanche L1. We will look at what happens under the hood in a later chapter.
+## Teleporter とは？  
 
-![](/common-images/teleporter/teleporter-source-destination.png)
+**Teleporter** を使うことで、Avalanche ネットワーク内の **異なるブロックチェーン間でメッセージを送信** できます。  
+具体的には、**`TeleporterMessenger` コントラクトの `sendCrossChainMessage` を呼び出すだけで、メッセージを他の Avalanche L1 に送信** できます。  
 
-## What You Will Learn
+送信されたメッセージは、**受信側の Avalanche L1 にあるスマートコントラクト** で処理されます。  
+この受信コントラクトは **`ITeleporterReceiver` インターフェース** を実装しており、受信したメッセージを処理できます。  
 
-In this section, you will go through the following topics:
+詳しい内部動作については、**後の章で詳しく解説** します。  
 
-- **Recap: Bytes, Encoding, and Decoding:** Understand how data is encoded and decoded in bytes
-- **Sending messages:** Write your first simple sender contract
-- **Receiving messages:** Write your first simple receiver contract
+![](/common-images/teleporter/teleporter-source-destination.png)  
 
-## Exercise
-You will apply your learned knowledge by building your first Cross-Chain application! This application will be deployed on two chains: C-chain and your own Avalanche L1, both running on a Local Network.
+## 学べること  
 
-Therefore, you will deploy two contracts:
+このセクションでは、次の内容について学びます。  
 
-- **Sender on Local C-Chain:** Send a message with a simple string
-- **Receiver on your Avalanche L1:** Receives the message and saves the most recent string
+- **復習: バイトデータのエンコードとデコード**  
+  - データがどのようにバイト列に変換され、解読されるのかを理解する  
+- **メッセージの送信**  
+  - 初めての「送信者」スマートコントラクトを作成する  
+- **メッセージの受信**  
+  - 初めての「受信者」スマートコントラクトを作成する  
 
-At the end of the section, you will be adapting the example to build an 'Adder'. This application is similar to the example above, but the message will include a number. The receiving contract keeps track of the sum of all sent numbers. 
+## 演習  
+
+学んだ内容を活用して、**初めてのクロスチェーンアプリケーションを構築** します。  
+このアプリケーションは、**2つのブロックチェーン（C-Chain と独自の Avalanche L1）** にデプロイされます。  
+両方のチェーンは **ローカルネットワーク上で実行** します。  
+
+### **デプロイする 2 つのコントラクト**  
+
+- **ローカル C-Chain 上の 「送信（Sender）」 コントラクト**  
+  - **シンプルな文字列メッセージ** を送信する  
+- **独自の Avalanche L1 上の 「受信（Receiver）」 コントラクト**  
+  - 受信したメッセージを保存し、最新の文字列を保持する  
+
+### **発展課題:「Adder」を作成する**  
+
+この課題では、**数値を含むメッセージを送信するアプリケーション** を作成します。  
+「Adder」は、以下のような動作を行います。  
+
+- 送信コントラクトは **数値を含むメッセージ** を送信する  
+- 受信コントラクトは **受信した数値を合計** し、すべての送信メッセージの合計値を記録する  
+
+この実装を通じて、**より高度なクロスチェーンメッセージングの理解を深めることができます**。  

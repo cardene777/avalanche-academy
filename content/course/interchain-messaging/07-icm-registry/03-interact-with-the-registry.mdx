@@ -1,23 +1,27 @@
 ---
-title: Interact with the ICM Registry
-description: Retrieve latest Interchain Messaging version using the Registry.
-updated: 2024-05-31
-authors: [martineckardt]
-icon: Terminal
+title: ICM レジストリとのやり取り  
+description: レジストリを使用して最新の Interchain Messaging バージョンを取得する  
+updated: 2024-05-31  
+authors: [martineckardt]  
+icon: Terminal  
 ---
+
 import { Step, Steps } from 'fumadocs-ui/components/steps';
 
+まずはレジストリとやり取りをしてみましょう。  
+レジストリは、ネットワークの状態やデプロイされたチェーンによって異なるアドレスにデプロイされています。  
+ローカルネットワークでは、以下のコマンドを使ってアドレスを確認できます。
 
-Let's start by interacting with the registry. Registry is deployed on specific addresses depending the chain you're operating and the status of the network at the deployment time. For your local network you can find it out with the following command:
+<Steps>  
+<Step>  
 
-<Steps>
-<Step>
-
-### Get C-Chain Registry Address
+### C-Chain のレジストリアドレスを取得する  
 
 ```bash
 avalanche primary describe
-``` 
+```  
+
+実行すると、以下のような情報が表示されます。  
 
 ```
    _____       _____ _           _         _____
@@ -53,25 +57,28 @@ avalanche primary describe
 +------------------------------+--------------------------------------------------------------------------+
 ```
 
-</Step>
-<Step>
+</Step>  
+<Step>  
 
-### Save C-Chain Registry Address
+### C-Chain のレジストリアドレスを保存する  
 
-Let's put the address of the registry in an environment variable:
+レジストリのアドレスを環境変数に保存します。  
 
 ```bash
 export C_CHAIN_REGISTRY_ADDRESS=0x17aB05351fC94a1a67Bf3f56DdbB941aE6c63E25
 ```
 
-</Step>
-<Step>
+</Step>  
+<Step>  
 
-### Get L1 Registry Address
+### L1 のレジストリアドレスを取得する  
 
 ```bash
 avalanche blockchain describe myblockchain
 ```
+
+出力の中で、Teleporter Registry Address の行を探します。  
+
 ```
 +-------------------------------------------------------------------------------------------+
 |                                         TELEPORTER                                        |
@@ -81,25 +88,26 @@ avalanche blockchain describe myblockchain
 |               | Teleporter Registry Address  | 0x98F9971D3832B94241A2FbBC39712d6e13D8Df99 | // [!code highlight]
 +---------------+------------------------------+--------------------------------------------+
 ```
-</Step>
-<Step>
 
-### Save L1 Registry Address
+</Step>  
+<Step>  
+
+### L1 のレジストリアドレスを保存する  
 
 ```bash
 export MYBLOCKCHAIN_REGISTRY_ADDRESS=0x98F9971D3832B94241A2FbBC39712d6e13D8Df99
 ```
 
-</Step>
-<Step>
+</Step>  
+<Step>  
 
-### Retrieve Latest ICM Messenger Version:
+### 最新の ICM メッセンジャーバージョンを取得する  
 
-Let's interact with the Registry by getting the latest version of the Interchain Messaging Messenger deployed on C-Chain:
+C-Chain のレジストリを参照して、最新の Interchain Messaging Messenger のバージョンを取得します。
 
 ```bash
 cast call --rpc-url local-c $C_CHAIN_REGISTRY_ADDRESS "latestVersion()(uint256)" 
 ```
 
-</Step>
+</Step>  
 </Steps>

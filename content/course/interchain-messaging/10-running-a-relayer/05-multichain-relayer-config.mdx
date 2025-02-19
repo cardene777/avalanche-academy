@@ -1,31 +1,38 @@
 ---
-title: Two-Way Messaging Configuration
-description: Learn how to configure a relayer for multiple L1s
-updated: 2024-10-09
-authors: [owenwahlgren]
-icon: BookOpen
+title: 双方向メッセージングの設定  
+description: 複数の L1 に対応するリレイヤーの設定方法を学ぶ  
+updated: 2024-10-09  
+authors: [owenwahlgren]  
+icon: BookOpen  
+
 ---
 
-<Callout>Important: The relayer needs funds on both L1s to deliver messages. </Callout>
+<Callout>重要: リレイヤーがメッセージを送信するには、両方の L1 に十分な資金が必要です。</Callout>  
 
-### Two-Way Messaging Configuration
+## **双方向メッセージングの設定**  
 
-In this section, you’ll learn how to configure a relayer to support two-way messaging between multiple Layer 1 blockchains (L1s). By extending your existing configuration, you can enable the relayer to handle communication in both directions, eliminating the need to run multiple relayers.
+このセクションでは、**複数の Layer 1（L1）間での双方向メッセージング** をサポートするリレイヤーの設定方法を学びます。設定を拡張することで、リレイヤーが**両方向の通信を処理**できるようになり、複数のリレイヤーを実行する必要がなくなります。  
 
-### Accessing the Relayer Configuration File
+---
 
-The relayer configuration is supplied as a JSON file. To open the configuration file automatically created by the Avalanche-CLI, run the following command:
+## **リレイヤー設定ファイルへのアクセス**  
+
+リレイヤーの設定は **JSON ファイル** で提供されます。Avalanche-CLI によって自動生成された設定ファイルを開くには、以下のコマンドを実行してください。  
+
 ```bash
-code ~/.avalanche-cli/runs/network_xxxx_xxxx/awm-relayer-config.json 
+code ~/.avalanche-cli/runs/network_xxxx_xxxx/awm-relayer-config.json
 ```
 
-<Callout>Replace xxxx_xxxx with the name automatically assigned to your local deployment.</Callout>
+<Callout>`xxxx_xxxx` の部分は、ローカルデプロイ時に自動的に割り当てられた名前に置き換えてください。</Callout>  
 
-Alternatively, navigate to the directory `~/.avalanche-cli/runs/` and locate the relayer configuration file for your network.
+または、`~/.avalanche-cli/runs/` ディレクトリに移動し、ネットワーク用のリレイヤー設定ファイルを見つけることもできます。  
 
-### Understanding the Existing Configuration
+---
 
-Assuming you have a configuration as described in the [Relayer Configuration section](/course/interchain-messaging/10-running-a-relayer/04-relayer-configuration), your current configuration should look similar to the following:
+## **現在の設定を確認**  
+
+[リレイヤー設定のセクション](/course/interchain-messaging/10-running-a-relayer/04-relayer-configuration) で説明されている設定をすでに行っている場合、設定ファイルは次のようになっているはずです。  
+
 ```json
 {
   "p-chain-api": {
@@ -87,11 +94,13 @@ Assuming you have a configuration as described in the [Relayer Configuration sec
 }
 ```
 
-### Updating the Configuration for Two-Way Communication
+---
 
-To enable two-way communication between L1s, you need to extend the configuration to include both blockchains in the source-blockchains and destination-blockchains arrays.
+## **双方向通信のための設定更新**  
 
-Updated Configuration:
+双方向のメッセージ通信を可能にするために、**両方の L1 を `source-blockchains` と `destination-blockchains` の配列に追加** する必要があります。  
+
+### **更新後の設定例**  
 
 ```json
 {
@@ -195,23 +204,33 @@ Updated Configuration:
   ]
 }
 ```
-### Explanation of Changes
 
-By adding both blockchains to the source-blockchains and destination-blockchains arrays, the relayer is configured to:
+---
 
-- Listen for messages on both blockchains.
-- Relay messages to the opposite blockchain.
+## **変更点の説明**  
 
-This setup enables two-way communication between the blockchains using a single relayer instance.
+- **`source-blockchains` に両方の L1 を追加**  
+  - 両方の L1 のメッセージをリスニングできるようにする。  
+- **`destination-blockchains` に両方の L1 を追加**  
+  - それぞれの L1 へのメッセージ転送を可能にする。  
 
-### Important Considerations
+この設定により、**1 つのリレイヤーで 2 つの L1 間の双方向通信** が可能になります。  
 
-- **Private Keys**: Ensure that the account-private-key field contains the private key for the respective blockchain. This key is used to sign transactions when relaying messages.
-- **Funding**: The relaxyer account must have sufficient funds on both L1s to cover transaction fees.
+---
 
-### Next Steps
+## **重要なポイント**  
 
-After updating the configuration file:
-- Save the changes.
-- Restart the relayer to apply the new configuration.
-- Test the two-way communication by sending messages between the blockchains.
+- **プライベートキー**  
+  `account-private-key` のフィールドには、それぞれの L1 でトランザクションを送信するための秘密鍵を設定する。  
+- **資金**  
+  リレイヤーがトランザクションを送信するために、**両方の L1 に十分なガス代があることを確認する**。  
+
+---
+
+## **次のステップ**  
+
+設定ファイルを更新したら、次の手順を実行してください。  
+
+1. **設定を保存**  
+2. **リレイヤーを再起動して、新しい設定を適用**  
+3. **L1 間でメッセージを送信し、双方向通信をテスト**

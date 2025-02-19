@@ -1,12 +1,13 @@
 ---
-title: Retrieving Interchain Messenger from the Registry
-description: Use Registry in a Cross-Chain dApp.
-updated: 2024-05-31
-authors: [martineckardt]
-icon: BookOpen
+title: レジストリから Interchain Messenger を取得する  
+description: クロスチェーン dApp でレジストリを活用する  
+updated: 2024-05-31  
+authors: [martineckardt]  
+icon: BookOpen  
 ---
 
-Let's now integrate the registry into a smart contract. Let's go back to the very simple string sending contract from the beginning:
+次に、レジストリをスマートコントラクトに統合してみましょう。  
+前章までで紹介した、単純な文字列を送信するコントラクトを改良してレジストリを活用できるようにします。
 
 ```solidity title="contracts/interchain-messaging/registry/SenderOnCChainWithRegistry.sol"
 pragma solidity ^0.8.18;
@@ -39,10 +40,11 @@ contract SenderOnCChain {
 }
 ```
 
-<Callout type="warn" title="Don't forget to replace the destinationBlockchainID with Blockchain ID (HEX) from your Avalanche L1!" />
+<Callout type="warn" title="destinationBlockchainID を Avalanche L1 の Blockchain ID (HEX) に置き換えるのを忘れないように！" />
 
-The key things to understand:
+### **このコードのポイント**
+- `ITeleporterRegistry.sol` インターフェースをインポートしている  
+- **Messenger のアドレスではなく、Registry のアドレスを指定** している  
+- **メッセージを送信する前に、レジストリから最新の Interchain Messenger を取得** している  
 
-- We are importing the `ITeleporterRegistry.sol` interface
-- We have a variable for the registry address instead of the messenger address
-- Before sending the message we get the latest version from the registry
+このようにレジストリを利用することで、Messenger のバージョンアップにも対応できる柔軟なコントラクト設計が可能になります。

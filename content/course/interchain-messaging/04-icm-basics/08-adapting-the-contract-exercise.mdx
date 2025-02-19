@@ -1,11 +1,27 @@
 ---
-title: Adapt the contract
-description: Assignment- Modify the Cross-Chain Messenger.
-updated: 2024-05-31
-authors: [martineckardt]
-icon: Terminal
+title: コントラクトの改良  
+description: 課題 - クロスチェーンメッセンジャーを変更する  
+updated: 2024-05-31  
+authors: [martineckardt]  
+icon: Terminal  
 ---
 
-To create a deeper understanding of the concepts, now change the provided contracts. Instead of sending a string, now send a number and add up the numbers on the destination chain:
+これまでの内容をより深く理解するために、**サンプルで用意されたコントラクトを変更してみましょう**。  
+今回は **文字列（string）を送るのではなく、数値（number）を送信し、受信側で受け取った数値を加算** するように修正します。  
 
-Once you finished with the assignment you can review the correct answer at `/contracts/interchain-messaging/send-receive-assignment-solution` in the [Avalanche-Starter-Kit](https://github.com/ava-labs/avalanche-starter-kit)
+---
+
+### **課題内容**  
+
+1. **送信コントラクト（Sender Contract）** を変更し、送信するデータを **文字列（string）から数値（uint）** にする。  
+2. **受信コントラクト（Receiver Contract）** を変更し、受信した数値を保存するだけでなく、**受信した数値を加算するロジックを追加** する。  
+
+---
+
+### **課題の解答**  
+
+課題が完了したら、`Avalanche-Starter-Kit` リポジトリの `/contracts/interchain-messaging/send-receive-assignment-solution` にある正解を確認できます。  
+
+[解答コードはこちら](https://github.com/ava-labs/avalanche-starter-kit)  
+
+**この課題を通じて、クロスチェーンメッセージのデータを変更する方法や、受信側でデータを処理する方法を学ぶことができます。**  

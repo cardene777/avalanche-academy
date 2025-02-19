@@ -1,20 +1,29 @@
 ---
-title: Sending a Message
-description: Learn to send messages with Avalanche Interchain Messaging.
-updated: 2024-05-31
-authors: [martineckardt]
-icon: BookOpen
+title: メッセージの送信  
+description: Avalanche Interchain Messaging を使用してメッセージを送信する方法を学ぶ  
+updated: 2024-05-31  
+authors: [martineckardt]  
+icon: BookOpen  
 ---
 
-Sending a message is nothing more than a simple contract call to the Interchain Messaging messenger contract.
+メッセージの送信は、 **Interchain Messaging（ICM）のメッセンジャーコントラクトに対して関数を呼び出すだけ** という非常にシンプルなプロセスです。  
 
-<img src="/common-images/teleporter/teleporter-source.png" width="400" class="mx-auto"/>
+<img src="/common-images/teleporter/teleporter-source.png" width="400" class="mx-auto"/>  
 
-The dApp on the Source Subnet has to call the `sendCrossChainMessage` function of the Interchain Messaging contract. The Interchain Messaging contract implements the `ITeleporterMessenger` interface below. Note that the dApp itself does not have to implement the interface.
+送信元のサブネット上の dApp は、 **`sendCrossChainMessage` 関数を呼び出すことで、メッセージを別の Avalanche L1 に送信** できます。  
+この関数は **`ITeleporterMessenger` インターフェース** を実装する Interchain Messaging コントラクトに含まれています。  
+
+なお、 **送信元の dApp 自体は `ITeleporterMessenger` インターフェースを実装する必要はありません**。  
+
+---
+
+### **ITeleporterMessenger インターフェース**  
+
+以下のインターフェースは、クロスチェーンメッセージングを行うための標準機能を提供します。  
 
 ```solidity title="/lib/teleporter/contracts/src/Teleporter/ITeleporterMessenger.sol"
 pragma solidity 0.8.18;
-
+ 
 struct TeleporterMessageInput {
     bytes32 destinationBlockchainID;
     address destinationAddress;
@@ -23,12 +32,12 @@ struct TeleporterMessageInput {
     address[] allowedRelayerAddresses;
     bytes message;
 }
-
+ 
 struct TeleporterFeeInfo {
     address feeTokenAddress;
     uint256 amount;
 }
-
+ 
 /**
  * @dev Interface that describes functionalities for a cross chain messenger.
  */
@@ -42,24 +51,60 @@ interface ITeleporterMessenger {
         TeleporterMessage message,
         TeleporterFeeInfo feeInfo
     );
-
+ 
     /**
      * @dev Called by transactions to initiate the sending of a cross subnet message.
      */
 	function sendCrossChainMessage(TeleporterMessageInput calldata messageInput)
         external
         returns (uint256);
-
+ 
 }
 ```
 
-The `sendCrossChainMessage` function takes `TeleporterMessageInput` struct as an input. In that multiple values are contained: This data will then be included in the payload of the Warp message:
+---
 
-- **`destinationChainID`:** The chainID where the contract that should receive the message is deployed. This is not the EVM chain ID you may know from adding a network to a wallet, but the blockchain ID on the P-Chain. The P-Chain uses the transaction ID of the transaction that created those blockchain on the P-Chain for the chain ID, e.g.: 0xd7cdc6f08b167595d1577e24838113a88b1005b471a6c430d79c48b4c89cfc53
-- **`destinationAddress`:** The address of the contract that should receive the message
-- **`feeInfo`:** A struct consisting of a contract address of an ERC20 which the fee is paid in as well as the amount of tokens to be paid as an incentive for the relayer. We will look at this later in more detail.
-- **`requiredGasLimit`:** The amount of gas the delivery of the message requires. If the relayer provides the required gas, the message will be considered delivered whether or not its execution succeeds, such that the relayer can claim their fee reward.
-- **`allowedRelayerAddresses`:** An array of addresses of allowed relayers. An empty allowed relayers list means anyone is allowed to deliver the message. We will look at this later in more detail.
-- **`message`:** The message to be sent as bytes. The message can contain multiple encoded values. DApps using Interchain Messaging are responsible for defining the exact format of this payload in a way that can be decoded on the receiving end. The message can hold multiple values that be encoded in a single bytes object. For example, applications may encode multiple method parameters on the sending side, then decode this data in the contract implementing the receiveTeleporterMessage function and call another contract with the parameters from there.
+### **`sendCrossChainMessage` 関数について**  
 
-<Quiz quizId="304"/>
+`sendCrossChainMessage` は、 **メッセージをクロスチェーンで送信するための関数** です。  
+この関数の引数には、 `TeleporterMessageInput` 構造体が渡されます。  
+この構造体には、次のような情報が含まれます。  
+
+- **`destinationChainID`（送信先のチェーン ID）**  
+
+メッセージを受け取るコントラクトが **どのブロックチェーンにデプロイされているか** を指定します。  
+これは通常の **EVM のチェーン ID ではなく、P-Chain 上のブロックチェーン ID** です。  
+P-Chain では、各ブロックチェーンの **作成時のトランザクション ID** をブロックチェーン ID として使用します。  
+例: `0xd7cdc6f08b167595d1577e24838113a88b1005b471a6c430d79c48b4c89cfc53`  
+
+- **`destinationAddress`（送信先のアドレス）**  
+
+メッセージを受け取る **スマートコントラクトのアドレス** を指定します。  
+
+- **`feeInfo`（手数料情報）**  
+
+**ERC20 トークン** で支払う手数料の詳細を含む構造体です。  
+**手数料を支払うトークンのアドレス** と **支払うトークンの量** を指定します。  
+この詳細は後の章で詳しく解説します。  
+
+- **`requiredGasLimit`（必要なガス上限）**  
+
+**メッセージを送信するために必要なガス量** を指定します。  
+**リレイヤー（メッセージを送信するノード）がガスを負担する** 仕組みになっています。  
+たとえメッセージの実行が失敗しても、リレイヤーはガスを支払った対価として手数料を請求できます。  
+
+- **`allowedRelayerAddresses`（リレイヤーの許可リスト）**  
+
+**メッセージを配信できるリレイヤーのアドレス** を指定します。  
+空のリストにすると **誰でもメッセージを配信できる** ようになります。  
+これについても、後の章で詳しく説明します。  
+
+- **`message`（送信するデータ）**  
+
+**実際に送信するメッセージの内容をバイトデータとして格納** します。  
+メッセージのフォーマットは **送信元の dApp が自由に定義** でき、**送信時にエンコード（`abi.encode()`）** して受信時にデコード（`abi.decode()`）** することでデータを正しく取得できます。  
+例えば、**複数のメソッドパラメータをまとめて送信し、受信したデータを処理する** ことも可能です。  
+
+この `sendCrossChainMessage` を活用することで、**異なる Avalanche L1 のコントラクト同士でメッセージをやり取りできるようになります**。  
+
+<Quiz quizId="304"/>  

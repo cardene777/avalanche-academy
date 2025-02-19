@@ -1,66 +1,70 @@
 ---
-title: Deploy Wrapper
-description: Learn how to deploy the CrossChainVRFWrapper contract to handle cross-chain VRF requests.
-updated: 2024-10-21
-authors: [0xstt]
-icon: Terminal
+title: Wrapper のデプロイ  
+description: クロスチェーン VRF リクエストを処理する `CrossChainVRFWrapper` コントラクトをデプロイする方法を学ぶ。  
+updated: 2024-10-21  
+authors: [0xstt]  
+icon: Terminal  
 ---
 
-import { Step, Steps } from 'fumadocs-ui/components/steps';
+import { Step, Steps } from 'fumadocs-ui/components/steps';  
 
-Once you have set up your Chainlink VRF subscription and have your LINK tokens ready, the next step is to deploy the **CrossChainVRFWrapper** contract. This contract will act as the bridge between your unsupported L1 and the Chainlink VRF network on a supported L1, enabling cross-chain requests for random words.
+**Chainlink VRF のサブスクリプションをセットアップし、LINK トークンの準備が完了したら、次は `CrossChainVRFWrapper` コントラクトをデプロイします。**  
+このコントラクトは、**Chainlink VRF をサポートしていない L1 と、サポートされている L1（例: Avalanche Fuji）の間のブリッジとして機能** し、クロスチェーンでのランダム数リクエストを可能にします。  
 
-<Steps>
-<Step>
+<Steps>  
+<Step>  
 
-## Prerequisites
-Before deployment, make sure you have:
-- A valid **Chainlink VRF Subscription ID** (see previous section for details).
-- The `TeleporterMessenger` contract address on your supported L1 (e.g., Avalanche Fuji).
-</Step>
-<Step>
+## 前提条件  
+デプロイ前に、以下の準備が整っていることを確認してください。  
+- **Chainlink VRF サブスクリプション ID**（取得方法は前のセクション参照）  
+- **サポートされている L1 にデプロイされた `TeleporterMessenger` コントラクトのアドレス**（例: Avalanche Fuji）  
 
-## Deploy the Contract
-Using the `forge create` command, deploy the `CrossChainVRFWrapper` contract to the supported L1 (e.g., Avalanche Fuji).
+</Step>  
+<Step>  
 
-```bash
+## コントラクトのデプロイ  
+`forge create` コマンドを使用して、`CrossChainVRFWrapper` コントラクトを **サポートされている L1**（例: Avalanche Fuji）にデプロイします。  
+
+```bash  
 forge create --rpc-url <RPC_URL> --private-key <PRIVATE_KEY> src/CrossChainVRFWrapper.sol:CrossChainVRFWrapper --constructor-args <TELEPORTER_MESSENGER_ADDRESS>
-```
+```  
 
-Replace the following:
+値を以下のように置き換えてください。  
 
-- `<RPC_URL>`: The RPC URL for the L1.
-- `<PRIVATE_KEY>`: The private key for the account used to deploy the contract.
-- `<TELEPORTER_MESSENGER_ADDRESS>`: The address of the deployed `TeleporterMessenger` contract.
+- `<RPC_URL>`: L1 の RPC URL  
+- `<PRIVATE_KEY>`: デプロイに使用するアカウントのプライベートキー  
+- `<TELEPORTER_MESSENGER_ADDRESS>`: `TeleporterMessenger` コントラクトのアドレス  
 
-After deployment, save the `Deployed to` address in an environment variable for future use.
+デプロイ後、出力される `Deployed to` のアドレスを保存しておきます。  
+環境変数に保存すると後で便利です。  
 
-```bash
+```bash  
 export VRF_WRAPPER=<address>
-```
+```  
 
-</Step>
-<Step>
+</Step>  
+<Step>  
 
-## Verify the Deployment
-After deploying the contract, verify that the `CrossChainVRFWrapper` has been successfully deployed by checking its address on a block explorer.
+## デプロイの確認  
+コントラクトのデプロイが成功したかどうかを、**ブロックエクスプローラーでアドレスを確認** して検証します。  
 
-</Step>
-<Step>
+</Step>  
+<Step>  
 
-## Configure Authorized Subscriptions
-Once deployed, the `CrossChainVRFWrapper` contract needs to be configured with authorized subscriptions to process requests for random words.
+## サブスクリプションの許可設定  
+デプロイが完了したら、`CrossChainVRFWrapper` コントラクトにリクエストを送信できるアドレスを設定します。  
 
-- Call the `addAuthorizedAddress` function to authorize a specific address with a given subscription ID.
-- This ensures that only authorized addresses can request random words via the wrapper.
+- `addAuthorizedAddress` 関数を呼び出し、特定のアドレスにサブスクリプション ID を関連付けます。  
+- これにより、**許可されたアドレスのみが VRF リクエストを送信可能** になります。  
 
-```bash
+```bash  
 cast send --rpc-url <RPC_URL> --private-key <PRIVATE_KEY> $VRF_WRAPPER "addAuthorizedAddress(address caller, uint256 subscriptionId)" <CALLER_ADDRESS> <SUBSCRIPTION_ID>
-```
+```  
 
-Replace the following:
+値を以下のように置き換えてください。  
 
-- `<CALLER_ADDRESS>`: The address that will be authorized to request random words.
-- `<SUBSCRIPTION_ID>`: The ID of your Chainlink VRF subscription.
-</Step>
-</Steps>
+- `<CALLER_ADDRESS>`: ランダム数をリクエストするアドレス  
+- `<SUBSCRIPTION_ID>`: Chainlink VRF のサブスクリプション ID  
+
+</Step>  
+</Steps>  

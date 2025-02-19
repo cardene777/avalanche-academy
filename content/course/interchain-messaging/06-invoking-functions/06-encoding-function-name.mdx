@@ -1,21 +1,32 @@
 ---
-title: Encoding the Function Name
-description: Work with multiple functions in a single Cross-Chain dApp
-updated: 2024-05-31
-authors: [martineckardt]
-icon: BookOpen
+title: 関数名のエンコード  
+description: 1 つのクロスチェーン dApp で複数の関数を扱う  
+updated: 2024-05-31  
+authors: [martineckardt]  
+icon: BookOpen  
 ---
+
 import { Step, Steps } from 'fumadocs-ui/components/steps';
 
-Great work. We can now pack multiple values into a message. In this section, we will learn how to encode the function name and depending on that its parameters in the message. Let's imagine a more advanced calculator that not only has a single `add` function but also a `concatenate` function, that lets you concatenate two strings. 
+**よくできました！**  
+これまでに、**複数の値を 1 つのメッセージにエンコードする方法** を学びました。  
+この章では、**関数名もエンコードし、適切なパラメータをメッセージに含める方法** を学びます。  
 
-For the add function we need to encode two numbers. For the concatenate function we need to encode two strings. How can we go about this? The concept is easy: It's like packing an envelope into another envelope:
+例えば、次のような **より高度な計算機** を考えてみましょう。  
+
+- `add` 関数（2 つの数値を加算）  
+- `concatenate` 関数（2 つの文字列を結合）  
+
+`add` では **数値 2 つ** をエンコードする必要があり、`concatenate` では **文字列 2 つ** をエンコードする必要があります。  
+これをどのように処理するかを見ていきます。  
 
 ![](/common-images/teleporter/message-function-call.png)
 
-## Ecoding the Function Name and Parameters
+## **関数名とパラメータのエンコード**  
 
-The first step is to create a `CalculatorAction` enum that specifies the different functions that can be called on the calculator. 
+### **ステップ 1: 関数名を表す `enum` を作成する**  
+
+まず、呼び出す関数を特定するための `CalculatorAction` **列挙型（enum）** を作成します。  
 
 ```solidity title="contracts/interchain-messaging/invoking-functions/CalculatorActions.sol"
 pragma solidity ^0.8.18;
@@ -26,7 +37,13 @@ enum CalculatorAction {
 }
 ```
 
-In the next step we can add this to our `encode helpers` in the sender contract:
+この `enum` を利用して、送信するメッセージが **どの関数を呼び出すべきか** を指定します。  
+
+---
+
+### **ステップ 2: 送信コントラクトに `encode helpers` を追加する**  
+
+次に、`CalculatorAction` を使用して関数名とパラメータを一緒にエンコードできるようにします。  
 
 ```solidity title="contracts/interchain-messaging/invoking-functions/CalculatorSenderOnCChain.sol"
 pragma solidity ^0.8.18;
@@ -79,11 +96,31 @@ contract CalculatorSenderOnCChain {
 }
 ```
 
-As you can see here we are calling `abi.encode` twice in the encode helpers. The first time we encode the function paramters and the second time we encode the function name with the byte array containing paramters.
+---
 
-## Decode the Function Name and Parameters
+### **📌 コードのポイント**  
 
-Let's now look at the receiver:
+#### **① `enum` で関数の種類を指定**
+- `CalculatorAction.add` → `add` 関数を実行  
+- `CalculatorAction.concatenate` → `concatenate` 関数を実行  
+
+#### **② 送信データのエンコード方法**
+関数ごとに **2 回 `abi.encode()`** を実行することで、**関数名とパラメータをまとめる** ことができます。  
+
+- **`encodeAddData()`**
+  ```solidity
+  bytes memory paramsData = abi.encode(a, b);  // 2 つの `uint256` をエンコード
+  return abi.encode(CalculatorAction.add, paramsData);  // 関数名とパラメータをまとめてエンコード
+  ```
+- **`encodeConcatenateData()`**
+  ```solidity
+  bytes memory paramsData = abi.encode(a, b);  // 2 つの `string` をエンコード
+  return abi.encode(CalculatorAction.concatenate, paramsData);  // 関数名とパラメータをまとめてエンコード
+  ```
+
+## 関数名とパラメータのデコード  
+
+**受信コントラクトで関数名とパラメータをデコードし、適切な処理を実行する方法** を見ていきます。  
 
 ```solidity title="contracts/interchain-messaging/invoking-functions/CalculatorReceiverOnSubnet.sol"
 pragma solidity ^0.8.18;
@@ -143,14 +180,23 @@ contract CalculatorReceiverOnSubnet is ITeleporterReceiver {
 }
 ```
 
-You can see that we first decode the `CalculatorAction` enum:
+---
+
+## **📌 コードのポイント**  
+
+### **① 関数名のデコード**  
 
 ```solidity
 // Decoding the Action type: 
 (CalculatorAction actionType, bytes memory paramsData) = abi.decode(message, (CalculatorAction, bytes)); 
 ```
 
-Then based on the function name we decide how to unpack the paramters
+受け取ったメッセージの最初の部分に **関数名（`CalculatorAction`）** がエンコードされているので、  
+まず **関数名（`actionType`）** を取得してから次に **関数のパラメータ（`paramsData`）** を取得します。  
+
+---
+
+### **② 関数名に応じたデコードと処理の実行**  
 
 ```solidity
 // Route to the appropriate function. 
@@ -165,18 +211,20 @@ if (actionType == CalculatorAction.add) {
 }
 ```
 
-For the `add` function we decode two numbers and for the `concatenate` function we decode two strings. After the decoding we call the appropriate internal function.
+- `CalculatorAction.add` → 2 つの数値をデコードし、`_calculatorAdd()` を実行  
+- `CalculatorAction.concatenate` → 2 つの文字列をデコードし、`_calculatorConcatenateStrings()` を実行  
+- 上記以外の関数名が送られた場合は `revert` でエラーを発生させる  
 
-## Try it Out
+## 実際に試してみよう  
 
-Deploy the sender and receiver contracts and try out the `add` and `concatenate` functions. 
+Sender コントラクトと Receiver コントラクトをデプロイし、`add`（加算）と `concatenate`（文字列結合）の関数を実際に動かしてみましょう。  
 
-<Steps>
-<Step>
+<Steps>  
+<Step>  
 
-### Deploy the Sender Contract
+### **Sender コントラクトをデプロイする**  
 
-<Callout type="warn" title="Don't forget to replace BOTH destinationBlockchainIDs in CalculatorSenderOnCChain with the Blockchain ID (HEX) from your Avalanche L1!" />
+<Callout type="warn" title="CalculatorSenderOnCChain の BOTH destinationBlockchainIDs を Avalanche L1 の Blockchain ID (HEX) に変更するのを忘れないように！" />
 
 ```bash
 forge create --rpc-url local-c --private-key $PK contracts/interchain-messaging/invoking-functions/CalculatorSenderOnCChain.sol:CalculatorSenderOnCChain
@@ -191,19 +239,19 @@ Deployed to: 0x8B3BC4270BE2abbB25BC04717830bd1Cc493a461 // [!code highlight]
 Transaction hash: 0xf9cce28a714764bb265bba7522bfd10d620fa0cb0f5dae26de2ac773b0a878ee
 ```
 
-</Step>
-<Step>
+</Step>  
+<Step>  
 
-### Save the Sender Address:
+### **Sender コントラクトのアドレスを保存する**  
 
 ```bash
 export SENDER_ADDRESS=0x8B3BC4270BE2abbB25BC04717830bd1Cc493a461
 ```
 
-</Step>
-<Step>
+</Step>  
+<Step>  
 
-### Deploy the Receiver Contract:
+### **Receiver コントラクトをデプロイする**  
 
 ```bash
 forge create --rpc-url myblockchain --private-key $PK contracts/interchain-messaging/invoking-functions/CalculatorReceiverOnSubnet.sol:CalculatorReceiverOnSubnet
@@ -217,36 +265,44 @@ Deployer: 0x8db97C7cEcE249c2b98bDC0226Cc4C2A57BF52FC
 Deployed to: 0x5DB9A7629912EBF95876228C24A848de0bfB43A9 // [!code highlight]
 Transaction hash: 0xa8efb88abfef486d2caba30cb4146b1dc56a0ee88c7fb4c46adccdf1414ae39e
 ```
-</Step>
-<Step>
 
-### Save the Receiver address:
+</Step>  
+<Step>  
+
+### **Receiver コントラクトのアドレスを保存する**  
 
 ```bash
 export RECEIVER_ADDRESS=0x5DB9A7629912EBF95876228C24A848de0bfB43A9
 ```
 
-</Step>
-<Step>
+</Step>  
+<Step>  
 
-### Call the Functions
+### **関数を呼び出す**  
 
-Now you can call the `sendAddMessage` and `sendConcatenateMessage` functions on the sender contract and see the results on the receiver contract. 
+Sender コントラクトの `sendAddMessage` や `sendConcatenateMessage` を呼び出し、Receiver コントラクトで処理されるか確認します。
 
 ```bash
 cast send --rpc-url local-c --private-key $PK $SENDER_ADDRESS "sendAddMessage(address, uint, uint)" $RECEIVER_ADDRESS 1 2
 ```
 
-</Step>
-<Step>
+</Step>  
+<Step>  
 
-### Verify the Result:
+### **結果を確認する**  
+
+Receiver コントラクトの `result_num()` を呼び出し、計算結果を確認します。
 
 ```bash
 cast call --rpc-url myblockchain $RECEIVER_ADDRESS "result_num()(uint)"
 ```
+期待される出力：
+```bash
+3
+```
+（1 + 2 = 3 の計算結果）  
 
-</Step>
-</Steps>
+</Step>  
+</Steps>  
 
 <Quiz quizId="307"/>

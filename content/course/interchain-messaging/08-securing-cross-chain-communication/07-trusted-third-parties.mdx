@@ -1,26 +1,41 @@
 ---
-title: Trusted Third Parties
-description: Learn about the challenges of cross-chain communication.
-updated: 2024-05-31
-authors: [martineckardt]
-icon: BookOpen
+title: 信頼できる第三者  
+description: クロスチェーン通信の課題について学ぶ  
+updated: 2024-05-31  
+authors: [martineckardt]  
+icon: BookOpen  
 ---
 
 # "Cross-chain communication is impossible without a trusted third party, contrary to common beliefs in the blockchain community"
-- A. Zamyatin et al. in [SoK: Communication Across Distributed Ledgers](https://eprint.iacr.org/2019/1128.pdf)
 
-Signature Schemes give us the tool to ensure the authenticity of message, but who will send these messages? Can we build a cross-chain communication protocol that does not introduce additional trust assumption?
+**「ブロックチェーンコミュニティでに信じられているのとは異なり、クロスチェーン通信は信頼できる第三者なしには不可能である」**
 
-The paper [SoK: Communication Across Distributed Ledgers](https://eprint.iacr.org/2019/1128.pdf) looks into this question and states that a CCC protocol must have the following attributes:
+— A. Zamyatin ら [SoK: Communication Across Distributed Ledgers](https://eprint.iacr.org/2019/1128.pdf) より  
 
-- **Effectiveness:** all relevant transactions are posted on their respective chains at the desired time
-- **Atomicity:** either all transactions were posted on their respective chains at the desired time, or no transactions were posted at all 
-- **Timeliness:** all transactions will eventually be posted on their respective chains
+署名スキームを使えば、メッセージの **真正性** を保証できます。しかし、そのメッセージを **誰が送信するのか** という問題があります。  
+追加の信頼を前提とせずに、クロスチェーン通信プロトコルを構築することは可能でしょうか？  
 
-It is possible to create a cross-chain communication protocol that adheres to the three attributes mentioned above? Can a correct CCC protocol that is trustless exist?
+[SoK: Communication Across Distributed Ledgers](https://eprint.iacr.org/2019/1128.pdf) という論文では、この疑問について検討し、クロスチェーン通信（CCC）プロトコルが満たすべき 3 つの特性を定義しています。  
 
-In SoK, the researchers come to the conclusion that such a trustless, correct CCC protocol is impossible. Using computational complexity theory, the trustless, correct CCC protocol problem can be reduced into the Fair Exchange problem, a problem that has been proven to have no solution.
+- **有効性（Effectiveness）**: 必要なトランザクションが、適切なタイミングで各チェーンに確実に投稿されること  
+- **原子性（Atomicity）**: 全てのトランザクションが適切なタイミングで投稿されるか、またはまったく投稿されないこと  
+- **適時性（Timeliness）**: 全てのトランザクションが最終的に投稿されること  
 
-We see this also in practice. Many bridges and cross-chain communications often rely on some centralized infrastructure that observes the source chain and then delivers the message to the destination chain. Their users need to trust this setup, often involving a set of third-party bridge validators.
+これらの特性をすべて満たすクロスチェーン通信プロトコルは作れるのでしょうか？  
+**完全に信頼不要（trustless）で、正しい CCC プロトコルは存在し得るのでしょうか？**  
 
-However, there might be a smart trick we can use. We'll explore this in the next section about Avalanche Warp Messaging.
+### 信頼不要な CCC プロトコルは理論上不可能  
+
+SoK の研究者たちは、**信頼不要かつ正しい CCC プロトコルは理論的に不可能である** という結論に至りました。  
+計算複雑性理論を用いると、この問題は「**フェアエクスチェンジ問題（Fair Exchange Problem）**」に帰着されることが分かっています。  
+しかし、この問題は **解決不可能** であることがすでに証明されています。  
+
+### 実際のクロスチェーン通信では何が起こっているのか？  
+
+この理論的な限界は、現実のブロックチェーンでも確認できます。  
+例えば、多くの **ブリッジ** や **クロスチェーン通信プロトコル** は、中央集権的なインフラに依存しています。  
+具体的には、送り元（ソースチェーン）の状態を監視し、それを宛先チェーン（デスティネーションチェーン）に伝える **第三者（ブリッジバリデータなど）** に頼る仕組みです。  
+この場合、ユーザーはこの **中央管理者を信頼する必要** があります。  
+
+しかし、**この問題を解決するためのスマートな方法** が存在するかもしれません。  
+次の章では、Avalanche Warp Messaging（AWM）を使って、どのように **信頼不要なクロスチェーン通信** を実現できるのかを探ります。

@@ -103,7 +103,7 @@ const CertificatePage: React.FC<CertificatePageProps> = ({ courseId }) => {
       });
 
       if (!response.ok) {
-        throw new Error('Failed to generate certificate');
+        throw new Error('証明書の生成に失敗しました');
       }
 
       const blob = await response.blob();
@@ -116,8 +116,8 @@ const CertificatePage: React.FC<CertificatePageProps> = ({ courseId }) => {
       a.click();
       window.URL.revokeObjectURL(url);
     } catch (error) {
-      console.error('Error generating certificate:', error);
-      alert('Failed to generate certificate. Please try again.');
+      console.error('証明書の生成に失敗しました:', error);
+      alert('証明書の生成に失敗しました。もう一度試してください。');
     } finally {
       setIsGenerating(false);
     }
@@ -179,11 +179,11 @@ const CertificatePage: React.FC<CertificatePageProps> = ({ courseId }) => {
             <h2 className="text-3xl font-bold text-gray-800 dark:text-white" style={{ fontSize: '2rem', marginTop: '1em'}}>Congratulations!</h2>
           </div>
           <p className="text-center text-gray-600 dark:text-gray-300 mb-8">
-            You've completed all quizzes for the {quizData.courses[courseId].title} course. Claim your certificate now!
+            {quizData.courses[courseId].title} コースのすべてのクイズを解きました。証明書を取得してください！
           </p>
           <div className="mb-6">
             <label htmlFor="userName" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              Enter your full name for the certificate:
+              証明書に表示する名前を入力してください：
             </label>
             <input
               type="text"
@@ -202,11 +202,11 @@ const CertificatePage: React.FC<CertificatePageProps> = ({ courseId }) => {
             onClick={generateCertificate}
             disabled={isGenerating}
           >
-            {isGenerating ? 'Generating Certificate...' : 'Generate My Certificate'}
+            {isGenerating ? '証明書を生成中...' : '証明書を生成する'}
           </button>
           <div className="border-t border-gray-200 dark:border-gray-700 pt-6">
             <p className="text-center text-gray-600 dark:text-gray-300 mb-4">
-              Share your achievement:
+              成果をシェアします：
             </p>
             <div className="flex justify-center space-x-4">
               <a href={shareOnLinkedIn()} target="_blank" rel="noopener noreferrer"
@@ -236,7 +236,7 @@ const CertificatePage: React.FC<CertificatePageProps> = ({ courseId }) => {
       {!allQuizzesCompleted && (
         <div className="mt-12 bg-muted rounded-lg shadow-lg p-8">
           <Share2 className="w-8 h-8 mx-auto mb-2 text-yellow-500" />
-          Complete all quizzes to unlock your certificate and share your achievement!
+          すべてのクイズを解くと証明書を解禁し、成果をシェアできます！
         </div>
       )}
     </div>

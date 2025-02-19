@@ -1,13 +1,24 @@
 ---
-title: Interoperability in Multi-Chain Systems
-description:  Learn about interoperability and it's importance in multichain systems
-updated: 2024-05-31
-authors: [martineckardt]
-icon: BookOpen
+title: マルチチェーンシステムにおける相互運用性  
+description: ブロックチェーンの相互運用性と、その重要性について学ぶ  
+updated: 2024-05-31  
+authors: [martineckardt]  
+icon: BookOpen  
 ---
 
-Interoperability is crucial for multi-chain systems, as the price for easy scalability is fragmentation. However, this interoperability is equally important to all blockchain systems. Even though more dApps are based on the same chain in single-chain systems, many of them require interaction with other chains for liquidity or governance. Therefore, coming up with secure and efficient interoperability solutions is crucial for the entire blockchain space.
+**相互運用性（Interoperability）** は、マルチチェーンシステムにおいて **不可欠な要素** です。  
+なぜなら、マルチチェーンの利点である **スケーラビリティの向上** の代償として、 **ネットワークの分断（フラグメンテーション）** が発生するためです。  
 
-![](/common-images/multi-chain-architecture/vm-variety.png)
+しかし、 **相互運用性はシングルチェーンシステムにとっても重要** です。  
+シングルチェーンの環境では、ほとんどの dApp（分散型アプリケーション）が同じチェーン上で動作しますが、多くのアプリは **流動性（Liquidity）** や **ガバナンス** のために他のチェーンとやり取りする必要があります。  
+そのため、安全で効率的な相互運用性ソリューションを構築することは、ブロックチェーン業界全体にとって極めて重要です。  
 
-Avalanche, as a multi-chain system, provides flexibility on the execution and application layer but also offers a standardized messaging protocol. The necessary cryptographic algorithms are implemented in AvalancheGo, enabling cross-Avalanche L1 communication out of the box, even when the application and execution layers of the chains may be completely different. The VMs can utilize these modules to sign and verify messages, making interoperability between Avalanche L1s much easier than between unrelated chains from different networks.
+![](/common-images/multi-chain-architecture/vm-variety.png)  
+
+Avalanche のような **マルチチェーンシステム** では、 **アプリケーション層と実行層の柔軟性** を提供しながら、 **標準化されたメッセージングプロトコル** も備えています。  
+
+これを可能にしているのが、 **AvalancheGo に実装された暗号アルゴリズム** です。  
+この仕組みにより、たとえ **各チェーンのアプリケーション層や実行層が異なっていても** 、 Avalanche L1 間での通信が標準機能として利用できます。  
+
+また、各仮想マシン（VM）は **メッセージの署名や検証を行うためのモジュール** を利用できます。  
+そのため、Avalanche L1 同士の相互運用性は、 **異なるネットワーク間のチェーンよりもはるかに簡単** に実現できます。  

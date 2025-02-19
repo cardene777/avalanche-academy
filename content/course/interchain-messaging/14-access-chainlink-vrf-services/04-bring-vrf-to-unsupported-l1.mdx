@@ -1,24 +1,25 @@
 ---
-title: Bringing Chainlink VRF to Unsupported L1s (Consumer)
-description: Learn how to request VRF from an unsupported L1 using CrossChainVRFConsumer.
+title: "Chainlink VRF をサポートされていない L1 へ導入（Consumer）"
+description: "`CrossChainVRFConsumer` を使用して、サポートされていない L1 から VRF をリクエストする方法を学ぶ。"
 updated: 2024-10-21
 authors: [0xstt]
 icon: BookOpen
 ---
 
-import { Step, Steps } from 'fumadocs-ui/components/steps';
+import { Step, Steps } from 'fumadocs-ui/components/steps';  
 
-The `CrossChainVRFConsumer` contract enables DApps on an unsupported L1 to request random words from Chainlink VRF using a cross-chain communication mechanism. Since Chainlink does not natively support all blockchains, this setup allows developers to access Chainlink's VRF service even on networks that don’t have direct support.
+`CrossChainVRFConsumer` コントラクトは、**Chainlink がネイティブにサポートしていない L1 上の DApp が、Chainlink VRF からランダム数を取得できるようにする** ための仕組みを提供します。  
+Chainlink はすべてのブロックチェーンをサポートしているわけではないため、この方法を使用することで、直接 Chainlink VRF を利用できないネットワーク上でもランダム数を取得できます。  
 
 <Steps>
 <Step>
+## ランダム数のリクエスト  
 
-## Requesting Random Words
+`CrossChainVRFConsumer` コントラクトは、`TeleporterMessenger` を介して、Chainlink をサポートする L1 上の `CrossChainVRFWrapper` にクロスチェーンメッセージを送信し、ランダム数をリクエストします。  
 
-The `CrossChainVRFConsumer` contract sends a cross-chain message to the `CrossChainVRFWrapper` on a Chainlink-supported L1, requesting random words. This request is sent using `TeleporterMessenger`, which handles cross-chain communication.
+<Accordions>  
+<Accordion title="実装">  
 
-<Accordions>
-<Accordion title="Implementation">
 ```solidity
 function requestRandomWords(
     bytes32 keyHash,
@@ -49,26 +50,27 @@ function requestRandomWords(
     teleporterMessenger.sendCrossChainMessage(messageInput);
 }
 ```
-</Accordion>
-</Accordions>
+
+</Accordion>  
+</Accordions>  
 
 </Step>
 
 <Step>
+## リクエストの処理  
 
-## Processing the Request
-Once the request is received by the `CrossChainVRFWrapper`, it interacts with the Chainlink VRF Coordinator to request the random words on behalf of the consumer on the unsupported L1.
+リクエストを受け取った `CrossChainVRFWrapper` は、Chainlink VRF コーディネーターとやり取りし、サポートされていない L1 上の `CrossChainVRFConsumer` に代わってランダム数をリクエストします。  
 
 </Step>
 
 <Step>
+## ランダム数の受信  
 
-## Receiving Random Words
+Chainlink がリクエストを処理した後、`CrossChainVRFWrapper` はクロスチェーンメッセージを送信し、リクエストした `CrossChainVRFConsumer` にランダム数を返します。  
 
-Once Chainlink fulfills the request, the `CrossChainVRFWrapper` sends the random words back to the `CrossChainVRFConsumer` via a cross-chain message, enabling the DApp on the unsupported L1 to use them.
+<Accordions>  
+<Accordion title="実装">  
 
-<Accordions>
-<Accordion title="Implementation">
 ```solidity
 function receiveTeleporterMessage(
     bytes32 originChainID,
@@ -94,8 +96,9 @@ function fulfillRandomWords(uint256 requestId, uint256[] memory randomWords) int
     emit RandomWordsReceived(requestId);
 }
 ```
-</Accordion>
-</Accordions>
+
+</Accordion>  
+</Accordions>  
 
 </Step>
 </Steps>

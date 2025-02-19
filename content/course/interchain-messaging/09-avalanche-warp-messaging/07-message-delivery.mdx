@@ -1,66 +1,70 @@
 ---
-title: Message Delivery
-description: Learn about the role of the Relayer for delivering the message.
-updated: 2024-05-31
-authors: [martineckardt]
-icon: BookOpen
+title: メッセージの送信
+description: リレイヤーがメッセージを送信する役割について学ぶ  
+updated: 2024-05-31  
+authors: [martineckardt]  
+icon: BookOpen  
 ---
 
 import { Step, Steps } from 'fumadocs-ui/components/steps';
 
-Next, the AWM Relayer delivers the message with the aggregated signature by simply submitting a transaction to the destination Avalanche L1. The transaction is propagated through the validator set of the destination blockchain just as any other regular transaction would.
+次に、AWM リレイヤーは、集約された署名付きのメッセージを送信先の Avalanche L1 にトランザクションとして送信し、メッセージを配信します。このトランザクションは、通常のトランザクションと同様に送信先のブロックチェーンのバリデータセットによって伝播されます。
 
-In order to submit the transaction, the AWM Relayer needs access to the private key of a wallet holding the gas token of the destination blockchain to sign the transaction.
+トランザクションを送信するために、AWM リレイヤーは送信先ブロックチェーンのガス代に使用するネイティブトークンを保有しているウォレットの秘密鍵にアクセスし、トランザクションに署名する必要があります。
 
 ![](/common-images/awm/relayer-delivery.png)
 
-When the validators verify the transaction, they perform the following steps:
+バリデータがトランザクションを検証するとき、以下の手順を実行します。
 
 <Steps>
 <Step>
- 
-### Query the P-Chain:
-The verifying validators of the destination L1 each query the validator set of the source Avalanche L1 with its stake weights and BLS Public Keys.
 
-</Step>
- 
-<Step>
- 
-### Verify Sufficient Stake Weight:
-First, the verifying validators are checking if the combined stake weight of the validators that have signed the Warp message is large enough to accept the message (e.g. validators representing 50% of the total stake have signed the message). The required stake weight required to accept a message from a source chain can be set arbitrarily by the destination chain. An Avalanche L1 may require 50% for chain A and 90% for chain B. If the stake weight of the validators of the aggregate signature is insufficient the message is rejected.
+### P-チェーンの照会  
+送信先 L1 のバリデータは、それぞれ P-チェーンに問い合わせ、送信元 Avalanche L1 のバリデータセットとそのステークの重み、および BLS 公開鍵を取得します。
 
 </Step>
 
 <Step>
- 
-### Aggregate BLS Public Keys:
-The verifying validators of the destination L1 aggregate the BLS Public Keys of the source L1 validators that signed the message. 
 
-</Step>
- 
-<Step>
- 
-### Verify BLS Multi-Signature:
-The aggregated signature (created by the AWM Relayer) is now being verified using the aggregated BLS Public Key (aggregated by the destination L1 validators). If the verification fails (e.g. the AWM Relayer modified the message), the message is rejected.
+### 十分なステークの確認  
+最初に、送信元の Avalanche L1 のバリデータのうち、Warp メッセージに署名したバリデータの合計ステークの重みがメッセージを受け入れるのに十分であるかを確認します（例: 送信元チェーンの総ステークの 50% を超えるバリデータが署名している）。  
+送信先チェーンは、送信元チェーンごとに受け入れるためのステークの割合を自由に設定できます。例えば、Avalanche L1 はチェーン A からのメッセージには 50%、チェーン B からのメッセージには 90% のステークを要求することができます。  
+もし、集約署名に含まれるバリデータのステークの重みが不足している場合、メッセージは拒否されます。
 
 </Step>
 
 <Step>
- 
-### Message Execution:
-If the verification is successful, the message is executed. 
+
+### BLS 公開鍵の集約  
+送信先 L1 のバリデータは、送信元 L1 のバリデータのうち、メッセージに署名したバリデータの BLS 公開鍵を集約します。
+
+</Step>
+
+<Step>
+
+### BLS マルチ署名の検証  
+集約された署名（AWM リレイヤーによって作成）を、集約された BLS 公開鍵（送信先 L1 のバリデータによって集約）を使用して検証します。  
+もし検証が失敗した場合（例: AWM リレイヤーがメッセージを改ざんしていた場合）、メッセージは拒否されます。
+
+</Step>
+
+<Step>
+
+### メッセージの実行  
+検証に成功した場合、メッセージが実行されます。
 
 </Step>
 
 </Steps>
 
+## なぜ AWM リレイヤーは BLS 公開鍵を集約しないのか？
 
-## Why doesn't the AWM Relayer also aggregate the BLS Public Keys?
+BLS 公開鍵の集約は、送信先サブネットのすべてのバリデータによって実行されなければなりません。一部の人は「この処理を AWM リレイヤーがオフチェーンで行い、メッセージに添付すればいいのでは？」と考えるかもしれません。
 
-The BLS public key aggregation has to be done by every validator of the destination subnet. Some may ask why we don't perform this action off-chain through the AWM Relayer and attach it to the message (similar to the BLS signature aggregation).
+たしかに、この方法を取れば検証は高速化できます。しかし、そこにはセキュリティ上の問題があります。  
+「集約された公開鍵が、本当に署名したバリデータの公開鍵を正しく表しているのか？」  
+「AWM リレイヤーが勝手に公開鍵を作成し、それに合う署名を生成しただけではないのか？」  
 
-Even though this would make the verification much faster, there is a security issue here. How can we be sure that the aggregated public key actually represents the public keys of the signing validators? How do we know that the AWM Relayer did not just create a bunch of public keys and an aggregated signature of these?
-
-The only way to verify that is to aggregate the public keys of the signing validators and compare it to the one sent by the AWM Relayer. Therefore, it is pointless to attach it to the message.
+この疑問を解決する唯一の方法は、署名したバリデータの公開鍵を自分たちで集約し、それを AWM リレイヤーが送ったものと比較することです。したがって、リレイヤーが公開鍵を事前に集約してメッセージに添付することには意味がありません。
 
 <Quiz quizId="314"/>

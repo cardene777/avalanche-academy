@@ -1,77 +1,81 @@
 import { Steps, Step } from 'fumadocs-ui/components/steps';
 import { GenerateKeysButton, SignMessageButton, VerifySignatureButton, AggregateSignaturesButton, AggregatePublicKeysButton, VerifyAggregateSignatureButton } from '@/components/signatureSchemes'
 
-Let's explore the use of a Multi-Signature Scheme. We'll take the following steps:
+マルチシグネチャスキームを使って、以下の手順を試してみましょう。  
 
-- **Generate Two Key Pairs**: We will generate two key pairs.
-- **Sign Message**: We create two Signatures of the same Message with the two Secret Keys.
-- **Aggregate Signatures**: We aggregate the two Signatures to a single Signature.
-- **Aggregate Public Keys**: We aggregate the two Public Keys to a single Public Key.
-- **Verify aggregated Signature**: We verify the Signature with the aggregated Public Key.
+- **2 つの鍵ペアを生成**: 2 つの公開鍵と秘密鍵のペアを作成  
+- **メッセージに署名**: それぞれの秘密鍵で同じメッセージに対して署名を作成  
+- **署名を集約**: 2 つの署名を 1 つの署名に集約  
+- **公開鍵を集約**: 2 つの公開鍵を 1 つの公開鍵に集約  
+- **集約された署名を検証**: 集約された公開鍵を使って署名を検証  
 
-<Steps>
-<Step>
+<Steps>  
+<Step>  
 
-### Generate First Key
-Start by generating a Key Pair consisting of a Public and Secret Key.
+### 1 つ目の鍵を生成  
+まず、公開鍵と秘密鍵のペアを作成します。  
 
-<GenerateKeysButton />
+<GenerateKeysButton />  
 
-</Step>
+</Step>  
 
-<Step>
+<Step>  
 
-### Sign the Messages
-Now use the generated Secret Key to sign a Message.
+### メッセージに署名  
+生成した秘密鍵を使って、メッセージに署名します。  
 
-<SignMessageButton />
+<SignMessageButton />  
 
-</Step>
-<Step>
+</Step>  
 
-### Generate Second Key
- In a real-world setting these key pairs would be created by independent actors, but for the sake of the exercise we will play multiple actors here.
-    
-<GenerateKeysButton />
+<Step>  
 
+### 2 つ目の鍵を生成  
+実際の環境では、鍵ペアは異なる人や組織によって作成されますが、今回は 2 つの役割を自分で担当します。  
 
-</Step>
-<Step>
+<GenerateKeysButton />  
 
-### Sign the Message with the second Key
+</Step>  
 
-Make sure to pick exactly the same Message for both Signatures, e.g. "Per consensum ad astra".
+<Step>  
 
-<SignMessageButton />
+### 2 つ目の鍵でメッセージに署名  
+必ず **同じメッセージ** に対して署名を行ってください。例えば、「Per consensum ad astra」など。  
 
-</Step>
-<Step>
+<SignMessageButton />  
 
-### Aggregate Signatures
+</Step>  
 
-We can now utilize the signature aggregation to create an aggregated Signature. In this exercise we are only aggregating two signatures, but we could do this with hundreds or thousands. Side fact: It does not matter in which order the signatures are aggrated.
+<Step>  
 
-<AggregateSignaturesButton />
+### 署名を集約  
+2 つの署名を 1 つにまとめます。この手順は何百、何千もの署名に対しても適用できます。  
+**順番は関係ありません。**  
 
-</Step>
-<Step>
+<AggregateSignaturesButton />  
 
-### Aggregate Public Keys
-To verify an aggregated Signature, we also need to aggregate the Public Keys that correspond to the Private Keys that were used to sign the message. Analogous to the signatures we can aggregate many more than just two Public Keys and also here the order does not matter.
+</Step>  
 
-<AggregatePublicKeysButton />
+<Step>  
 
-</Step>
-<Step>
+### 公開鍵を集約  
+署名を検証するために、対応する公開鍵も集約します。これも、順番は関係なく、何百、何千もの公開鍵をまとめることができます。  
 
-### Verify the Aggregated Signature
+<AggregatePublicKeysButton />  
 
-Anyone, that has access to the aggregated Public Key can now verify the Signature of the Message. Therefore, the Authenticity, Non-Repudiation and Integrity of the Message can be trusted in an efficient way for a large number of signers.
+</Step>  
 
-<VerifySignatureButton aggregated={true} />
+<Step>  
 
-</Step>
-</Steps>
+### 集約された署名を検証  
+誰でも集約された公開鍵を使って署名を検証できます。  
+これにより、大規模なグループの署名に対しても **効率的かつ安全に** 署名の真正性を確認できます。  
 
-Congrats on going through the exercise and experiencing hands-on how we can utilize Signature Aggregation. You will see in the next chapter about Avalanche Warp Messaging; how Mutli-Signature schemes can enable secure and efficient cross-L1 communication.
+<VerifySignatureButton aggregated={true} />  
 
+</Step>  
+</Steps>  
+
+お疲れさまでした！ 🎉  
+この演習を通じて、署名の集約がどのように機能するのかを体験できました。  
+次の章では、**Avalanche Warp Messaging** において、マルチシグネチャスキームがどのように **安全で効率的なクロスチェーン L1 通信** を実現するのかを学びます。  

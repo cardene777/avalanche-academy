@@ -1,16 +1,20 @@
 ---
-title: Encoding of multiple Values
-description: Learn how to encode multiple function parameters
-updated: 2024-05-31
-authors: [martineckardt]
-icon: BookOpen
+title: 複数の値のエンコーディング  
+description: 関数の複数の引数をエンコードする方法を学ぶ  
+updated: 2024-05-31  
+authors: [martineckardt]  
+icon: BookOpen  
 ---
 
-In this section, we will learn how to pack multiple values into a single message.
+このセクションでは、**複数の値を 1 つのメッセージにまとめてエンコードする方法** を学びます。  
 
-![](/common-images/teleporter/message-multiple-parameters.png)
+![](/common-images/teleporter/message-multiple-parameters.png)  
 
-We can use `abi.encode()` to encode multiple values into a single byte array:
+---
+
+## **複数の値をエンコードする方法**  
+
+Solidity の `abi.encode()` を使用すると、**複数の異なる型の値を 1 つの `bytes` 配列にまとめることができます**。  
 
 ```solidity
 bytes message = abi.encode(
@@ -20,7 +24,19 @@ bytes message = abi.encode(
   );
 ```
 
-Here we can see how the function `abi.encode()` is used to turn multiple values `(someString, someNumber & someAddress)` of various types `(string, uint & address)` into a single value of the type bytes called `message`. This bytearray can then be sent to the destination chain using the Teleporter. 
+このコードでは、  
+- `someString`（`string` 型）  
+- `someNumber`（`uint` 型）  
+- `someAddress`（`address` 型）  
+
+の 3 つの値を **1 つの `bytes` 型の `message` にエンコード** しています。  
+この `message` は、**Teleporter を使用して送信先のブロックチェーンに転送できます**。  
+
+---
+
+## **エンコードしたデータをメッセージとして送信する**  
+
+以下の関数では、エンコードしたデータを送信し、クロスチェーンメッセージを作成しています。  
 
 ```solidity
 function sendMessage(address destinationAddress) external returns (uint256 messageID) {
@@ -50,7 +66,11 @@ function sendMessage(address destinationAddress) external returns (uint256 messa
 }
 ```
 
-The receiving contract can then decode the byte array back into its original values:
+---
+
+## **受信側でエンコードされたデータをデコードする**  
+
+送信された `bytes` 型の `message` は、受信コントラクトでデコードすることで **元の複数の値に戻すことができます**。  
 
 ```solidity
 function receiveTeleporterMessage(
@@ -80,8 +100,13 @@ function _someFunction(string someString, uint256 someNumber, address someAddres
 }
 ```
 
+ここでは、`abi.decode()` を使用して、`message` に含まれる 3 つの値（`someString`, `someNumber`, `someAddress`）をデコードしています。  
 
-Here we are using `abi.decode()` to unpack the three values `(someString, someNumber & someAddress)` from the parameter `message` of the type `bytes`. As you can see, we need to provide the message as well as the types of values encoded in the message. It is important to note the types must be the same order as parameters to `abi.decode()`. 
+---
+
+## **エンコード・デコード時の注意点**  
+
+`abi.encode()` と `abi.decode()` を使用する際は、**エンコード時とデコード時のデータ型と順番を必ず一致させる必要があります**。  
 
 ```solidity
 (
@@ -89,5 +114,8 @@ Here we are using `abi.decode()` to unpack the three values `(someString, someNu
   uint someNumber,
   address someAddress
 ) = abi.decode(message, (string, uint, address));  // [!code highlight]
-``` 
+```  
+
+もしデータの型や順番が異なっていると、**デコード時にエラーが発生する** ため、特に注意しましょう。  
+
 <Quiz quizId="306"/>

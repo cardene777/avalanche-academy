@@ -1,16 +1,23 @@
 ---
-title: Allowed Relayer
-description: Learn about the basics of Avalanche.
-updated: 2024-05-31
-authors: [martineckardt]
-icon: BookOpen
+title: 許可されたリレイヤー  
+description: Avalanche のリレイヤー制限の基本を学ぶ  
+updated: 2024-05-31  
+authors: [martineckardt]  
+icon: BookOpen  
+
 ---
 
-In this segment, we'll delve into the mechanisms of restricting relayers for transmitting messages across Avalanche L1s. While the security in AWM and Interchain Messaging doesn't rely at all on the Relayer, there might be some reasons why you would want to restrict the delivery of the message to certain Relayers. 
+## **リレイヤーの制限について**  
 
-The more obvious one is when you run your own Relayer, and don't want to incentivize any other to ensure your message gets to the destination. On following sections you will learn how to run your own Relayer so you can restrict the messages to your own.
+このセクションでは、Avalanche L1 間のメッセージ送信を特定のリレイヤーに制限する方法について解説します。AWM（Avalanche Warp Messaging）および Interchain Messaging のセキュリティはリレイヤーに依存しませんが、特定のリレイヤーにのみメッセージ配信を許可したいケースもあります。  
 
-Let's look at the `TeleporterMessageInput` structure included when we call the `sendCrossChainMessage` one more time.
+例えば、自分でリレイヤーを運用し、他のリレイヤーに報酬を支払いたくない場合などが該当します。今後のセクションでは、**独自のリレイヤーを運用し、メッセージ配信を制限する方法** について学びます。  
+
+---
+
+## **リレイヤーの制限方法**  
+
+`sendCrossChainMessage` 関数を使用してメッセージを送信する際に、`TeleporterMessageInput` 構造体を指定できます。  
 
 ```solidity
 struct TeleporterMessageInput {
@@ -29,7 +36,13 @@ interface ITeleporterMessenger {
 }
 ```
 
-As you can see the `TeleporterMessageInput` allows you to specify an array of addresses for the allowed relayers. Previously we have set that to an empty array, which means that any relayer can pick up the message.
+この `TeleporterMessageInput` には **`allowedRelayerAddresses`** というフィールドがあり、メッセージを配信できるリレイヤーのアドレスを指定できます。  
+
+---
+
+## **すべてのリレイヤーを許可する（デフォルト設定）**  
+
+以下のコードでは、`allowedRelayerAddresses` を空の配列 `new address定しています。この場合、**全てのリレイヤーがメッセージを取得できる** ようになります。  
 
 ```solidity
 messenger.sendCrossChainMessage( 
@@ -45,7 +58,11 @@ messenger.sendCrossChainMessage(
 );
 ```
 
-If you want to restrict the message to a certain relayer, you can simply add the address of the relayer to the array. A Relayer will be identified by the reward address it is associating each time it delivers a message.
+---
+
+## **特定のリレイヤーのみに許可する**  
+
+特定のリレイヤーにのみメッセージを配信させたい場合は、`allowedRelayerAddresses` に **リレイヤーの報酬アドレス** を指定します。  
 
 ```solidity
 messenger.sendCrossChainMessage( 
@@ -60,3 +77,5 @@ messenger.sendCrossChainMessage(
     })
 );
 ```
+
+このように設定すると、**指定したリレイヤーのみがメッセージを配信できるようになります**。
