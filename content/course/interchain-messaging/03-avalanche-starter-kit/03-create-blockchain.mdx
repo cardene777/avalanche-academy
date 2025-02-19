@@ -1,6 +1,6 @@
 ---
-title: Create a Blockchain
-description: Environment Setup
+title: ブロックチェーンの作成
+description: 環境構築
 updated: 2024-05-31
 authors: [martineckardt]
 icon: Terminal
@@ -8,6 +8,11 @@ icon: Terminal
 
 import CreateDefaultBlockchain from "@/content/common/avalanche-starter-kit/create-default-blockchain.mdx";
 
-In order to send messages between two chains, we need to create a blockchain. In this guide, we will spin up a local Avalanche network that has it's own Primary Network (C-, P- and X-Chain) using the Avalanche CLI. Furthermore, we will create a blockchain in that Avalanche network, so we can send messages between the C-Chain and the newly created blockchain in the next chapters.
+異なるブロックチェーン間でメッセージを送信するには、まず **ブロックチェーンを作成** する必要があります。  
 
+このガイドでは、 **Avalanche CLI を使用してローカル環境に Avalanche ネットワークを構築** します。  
+このネットワークには、**独自の Primary Network（C-Chain、P-Chain、X-Chain）** が含まれています。  
+
+さらに、この Avalanche ネットワーク内に **新しいブロックチェーンを作成** します。  
+次の章では、 **C-Chain とこの新しく作成したブロックチェーン間でメッセージを送信** する方法を学びます。  
 <CreateDefaultBlockchain/>

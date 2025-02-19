@@ -1,27 +1,46 @@
 ---
-title: Invoking Functions
-description: Learn how to invoke functions on destination.
-updated: 2024-05-31
-authors: [martineckardt]
-icon: Book
+title: 関数の呼び出し
+description: 送信先チェーンでスマートコントラクトの関数を実行する方法を学ぶ  
+updated: 2024-05-31  
+authors: [martineckardt]  
+icon: Book  
 ---
 
 <YouTube id="fl9bF7xzHXc" />
 
-Well done, you successfully learned how to send simple data back and forth between blockchains. In this section we will look further and invoke a smart contract function on the destination chain. 
+**おめでとうございます！🎉**  
+これまでに学んだ内容を活かして、**異なるブロックチェーン間でデータを送受信する方法** を習得しました。  
 
-![](/common-images/teleporter/invoking-functions.png)
+このセクションでは、**受信側のスマートコントラクトで特定の関数を呼び出す方法** について学びます。  
 
-## What You Will Learn
+![](/common-images/teleporter/invoking-functions.png)  
 
-In this section, you will go through the following topics:
+---
 
-- **Encoding:** Most smart contract functions have multiple parameters. So the first thing we will learn is how to encode multiple values in the message
-- **Specify which function to call:** Most smart contracts have multiple functions. We will learn how to specify which function to call and encode different parameters depending on which function is been called
+## **学べること**  
 
-## Exercise
+このセクションでは、以下の内容を学びます。  
 
-In this section you will apply the learned knowledge by building a cross-chain dApp where multiple functions are called on the destination chain.
+- **エンコーディング（Encoding）**  
+  - 多くのスマートコントラクト関数は **複数の引数** を持っています。  
+  - そのため、メッセージの中に複数の値をエンコードする方法を学びます。  
 
-- Build a Calculator that takes two parameters and adds them up
-- Modify the Calculator to support more functions that can be called from the source Avalanche L1
+- **どの関数を呼び出すか指定する**  
+  - スマートコントラクトには複数の関数が実装されていることが一般的です。  
+  - そのため、 **どの関数を実行するか指定する方法** や、関数ごとに異なるパラメータをエンコードする方法を学びます。  
+
+---
+
+## **演習**  
+
+学んだ内容を活用し、**クロスチェーン dApp を構築** します。  
+このアプリケーションでは、**送信側チェーン（Source）から受信側チェーン（Destination）のスマートコントラクトの関数を呼び出します**。  
+
+### **課題内容**  
+
+1. **計算関数（Calculator）を作成する**  
+   - **2 つの数値を引数として受け取り、合計値を計算する関数を実装する**  
+
+2. **計算関数を拡張する**  
+   - **加算だけでなく、他の演算（減算、乗算、除算）も実行できるようにする**  
+   - **送信側から実行したい関数とパラメータを指定できるようにする**  

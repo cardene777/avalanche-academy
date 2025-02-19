@@ -1,9 +1,20 @@
-Since the Avalanche Network is running in a Github Codespace the localhost (127.0.0.1) will only be accessible from inside the Codespace. Connecting your wallet using the localhost RPC URL will not work, since your wallet will be running on your computer, and not the local environment where the network is running (the Codespace cloud). 
+Avalanche ネットワークは **GitHub Codespace 上で実行** されているため、 **`localhost (127.0.0.1)` は Codespace 内部でのみアクセス可能** です。  
+つまり、 **自分のパソコン上で動作しているウォレット（MetaMask や Core など）から `localhost` の RPC URL に接続することはできません** 。  
+なぜなら、ウォレットはローカル環境（自分の PC）で動作しているのに対し、Avalanche ノードは **Codespace のクラウド環境** で動作しているからです。  
 
-Therefore, we need to make the RPC-Endpoint publicly accessible. Click on the little antenna icon in the bottom bar of the Codespace:
+そのため、**RPC エンドポイントを外部からアクセス可能にする** 必要があります。  
+以下の手順で、ポート 9650 をパブリックに設定してください。  
 
-![](/common-images/codespaces/ports-open.png)
+### **1. Codespace のポート設定を開く**  
 
-There select the row with the port 9650 and right-click to open the port:
+Codespace の画面下部にある **アンテナアイコン** をクリックしてください。  
 
-![](/common-images/codespaces/ports-publish.png)
+![](/common-images/codespaces/ports-open.png)  
+
+### **2. ポート 9650 を公開する**  
+
+表示されたポート一覧の中から **ポート 9650 の行を選択し、右クリック** して **「Open Port」** を選択します。  
+
+![](/common-images/codespaces/ports-publish.png)  
+
+この設定を行うことで、**Codespace 上の Avalanche RPC に外部からアクセスできるようになり、ウォレットとの接続が可能になります** 。  

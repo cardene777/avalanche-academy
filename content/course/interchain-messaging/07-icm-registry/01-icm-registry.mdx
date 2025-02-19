@@ -1,18 +1,20 @@
 ---
-title: Interchain Messaging Registry
-description: Learn about the Interchain Messaging Registry to manage multiple Interchain Messaging versions.
-updated: 2024-05-31
-authors: [martineckardt]
-icon: Book
+title: インターチェーン・メッセージング・レジストリ  
+description: 複数の Interchain Messaging バージョンを管理する方法を学ぶ  
+updated: 2024-05-31  
+authors: [martineckardt]  
+icon: Book  
 ---
 
-When sending a message from the source chain we are calling the Interchain Messaging contract:
+インターチェーン・メッセージを送信する際、送信元チェーンでは **Interchain Messaging コントラクト** を呼び出します。  
 
 <img src="/common-images/teleporter/teleporter-source.png" width="400" class="mx-auto"/>
 
-The TeleporterMessenger contract is non-upgradable. Once a version of the contract is deployed it cannot be changed. This is with the intention of preventing any changes to the deployed contract that could potentially introduce bugs or vulnerabilities. However, there could still be new versions of TeleporterMessenger contracts needed to be deployed in the future.
+この **TeleporterMessenger コントラクトはアップグレードできません** 。そのため、一度デプロイされたバージョンのコントラクトは変更できません。これは、デプロイ済みのコントラクトに **バグやセキュリティ上の脆弱性を生じさせる変更を防ぐ** ための仕様です。  
+ただし、新しいバージョンの **TeleporterMessenger** が必要になることもあります。
 
-So far we used a fixed address for the TeleporterMessenger in all of our contracts. It is hardcoded in our contract. This is not a good practice, as it makes the contract less flexible and harder to upgrade.
+### ハードコードされたコントラクトアドレスの問題点  
+これまで、すべてのコントラクトで **固定のアドレス** を使用して TeleporterMessenger を参照していました。  
 
 ```solidity
 contract SenderOnCChain {
@@ -30,11 +32,17 @@ contract SenderOnCChain {
 }
 ```
 
-While we could manually update the address of the used TeleporterMessenger in our contract, TeleporterRegistry provides us an easy way to use the latest version of TeleporterMessenger.
+しかし、コントラクト内に **アドレスをハードコード** するのは望ましくありません。  
+なぜなら、次のような **デメリット** があるためです。
 
-## What you will learn
+- **柔軟性の低下**：新しいバージョンの TeleporterMessenger がデプロイされた場合に対応しにくい  
+- **アップグレードの難しさ**：新しいバージョンに切り替えるたびに、コントラクトを再デプロイしなければならない  
 
-In this section, you will explore the following topics:
+そこで、**TeleporterRegistry** を使用することで、 **常に最新の TeleporterMessenger を簡単に取得できる** ようになります。
 
-- How the Interchain Messaging Registry works
-- How to retrieve the latest version of the TeleporterMessenger on a blockchain
+## このセクションで学ぶこと  
+
+このセクションでは、以下の内容を学びます。  
+
+- **インターチェーン・メッセージング・レジストリの仕組み**  
+- **ブロックチェーン上で最新バージョンの TeleporterMessenger を取得する方法**  

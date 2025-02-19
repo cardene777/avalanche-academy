@@ -1,51 +1,77 @@
 ---
-title: Registering Validators
-description: Learn how validators are registered on the Avalanche network post-etna.
-updated: 2024-10-14
-authors: [owenwahlgren]
-icon: Terminal
+title: バリデーターの登録  
+description: Avalanche ネットワークにおけるバリデーターの登録プロセス（Etna アップデート後）を学ぶ  
+updated: 2024-10-14  
+authors: [owenwahlgren]  
+icon: Terminal  
 ---
 
-> How does it all work? I mean *actually* work.
+> どうやって機能しているのか？つまり、本当に *実際に* どう動いているのか？
 
-### Sending Warp Messages
+### Warp メッセージの送信  
 
-On the EVM, a warp message is simply an event log with `messageID = sha256(messagePayload)` Nothing is ever actually “sent” anywhere, which trips people up when first learning how Warp Messaging works.
+EVM において、Warp メッセージとは単に `messageID = sha256(messagePayload)` のイベントログです。  
+メッセージが実際にどこかに「送信」されるわけではないため、Warp Messaging の仕組みを学び始めた人が戸惑うことがよくあります。
 
-The log event emitted is from the Warp precompile address (`0x0200000000000000000000000000000000000005`) The topic of the message will be `0x56600c567728a800c0aa927500f831cb451df66a7af570eb4df4dfbf4674887d` which is the output of 
+このログイベントは、Warp プリコンパイルアドレス (`0x0200000000000000000000000000000000000005`) から発行されます。  
+メッセージのトピックは次のハッシュ値になります。
+
 ```bash
 cast keccak "SendWarpMessage(address,bytes32,bytes)"
 ```
 
-To find a specific warp messageID, one must know the block number or block hash to retrieve the logs, or be monitoring all events, looking for and indexing messages. 
+このイベントの値は  
+`0x56600c567728a800c0aa927500f831cb451df66a7af570eb4df4dfbf4674887d` です。
 
-When a block is [accepted](https://github.com/ava-labs/coreth/blob/7242ae2d235593d2bb14e2496b6ed102aab14c3d/precompile/contracts/warp/config.go#L130) by the network, a precompile hook is called, and the EVM saves the warp message to a local database. The validator node will then be willing to sign any messages in that database upon request, typically via an `AppRequest` message over the p2p network.
+特定の Warp `messageID` を探すには、ブロック番号やブロックハッシュを知っている必要があります。  
+または、全てのイベントを監視し、メッセージをインデックス化する方法もあります。
 
-### Receiving Warp Messages
+ブロックが[承認される](https://github.com/ava-labs/coreth/blob/7242ae2d235593d2bb14e2496b6ed102aab14c3d/precompile/contracts/warp/config.go#L130)と、プリコンパイルフックが呼び出され、EVM は Warp メッセージをローカルデータベースに保存します。  
+バリデーターノードは、このデータベースに保存されたメッセージに署名する準備ができており、通常は P2P ネットワーク経由の `AppRequest` メッセージを通じて署名リクエストが行われます。
 
-On the EVM, any smart contract can call the precompile
+### Warp メッセージの受信  
 
-which returns the warp message and verifies the attached signature. But what is `index`? Where does it get the warp message from?  The answer is, you!  When you send a tx to any contract that eventually calls `getVerifiedWarpMessage`, you **must** pass in the signed warp message as a “predicate”.  It’s called an AccessList, and typically this is an optional field that can be used by the EVM to pre-fetch storage slots that will be accessed, for efficiency and reducing gas costs. But Warp cleverly (ab)uses this feature of the EVM to verify the signature of the warp message, and then make the warp message available during the transactions lifetime, by calling `getVerifiedWarpMessage`. You can pass multiple warp messages which is where the `index` comes in.  (All of this is abstracted away by Teleporter for EVM to EVM comms)
+EVM では、任意のスマートコントラクトがプリコンパイル関数を呼び出すことで Warp メッセージを取得し、その署名を検証できます。  
+しかし、`index` とは何を意味し、どこから Warp メッセージを取得するのでしょうか？  
 
-Details: [Warp README](https://github.com/ava-labs/coreth/blob/7242ae2d235593d2bb14e2496b6ed102aab14c3d/precompile/contracts/warp/README.md)
+答えは **「あなた自身」** です！  
+任意のコントラクトが `getVerifiedWarpMessage` を呼び出すトランザクションを送信する場合、**署名済みの Warp メッセージを「前提条件」として渡す必要があります。**  
+これは **AccessList** という EVM の機能を活用しており、本来はストレージスロットを事前に取得してガスコストを削減するためのものですが、Warp Messaging ではこの仕組みを利用しています。  
+Warp メッセージの署名を検証し、そのメッセージをトランザクションの実行中に利用できるようにします。
 
-### Teleporter
+さらに、複数の Warp メッセージを渡すことも可能であり、そのために `index` パラメータが用意されています。  
+（この仕組みは、EVM 間通信をサポートする **Teleporter** によって抽象化されています。）
 
-[Teleporter](https://github.com/ava-labs/teleporter) is a set of smart contracts that implements a rich messaging protocol on top of the Warp Messaging primitive, allowing for verified message passing between EVM chains. 
+詳しくは、[Warp README](https://github.com/ava-labs/coreth/blob/7242ae2d235593d2bb14e2496b6ed102aab14c3d/precompile/contracts/warp/README.md) を参照してください。
+
+### Teleporter  
+
+[Teleporter](https://github.com/ava-labs/teleporter) は、Warp Messaging の仕組みを活用した高度なメッセージングプロトコルを実装するスマートコントラクトのセットです。  
+この仕組みにより、**EVM チェーン間でのメッセージ検証付きの通信** が可能になります。
 
 <Callout>
-**Only (currently) supports EVM→EVM comms. Not used for EVM→P-Chain**
+**現在のところ、EVM → EVM の通信のみをサポートしており、EVM → P-Chain には対応していません。**
 </Callout>
 
-### Relayer
+### Relayer  
 
-[Relayer](https://github.com/ava-labs/awm-relayer/blob/main/relayer/README.md) is an off-chain program that listens for warp messages on a source chain, and delivers them to a destination chain.  Messages can choose to be relayed by anyone, or by only privileged relayers. Messages can also pay fees to incentivize relayers and cover gas costs.
+[Relayer](https://github.com/ava-labs/awm-relayer/blob/main/relayer/README.md) は、オフチェーンプログラムであり、Warp メッセージをソースチェーン上で検出して宛先チェーンへ送信します。  
 
-## Registering ValidatorManager
+- メッセージは **任意のリレイヤーが送信可能** ですが、特定のリレイヤーに制限することもできます。  
+- メッセージごとに手数料を設定してリレイヤーに報酬を支払うことで、ガス代をカバーすることが可能です。
 
-ACP-77 introduces L1-only Validators, that stake no AVAX, and do not validate the X/C chains. They must connect to the Primary Network and track the P-Chain, and also validate their own chain, and pay a small continuous fee in AVAX to the network.
+---
 
-User submits EVM tx to smart contract [NativeTokenStakingManager.sol](https://github.com/ava-labs/teleporter/blob/acp-77-updates/contracts/validator-manager/NativeTokenStakingManager.sol)
+## バリデーターの登録 (`ValidatorManager` の登録)
+
+**ACP-77** により、**L1 のみのバリデーター（L1-Only Validator）** が導入されました。  
+このバリデーターは AVAX をステークせず、X-Chain や C-Chain をバリデートしません。  
+ただし、**Primary Network に接続し P-Chain を追跡しながら、自身の L1 をバリデートする必要があります。**  
+また、ネットワーク利用料として小額の AVAX を継続的に支払う必要があります。
+
+### スマートコントラクト `NativeTokenStakingManager.sol` を使用した登録
+
+ユーザーは EVM トランザクションを `NativeTokenStakingManager.sol` コントラクトへ送信することで登録を開始します。
 
 ```solidity
 function initializeValidatorRegistration(
@@ -53,13 +79,13 @@ function initializeValidatorRegistration(
         uint16 delegationFeeBips,
         uint64 minStakeDuration) payable returns (bytes32 validationID)
 ```
-Notably, this function will:
 
-- Lock the native tokens in the contract
-- `validationID`: bytes32 hash of an encoded `RegisterSubnetValidatorMessage`
-- `messageID`: bytes32 hash of the warp message
-- Store some data in the contract:
+この関数の主な動作は以下の通りです。
 
+- ネイティブトークンをロックする
+- `validationID`: `RegisterSubnetValidatorMessage` のエンコードハッシュ
+- `messageID`: Warp メッセージのハッシュ
+- コントラクト内で以下のデータを保存。
 
 ```solidity
 $._pendingRegisterValidationMessages[validationID] = registerSubnetValidatorMessage;
@@ -76,55 +102,77 @@ $._validationPeriods[validationID] = Validator({
 });
 ```
 
-- Emit `ValidationPeriodCreated(validationID, nodeID, messageID, weight, registrationExpiry)`
-- The `sendWarpMessage` precompile will emit a log with `sender`, `messageID`, `message`
+また、次のイベントを発行します。
 
-At this point, we have submitted a transaction on the blockchain (C-Chain or L1, wherever the staking contract is deployed). All that has happened is we have stored some state in our contract and emitted some events. No changes to validators has occurred.
+```solidity
+ValidationPeriodCreated(validationID, nodeID, messageID, weight, registrationExpiry)
+```
 
-<Callout>
-Nothing else will happen UNLESS an off-chain actor continues the process.
-</Callout>
-
-
-In our case, someone must be running a relayer that is configured with our staking contract as the source and the P-Chain as the destination.
+この時点では、C-Chain または L1 上でステーキングコントラクトがデプロイされているブロックチェーン上にトランザクションを送信しただけです。  
+**コントラクトの状態を保存してイベントを発行したのみで、バリデーターからは何も実行されていません。**
 
 <Callout>
-At the moment, the relayer does not support the P-Chain, so messages must be signed and sent manually. The relayer will be updated soon to support the P-Chain.
+この後、オフチェーンのアクター（リレイヤー等）がプロセスを継続しなければ、何も起こりません。
 </Callout>
 
+### リレイヤーを介したバリデーター登録  
 
-So, to sign and send the message ourselves, we can use the Signature Aggregator server in the relayer project. This will use the p2p layer of the Avalanche network to connect to validators and send `AppRequest` messages to request each validator to sign a message.
+今回のケースでは、**ステーキングコントラクトを送信元** とし、**P-Chain を送信先** とするように設定されたリレイヤーが動作している必要があります。
+
+<Callout>
+現在のところ、リレイヤーは P-Chain をサポートしていないため、メッセージの署名と送信を手動で行う必要があります。  
+ただし、今後のアップデートで P-Chain に対応する予定です。
+</Callout>
+
+### 手動で署名と送信を行う方法  
+
+リレイヤープロジェクトに含まれる **Signature Aggregator サーバー** を使用することで、メッセージに署名して送信することができます。  
+このサービスは Avalanche ネットワークの P2P レイヤーを使用し、バリデーターに `AppRequest` メッセージを送信し、各バリデーターに署名をリクエストします。
+
+次のコマンドを実行して、署名の集約を行います。
+
 ```bash
 curl --location 'http://localhost:8080/aggregate-signatures' \
 --json '{"message": "<hex encoded unsigned message bytes retrieved from the logs>"}'
 ```
-This will give us an aggregated BLS signature from at least 67% of the stake weighted validator set. Now we need to `POST` this to the P-Chain via the `RegisterSubnetValidatorTx` tx.
 
-The P-Chain, if it accepts the tx, will “send” a Warp Message `SubnetValidatorRegistration` which acknowledges the change. Note that nothing is actually “sent”, instead the validator node will be willing to sign the unsigned message upon request.
+このコマンドを実行すると、**ステーク加重のバリデーターセットの少なくとも 67%** から署名された **集約 BLS 署名** を取得できます。  
+次に、この署名を P-Chain に `RegisterSubnetValidatorTx` トランザクションとして送信する必要があります。
 
-So the next step is to use the Signature Aggregator service again, and provide the unsigned `SubnetValidatorRegistration` warp message, which the service will then ask validators to sign.
+### P-Chain の承認  
+
+P-Chain がこのトランザクションを受け入れると、`SubnetValidatorRegistration` の Warp メッセージが **「送信」** されて変更が承認されます。  
+ただし、実際にはデータがどこかに送信されるわけではありません。代わりに、バリデーターノードがリクエストに応じて未署名メッセージに署名する準備を整えます。
+
+次のステップでは、もう一度 **Signature Aggregator サービス** を使用し、未署名の `SubnetValidatorRegistration` Warp メッセージを提供します。  
+このサービスがバリデーターに署名をリクエストし、集約署名を取得します。
 
 <Callout>
-If your Validator Manager contract is on your L1 (instead of C-Chain), as an optimization, you only need to ask 67% of the stake weighted validators of your L1, not the entire P-Chain validator set.
+もし **Validator Manager コントラクトが C-Chain ではなく L1 にデプロイされている場合**、最適化として **P-Chain の全バリデーターセットではなく、L1 の 67% のステーク加重バリデーターセット** に対して署名をリクエストするだけで済みます。
 </Callout>
 
+### 登録を完了する  
 
-Once an aggregate BLS signature is created, we need to submit the signed message to the C-Chain (or L1) by calling a function on the `ValidatorManager` contract.
+**集約 BLS 署名が作成されたら**、次に `ValidatorManager` コントラクトの関数を呼び出し、署名済みメッセージを C-Chain（または L1）に送信します。
 
 ```solidity
 function completeValidatorRegistration(uint32 messageIndex)
 ```
 
-Remember, this involves calling the function via `eth_sendTransaction` and encoding the signed warp message into the `AccessList`. (If you encode an array of 1 warp message, then `messageIndex` would be 0)
+この関数を呼び出す際には、**`eth_sendTransaction` を使用してトランザクションを送信** し、**署名済み Warp メッセージを AccessList にエンコード** する必要があります。  
+（配列内に 1 つの Warp メッセージしか含めない場合、`messageIndex` は `0` になります。）
 
-The function will adjust the state in the contract, including these bits:
+この関数を実行すると、以下のように **コントラクトの状態が変更されます**。
+
 ```solidity
 delete $._pendingRegisterValidationMessages[validationID];
 $._validationPeriods[validationID].status = ValidatorStatus.Active;
 $._validationPeriods[validationID].startedAt = uint64(block.timestamp);
 ```
-And that’s it!
+
+これで登録が完了です！🎉
 
 <Callout>
-This doc is a WIP and we will eventually cover all the flows and add some diagrams.
+このドキュメントは現在作成中です。  
+今後、すべてのフローをカバーし、図解を追加する予定です。
 </Callout>

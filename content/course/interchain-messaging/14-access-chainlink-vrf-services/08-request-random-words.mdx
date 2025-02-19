@@ -1,47 +1,49 @@
 ---
-title: Request Random Words
-description: Learn how to request random words using CrossChainVRFConsumer.
-updated: 2024-10-21
-authors: [0xstt]
-icon: Terminal
+title: ランダムな数値のリクエスト  
+description: CrossChainVRFConsumer を使用してランダムな数値をリクエストする方法を学ぶ。  
+updated: 2024-10-21  
+authors: [0xstt]  
+icon: Terminal  
 ---
 
-import { Step, Steps } from 'fumadocs-ui/components/steps';
+import { Step, Steps } from 'fumadocs-ui/components/steps';  
 
-In this section, you will learn how to request random words from Chainlink VRF using both the `CrossChainVRFConsumer` contracts.
+このセクションでは、**Chainlink VRF** を使用して `CrossChainVRFConsumer` コントラクトを通じてランダムな数値をリクエストする方法を学びます。  
 
-<Steps>
-<Step>
+<Steps>  
+<Step>  
 
-## Authorize an Address to Request Random Words
+## ランダムネスリクエストを許可するアドレスを登録  
 
-After deploying the `CrossChainVRFWrapper` contract, the first step is to authorize an address to make requests for random words. This ensures that only specific addresses linked to a subscription can request VRF.
+`CrossChainVRFWrapper` コントラクトをデプロイした後、最初に行うべきことは特定のアドレスに対してランダムな数値をリクエストする権限を付与することです。  
+これにより、特定の**サブスクリプションに関連付けられたアドレス**だけが VRF をリクエストできるようになります。  
 
-- Use the `addAuthorizedAddress` function to authorize a specific address with a given subscription ID. This step allows the address to make random word requests through the wrapper.
+- `addAuthorizedAddress` 関数を使用して、特定のアドレスを認証し、サブスクリプション ID を設定します。  
 
-```bash
-cast send --rpc-url <RPC_URL> --private-key <PRIVATE_KEY> $VRF_WRAPPER "addAuthorizedAddress(address caller, uint256 subscriptionId)" $VRF_CONSUMER $VRF_SUBSCRIPTION_ID
-```
+```bash  
+cast send --rpc-url <RPC_URL> --private-key <PRIVATE_KEY> $VRF_WRAPPER "addAuthorizedAddress(address caller, uint256 subscriptionId)" $VRF_CONSUMER $VRF_SUBSCRIPTION_ID  
+```  
 
-</Step>
-<Step>
+</Step>  
+<Step>  
 
-## Request Random Words from `CrossChainVRFConsumer`
+## `CrossChainVRFConsumer` からランダムな数値をリクエスト  
 
-Once the address is authorized, the next step is to send a request for random words from the `CrossChainVRFConsumer` contract on the unsupported L1. This request is then sent to the `CrossChainVRFWrapper` via a cross-chain message.
+アドレスが認証されると、次のステップとして **`CrossChainVRFConsumer` コントラクト** からランダムな数値をリクエストできます。  
+このリクエストは、クロスチェーンメッセージとして `CrossChainVRFWrapper` に送信されます。  
 
-```bash
-cast send --rpc-url <RPC_URL> --private-key <PRIVATE_KEY> $VRF_CONSUMER "requestRandomWords(bytes32 keyHash, uint16 requestConfirmations, uint32 callbackGasLimit, uint32 numWords, bool nativePayment, uint32 requiredGasLimit)" <KEY_HASH> <CONFIRMATIONS> <GAS_LIMIT> <NUM_WORDS> <NATIVE_PAYMENT> <REQUIRED_GAS_LIMIT>
-```
+```bash  
+cast send --rpc-url <RPC_URL> --private-key <PRIVATE_KEY> $VRF_CONSUMER "requestRandomWords(bytes32 keyHash, uint16 requestConfirmations, uint32 callbackGasLimit, uint32 numWords, bool nativePayment, uint32 requiredGasLimit)" <KEY_HASH> <CONFIRMATIONS> <GAS_LIMIT> <NUM_WORDS> <NATIVE_PAYMENT> <REQUIRED_GAS_LIMIT>  
+```  
 
-Replace the placeholders with:
+各プレースホルダーには、以下の情報を設定してください。  
 
-- `<KEY_HASH>`: The VRF key hash used for random word generation.
-- `<CONFIRMATIONS>`: Number of confirmations required for the request.
-- `<GAS_LIMIT>`: The gas limit for the VRF callback function.
-- `<NUM_WORDS>`: The number of random words requested.
-- `<NATIVE_PAYMENT>`: Indicates whether the payment will be made in the native token.
-- `<REQUIRED_GAS_LIMIT>`: The gas limit required for the cross-chain message to be processed.
+- `<KEY_HASH>` ：ランダムな数値生成に使用する **VRF のキー ハッシュ**  
+- `<CONFIRMATIONS>` ：リクエスト完了までに必要な **ブロックの確認回数**  
+- `<GAS_LIMIT>` ：**VRF コールバック関数** の最大ガスリミット  
+- `<NUM_WORDS>` ：リクエストする **ランダムな数値の個数**  
+- `<NATIVE_PAYMENT>` ：支払いをネイティブトークンで行うかどうか（ `true` / `false` ）  
+- `<REQUIRED_GAS_LIMIT>` ：**クロスチェーンメッセージ処理に必要なガスリミット**  
 
-</Step>
-</Steps>
+</Step>  
+</Steps>  

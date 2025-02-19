@@ -1,16 +1,27 @@
-Multi-signature schemes, also known as multi-sigs, are cryptographic methods enabling multiple parties to collectively authorize a specific action or operation, typically by requiring a predefined number of authorized participants to provide their digital signatures. In a multi-signature scheme, each authorized party possesses their own private key, and to validate the action. A specified subset of these parties must produce their unique signatures.
+マルチシグネチャスキーム（通称 **マルチシグ**）は、複数の署名者が共同で特定のアクションや操作を承認できる暗号技術です。通常、事前に定められた人数の署名者が、それぞれの **秘密鍵** を用いてデジタル署名を行うことで、アクションが有効になります。  
 
-![](/common-images/cryptography/multi-signature-schemes.png)
+![](/common-images/cryptography/multi-signature-schemes.png)  
 
-This is useful in scenarios where a group of participants want to collectively sign a message, but only a subset of them are needed to do so.
+これは、グループのうち一部のメンバーが署名すればよい場合に特に役立ちます。  
 
-Multi-signature schemes enhance security by reducing the reliance on a single entity, mitigating risks associated with compromised keys, and enabling shared control over various cryptographic processes. These schemes find applications in a wide range of cryptographic and security contexts, where they help ensure trust, distribute control, and minimize the impact of potential vulnerabilities.
+マルチシグネチャスキームは、 **単一の鍵に依存するリスクを軽減** し、秘密鍵の漏洩による影響を抑え、複数の参加者による管理を可能にすることでセキュリティを強化します。これにより、以下のような幅広い暗号技術やセキュリティ用途で利用されています。  
 
-## BLS  Multi-Signature Scheme
+- **信頼性の確保**: 1人ではなく複数人で承認することで、不正や誤操作のリスクを低減できる。  
+- **管理権限の分散**: 1人の管理者に権限を集中させず、グループ全体で決定できる仕組みを作れる。  
+- **攻撃耐性の向上**: 1つの鍵が流出しても、他のメンバーの署名が必要なため、被害を防げる。  
 
-The [BLS (Boneh-Lynn-Shacham) multi-signature scheme](https://iacr.org/archive/asiacrypt2001/22480516.pdf) is notable for its compact size, making it a highly efficient for blockchain application. Furthermore, it supports signature and public key aggregation.  
+## BLS マルチシグネチャスキーム  
 
-- Signature aggregation compresses all signatures into a single short signature, which makes the transportation and verification much more efficient.
-- Public Key aggregation allows the verification algorithm to only use a short aggregated public key. 
+[BLS（Boneh-Lynn-Shacham）マルチシグネチャスキーム](https://iacr.org/archive/asiacrypt2001/22480516.pdf) は、署名データのサイズが **コンパクト** であることが特徴であり、ブロックチェーンなどの用途に適しています。さらに、 **署名と公開鍵の集約（アグリゲーション）** をサポートしている点でも優れています。  
 
-The BLS multi-signature scheme has applications in various cryptographic protocols, such as secure multi-party computation, distributed key generation, threshold decryption, and more. They are particularly useful in decentralized systems like blockchain networks, where multiple parties may need to collaboratively sign messages or perform other cryptographic operations.
+- **署名の集約**: すべての署名を **1つの短い署名データにまとめる** ことで、署名の送信や検証が効率化される。  
+- **公開鍵の集約**: 検証の際に **1つの短い公開鍵だけを使用** できるため、計算負荷が低減される。  
+
+BLS マルチシグネチャスキームは、以下のようなさまざまな暗号技術に活用されています。  
+
+- **安全なマルチパーティ計算**  
+- **分散型鍵生成**  
+- **しきい値暗号（一定数の署名が必要な暗号技術）**  
+- **ブロックチェーンのコンセンサスアルゴリズム**  
+
+特に、ブロックチェーンなどの分散型システムでは **複数の参加者が共同で署名を行う** ことが求められる場面が多く、BLS マルチシグはその実装に適した技術となっています。

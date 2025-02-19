@@ -1,12 +1,14 @@
 ---
-title: Verify if Sender is Interchain Messaging
-description: Safety verification of the message sender
-updated: 2024-05-31
-authors: [martineckardt]
-icon: BookOpen
+title: Interchain Messaging での送信元確認  
+description: メッセージの送信元を安全に検証する  
+updated: 2024-05-31  
+authors: [martineckardt]  
+icon: BookOpen  
 ---
 
-We can also leverage the registry to check if `msg.sender` is a registered Interchain Messaging contract. Previously, we hardcoded this check in the contract:
+Interchain Messaging のレジストリを活用することで、`msg.sender` が登録済みの Interchain Messaging コントラクトであるかを確認できます。  
+
+これまでは、コントラクト内でハードコードして送信元の検証を行っていました。  
 
 ```solidity
 import "@teleporter/ITeleporterMessenger.sol";
@@ -27,9 +29,11 @@ contract ReceiverOnSubnet is ITeleporterReceiver {
 }
 ```
 
-If there was now a new Interchain Messaging contract version that would be used for sending messages, we would have to update the contract.
+しかし、新しいバージョンの Interchain Messaging コントラクトが導入された場合、  
+このコントラクトも都度更新しなければなりません。
 
-Instead, we can use the registry to check if the sender is a registered Interchain Messaging contract. 
+### **レジストリを利用した送信元の検証**
+これを解決するために、レジストリを活用し、送信元アドレスが登録済みの Interchain Messaging コントラクトであるかをチェックできます。
 
 ```solidity
 pragma solidity ^0.8.18;
@@ -55,3 +59,10 @@ contract ReceiverOnDispatchWithRegistry is ITeleporterReceiver {
     }
 }
 ```
+
+### **このコードのポイント**
+- `TeleporterRegistry` を利用して、Interchain Messaging のバージョン管理を行う  
+- **`msg.sender` がレジストリに登録されたアドレスかどうかを動的に検証** する  
+- **新しいバージョンの Interchain Messaging コントラクトが導入されても、レジストリに登録されていれば問題なく動作** する  
+
+このように、レジストリを活用することで **柔軟で保守性の高いコントラクト設計** が可能になります。

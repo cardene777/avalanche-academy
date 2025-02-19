@@ -1,21 +1,24 @@
 ---
-title: Create Simple Calculator Sender
-description: Create a contract that sends multiple parameters of a function
-updated: 2024-05-31
-authors: [martineckardt]
-icon: Terminal
+title: シンプルな計算を行うの送信コントラクトの作成  
+description: 関数の複数のパラメータを送信するコントラクトを作成する  
+updated: 2024-05-31  
+authors: [martineckardt]  
+icon: Terminal  
 ---
 
 import { Step, Steps } from 'fumadocs-ui/components/steps';
 
-Now, our goal is to create a dApp that works as a cross-Avalanche L1 Calculator, receiving multiple parameters and using those for a calculation. For now our calculator will only have the `Sum` function.
+**クロスチェーン計算機 dApp** を作成します。この計算機は **異なる Avalanche L1 間でメッセージをやり取りし、計算を実行** します。  
+まずは、**2 つの数値を送信し、それらを加算する機能（Sum）** を実装します。  
 
-<Steps>
-<Step>
+<Steps>  
 
-### Create Sender Contract
+<Step>  
 
-On the local C-Chain, we need to create the sender part of our cross-chain calculator. This will send two numbers (uint) to the receiver contract on your Avalanche L1. 
+### **送信コントラクトの作成**  
+
+ローカル C-Chain 上に、**送信コントラクト（Sender Contract）** を作成します。  
+このコントラクトは **2 つの `uint` 値を Avalanche L1 上の受信コントラクトに送信** します。  
 
 ```solidity title="src/02a-encoding-multiple-paramters/SimpleCalculatorSenderOnCChain.sol"
 pragma solidity ^0.8.18;
@@ -46,27 +49,35 @@ contract SimpleCalculatorSenderOnCChain {
         return paramsData;
     }
 }
-
 ```
 
-To increase the readability of the code, we have created a helper function `encodeAddData` that encodes the two numbers into a single byte array.
+**📌 ポイント**  
 
-</Step>
-<Step>
+- **`encodeAddData()` 関数を作成し、2 つの `uint` 値をバイト配列にエンコード**
+- **エンコードしたデータを `sendCrossChainMessage()` で送信**  
 
-### Replace `destinationBlockchainID`
-<Callout type="warn" title="Don't forget to replace the destinationBlockchainID with the Blockchain ID (HEX) from your Avalanche L1!" />
+</Step>  
 
-</Step>
-<Step>
+<Step>  
 
-### Deploy the Sender Contract
+### **送信先の `destinationBlockchainID` を変更する**  
 
-Deploy the sender contract on the Local C-Chain:
+<Callout type="warn" title="`destinationBlockchainID` を必ず Avalanche L1 の Blockchain ID（HEX）に置き換えてください！" />  
+
+</Step>  
+
+<Step>  
+
+### **送信コントラクトをデプロイする**  
+
+ローカル C-Chain 上に、送信コントラクトをデプロイします。  
 
 ```bash
 forge create --rpc-url local-c --private-key $PK contracts/interchain-messaging/invoking-functions/SimpleCalculatorSenderOnCChain.sol:SimpleCalculatorSenderOnCChain
 ```
+
+実行すると、以下のような出力が得られます。  
+
 ```
 [⠊] Compiling...
 [⠒] Compiling 1 files with Solc 0.8.18
@@ -76,16 +87,19 @@ Deployer: 0x8db97C7cEcE249c2b98bDC0226Cc4C2A57BF52FC
 Deployed to: 0x789a5FDac2b37FCD290fb2924382297A6AE65860 // [!code highlight]
 Transaction hash: 0xd6cb47dd4ff38e4447711ebbec8b646b93f492f48e80b51719f860984cc25413
 ```
-</Step>
-<Step>
 
-### Save the Sender Contract Address
+</Step>  
 
-Overwrite the `SENDER_ADDRESS` environment variable with the new address:
+<Step>  
+
+### **送信コントラクトのアドレスを保存する**  
+
+デプロイ後、新しい送信コントラクトのアドレスを環境変数に保存します。  
 
 ```bash
 export SENDER_ADDRESS=0x789a5FDac2b37FCD290fb2924382297A6AE65860
 ```
 
-</Step>
+</Step>  
+
 </Steps>

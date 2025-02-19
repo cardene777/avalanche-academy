@@ -1,9 +1,15 @@
 ---
-title: Finality Importance in Interoperabile Systems
-description:  Learn about interoperability and it's importance in multichain systems
-updated: 2024-06-10
-authors: [andyvargtz]
-icon: BookOpen
+title: 相互運用システムにおけるファイナリティの重要性  
+description: ブロックチェーンの相互運用性と、その重要性について学ぶ  
+updated: 2024-06-10  
+authors: [andyvargtz]  
+icon: BookOpen  
 ---
 
-Finality is crucial for building cross-chain applications and interoperable systems because it ensures that transactions on the source chain are confirmed and immutable, therefore whatever action is triggered on the destination chain can securely be executed knowing the source chain won't revert the state induced by that cross chain message.
+**ファイナリティ（Finality）** は、クロスチェーンアプリケーションや相互運用性を持つシステムを構築する上で **極めて重要** です。  
+その理由は、ファイナリティによって **送信元上のトランザクションが確定して変更ができなくなる** ためです。  
+
+つまり、送信元チェーンで確定したトランザクションは **巻き戻されることがなく** 、そのメッセージを受け取った宛先チェーンは **安全に処理を実行** できます。  
+もしファイナリティが保証されていなければ、宛先チェーン側で処理が完了した後に、送信元チェーンのステートが元に戻ってしまう **「ロールバック」** のリスクが生じ、整合性の取れたクロスチェーン通信が不可能になります。  
+
+このように、**ファイナリティの保証があることが、信頼できるクロスチェーンシステムを構築するための前提条件** となります。  

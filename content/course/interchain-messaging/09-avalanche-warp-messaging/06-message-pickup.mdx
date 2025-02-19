@@ -1,27 +1,27 @@
 ---
-title: Message Pickup
-description: Learn about the role of the Relayer when picking up the message.
-updated: 2024-05-31
-authors: [martineckardt]
-icon: BookOpen
+title: メッセージの取得
+description: リレイヤーがメッセージを取得仕組みについて学ぶ  
+updated: 2024-05-31  
+authors: [martineckardt]  
+icon: BookOpen  
 ---
 
-When the AWM Relayer detects a new message, it collects the signatures of that message from the validators of the source Avalanche L1. The validator uses the BLS private key corresponding to their  BLS public key (registered on the P-Chain) to create a signature for the unsigned warp message we've learned about earlier (in the Warp Message Format).
+AWM リレイヤーが新しいメッセージを検出すると、送信元の Avalanche L1 のバリデータからそのメッセージの署名を収集します。バリデータは、P-Chain に登録されている **BLS 公開鍵** に対応する **BLS 秘密鍵** を使用して、これまで学んだ **未署名のワープメッセージ** に対して署名を行います。
 
 ![](/common-images/awm/relayer-pickup.png)
 
-The AWM Relayer does not necessarily need to collect the signature of all validators. It only needs to ensure that the validators of the collected signatures represent a sufficiently large share of the total stake of the Avalanche L1. It is up to the receiving Avalanche L1 to determine what the threshold is.
+AWM リレイヤーはすべてのバリデータの署名を収集する必要はありません。収集した署名のバリデータが Avalanche L1 の **合計ステークの十分な割合** を占めることを確認すればよいのです。どの程度の割合を必要とするかは、受信側の Avalanche L1 によって決定されます。
 
-## New Outgoing Messages
+## 新しい送信メッセージの検出方法  
 
-How does a AWM Relayer learn about new messages? The AWM Relayer has two options to check for outgoing warp message on the source Avalanche L1:
+AWM リレイヤーは、送信元の Avalanche L1 で新しいワープメッセージを検出するために、以下の 2 つの方法を使用できます。
 
-- **Polling:** The AWM Relayer periodically checks the source chain for new outgoing messages. 
-- **Notification:** The AWM Relayer is triggered whenever a new outgoing message is detected by a node. 
+- **ポーリング:** AWM リレイヤーが定期的に送信元チェーンをチェックし、新しい送信メッセージを検出する。  
+- **通知:** AWM リレイヤーがノードからの通知を受け取り、新しい送信メッセージが検出されたときに自動的にトリガーされる。  
 
-## AWM Relayer Source Avalanche L1 Configuration
+## AWM リレイヤーの送信元 Avalanche L1 設定  
 
-For the source Avalanche L1s, the AWM Relayer offers the following configuration:
+AWM リレイヤーでは、送信元 Avalanche L1 に関する以下の設定が可能です。
 
 ```json
 "source-blockchains": [
@@ -47,14 +47,14 @@ For the source Avalanche L1s, the AWM Relayer offers the following configuration
   ],
 ```
 
-- **subnet-id:** The id of the source Avalanche L1
-- **blockchain-id:** The chainId of the source Avalanche L1's blockchain that should be checked for outgoing messages
-- **vm:** A string specifying the virtual machine of the source Avalanche L1's blockchain. Currently, only the evm is supported, but this field has been added in anticipation of communication between blockchains powered by different virtual machines in the future.
-- **rpc-endpoint:** The host of a node that can be queried for outgoing messages 
-- **rpc-endpoint:** The websocket endpoint of a node that can be queried for outgoing messages 
-- **message-contracts:** A map with the address of the Interchain Messaging contract as key and the following config parameters as values:
-    - **message-format:** A string specifying the format. Currently, only the format "teleporter" exists, but this field has been added in anticipation of multiple formats in the future
-    - **settings:** A dictionary with settings for this Interchain Messaging contract 
-    - **reward-address:** The address rewards are paid out to
+- **subnet-id:** 送信元 Avalanche L1 のサブネット ID  
+- **blockchain-id:** 送信元 Avalanche L1 のブロックチェーン ID（このチェーンで送信メッセージを監視する）  
+- **vm:** 使用する仮想マシンの種類（現在は `evm` のみ対応だが、将来的には異なる VM 同士の通信も想定）  
+- **rpc-endpoint:** 送信メッセージを取得するための RPC エンドポイント  
+- **ws-endpoint:** 送信メッセージを取得するための WebSocket エンドポイント  
+- **message-contracts:** Interchain Messaging コントラクトのアドレスをキーとし、以下の設定を持つマップ  
+    - **message-format:** メッセージフォーマット（現在は `"teleporter"` のみ対応）  
+    - **settings:** Interchain Messaging コントラクトに関する設定  
+    - **reward-address:** 報酬の受け取りアドレス  
 
 <Quiz quizId="313"/>

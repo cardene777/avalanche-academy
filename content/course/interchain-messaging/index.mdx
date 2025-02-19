@@ -1,67 +1,68 @@
 ---
-title: Welcome to the course
-description: Learn about Interchain Messaging, the interoperability protocol of Avalanche.
+title: コースへようこそ
+description: Avalanche の相互運用プロトコルである Interchain Messaging について学びましょう。
 updated: 2024-05-31
 authors: [martineckardt]
 icon: Smile
 ---
 
-In this course, you will learn how to build cross-L1 Solidity dApps with Interchain Messaging and Avalanche Warp Messaging.
+このコースでは、Interchain Messaging と Avalanche Warp Messaging を使用して、クロスチェーンL1（Layer 1）対応の Solidity dApp を構築する方法を学びます。
 
-## Why Take This Course?
+## なぜこのコースを受講するのか？
 
-A significant innovation in blockchain is the development of multi-chain systems, like Avalanche, which provide a significant improvement in scalability, interoperability, and flexibility. At the core of these multi-chain systems is the ability to run multiple blockchains that communicate. Each chain's VM is optimized for specialized use cases, thereby boosting the network's overall performance.
+ブロックチェーン技術の大きな進歩の一つに、Avalanche のような **マルチチェーンシステム** の開発があります。これにより、スケーラビリティ（拡張性）、相互運用性、柔軟性が大幅に向上しました。マルチチェーンシステムの核となるのは、複数のブロックチェーンが相互に通信できることです。それぞれのチェーンの仮想マシン（VM）は特定のユースケースに最適化されており、ネットワーク全体のパフォーマンスを向上させます。
 
-Cross-chain communication is a crucial building block of multi-chain systems. Utilizing Interchain Messaging and Avalanche Warp Messaging is an incredible easy way to build cross-L1 dApps, since developers can build on top an extensive and audited development framework. 
+**クロスチェーン通信** は、マルチチェーンシステムにおける重要な要素です。Interchain Messaging と Avalanche Warp Messaging を利用すれば、既に監査された開発フレームワーク上に構築できるため、クロスチェーンL1 dApp を容易に開発できます。
 
-## Course Content
+## コース内容
 
-Below you can find a 30 minute recording of a presentation about Avalanche Warp Messaging and Teleporter. This summarizes the content of the first chapters:
+以下に、Avalanche Warp Messaging と Teleporter についての 30 分のプレゼンテーション動画を掲載します。最初の章の内容を要約しています。
 
 <YouTube id="N6F7D4Hb87c"/>
 
-### Interoperability 
+### **相互運用性（Interoperability）**
 
-In the first section, we cover some basic concepts of interoperability in multi-chain systems. You will learn about examples of interoperability between blockchains and the terms "source," "destination," and "message."
+最初のセクションでは、マルチチェーンシステムにおける **相互運用性（interoperability）** の基本概念を学びます。異なるブロックチェーン間での相互運用の例や、「送信元（source）」、「宛先（destination）」、「メッセージ（message）」といった基本的な用語について説明します。
 
-### Avalanche Interchain Messaging
+### **Avalanche Interchain Messaging**
 
-In this section, we learn what Avalanche Interchain Messaging is and what is abstracted away from the general dApp developer. You will also build your first cross-L1 dApps.
+このセクションでは、Avalanche Interchain Messaging の仕組みや、一般的な dApp 開発者が意識する必要のない部分について学びます。また、実際に最初の **クロスチェーンL1 dApp** を構築します。
 
-### Securing Cross-Chain Communication
+### **クロスチェーン通信のセキュリティ**
 
-In this section, we look at techniques to secure cross-chain communication. We dive into signature schemes, multi-signature schemes, and the BLS multi-signature scheme.
+このセクションでは、クロスチェーン通信を安全に行うための技術について学びます。署名スキーム（signature schemes）、マルチシグ（multi-signature schemes）、BLSマルチシグ（BLS multi-signature scheme）について詳しく掘り下げます。
 
-### Avalanche Interchain Messaging Protocol
+### **Avalanche Interchain Messaging プロトコル**
 
-Avalanche blockchains can natively interoperate between one another using AWM. You will learn about the AWM message format and how the message flow works.
+Avalanche のブロックチェーン同士は、**Avalanche Warp Messaging（AWM）** を利用してネイティブに相互運用できます。このセクションでは、AWM の **メッセージフォーマット** や **メッセージの流れ（message flow）** について学びます。
 
-## Prerequisites
+## **受講前の前提知識**
 
-### Avalanche
+### **Avalanche の基礎知識**
 
-This course is meant for people with a solid understanding of the basic concepts of Avalanche. You should be familiar with these concepts:
+このコースは、Avalanche の基本概念を十分に理解している方向けです。以下の知識が必要になります。
 
-- **Virtual Machines:** What they are and what VM customization means
-- **Avalanche L1s & Blockchains:** What the difference between a VM, Blockchain, and an Avalanche L1 is
+- **仮想マシン（Virtual Machines）：** 仮想マシンとは何か、カスタマイズの意味
+- **Avalanche L1 とブロックチェーンの違い：** **VM（仮想マシン）**、**Blockchain（ブロックチェーン）**、**Avalanche L1** の違い
 
-If any of this is unclear, we strongly recommend taking the Avalanche Fundamentals and Multi-Chain Architecture courses first.
+これらの理解が不足している場合は、**Avalanche Fundamentals（Avalancheの基礎）** や **Multi-Chain Architecture（マルチチェーンアーキテクチャ）** のコースを先に受講することを推奨します。
 
-### Software Development
+### **ソフトウェア開発の基礎知識**
 
-You will need a general understanding of Software Development. You won't have to write a lot of code, but you will have to understand some. Therefore, we recommend:
+このコースでは多くのコードを書く必要はありませんが、ある程度の理解が求められます。以下の技術について知識があるとスムーズに学習できます。
 
-- **Solidity:** Familiarity with most concepts of the language. All exercises will mainly consist of writing cross-subnet dApps in Solidity.
-- **Docker:** The advanced exercises in the latter part of the course will occur in contained environments for easy setup. It will help if you're generally familiar with the concept of containerization, docker, and docker compose.
-- **Testing:** Having some experience or familiarity with unit testing is ideal.
+- **Solidity:** 言語の基本概念に精通していること。演習では **クロスチェーンサブネット（cross-subnet）** dApp を Solidity で記述します。
+- **Docker:** コース後半の高度な演習では、セットアップを簡素化するため **コンテナ環境** を利用します。Docker や Docker Compose の基本概念に慣れていると理解しやすくなります。
+- **テスト（Testing）:** 単体テスト（unit testing）の経験や、テスト手法に関する基本的な知識があると理想的です。
 
-## Learning Outcomes
+## **学習目標**
 
-By the end of this course, students will:
+このコースを修了すると、以下の内容を習得できます。
 
-- Understand the challenges of cross-chain communication
-- Know what separates Avalanche Warp Messaging from other cross-chain communication protocols
-- Understand the differences between Avalanche Warp Messaging and Teleporter
-- Apply their knowledge by building cross-Avalanche L1 dApps, such as asset bridges
+- **クロスチェーン通信の課題を理解する**
+- **Avalanche Warp Messaging が他のクロスチェーン通信プロトコルとどう違うのかを知る**
+- **Avalanche Warp Messaging と Teleporter の違いを理解する**
+- **クロスAvalanche L1 dApp（例えば資産ブリッジ）を構築するスキルを身につける**
 
-Overall, this course aims to provide an advanced understanding of Teleporter. By completing this course, students will be better prepared to build advanced cross-Avalanche L1 blockchain applications.
+全体を通して、本コースは **Teleporter の高度な理解** を提供することを目的としています。修了することで、**Avalanche L1 を跨ぐブロックチェーンアプリケーションの開発に備えることができます**。
+

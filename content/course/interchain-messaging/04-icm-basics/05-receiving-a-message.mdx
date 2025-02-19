@@ -1,16 +1,24 @@
 ---
-title: Receiving a Message
-description: Learn to receive messages with Avalanche Interchain Messaging.
-updated: 2024-05-31
-authors: [martineckardt]
-icon: BookOpen
+title: メッセージの受信  
+description: Avalanche Interchain Messaging を使用してメッセージを受信する方法を学ぶ  
+updated: 2024-05-31  
+authors: [martineckardt]  
+icon: BookOpen  
 ---
 
-To receive a message we need to enable our cross-L1 dApps to being called by the Interchain Messaging contract.
+クロス L1（レイヤー1） dApp がメッセージを受信できるようにするには、**Interchain Messaging コントラクトから呼び出される仕組みを構築する必要があります**。  
 
-![](/course-images/teleporter/teleporter-source-destination-with-relayer.png)
+![](/course-images/teleporter/teleporter-source-destination-with-relayer.png)  
 
-The Interchain Messaging does not know our contract and what functions it has. Therefore, our dApp on the destination Subnet has to implement the ITeleporterReceiver interface. It is very straight forward and only requires a single method for receiving the message that then can be called by the Interchain Messaging contract:
+Interchain Messaging コントラクトは、受信側のコントラクトの存在やその関数を事前に知ることができません。  
+そのため、**受信側の dApp（サブネット上のコントラクト）が `ITeleporterReceiver` インターフェースを実装** する必要があります。  
+このインターフェースは **1つの関数** を持ち、Interchain Messaging コントラクトがメッセージを配信する際に呼び出されます。  
+
+---
+
+### **`ITeleporterReceiver` インターフェース**  
+
+以下の `ITeleporterReceiver` インターフェースを実装すると、Interchain Messaging 経由でメッセージを受け取ることができます。  
 
 ```solidity
 pragma solidity 0.8.18;
@@ -34,13 +42,31 @@ interface ITeleporterReceiver {
 }
 ```
 
-The function receiveTeleporterMessage has three parameters:
+---
 
-- **`originChainID`**: The chainID where the message originates from, meaning where the user or contract called the `sendCrossChainMessage` function of the Interchain Messaging contract
-- **`originSenderAddress`**: The address of the user or contract that called the `sendCrossChainMessage` function of the Interchain Messaging contract on the origin Subnet
-- **`message`**: The message encoded in bytes
+### **`receiveTeleporterMessage` 関数の役割**  
 
-An example for a contract being able to receive Interchain Messaging messages and storing these in a mapping could look like this:
+この関数には **3つの引数** があります。  
+
+- **`originChainID`（送信元のチェーン ID）**  
+
+メッセージがどの Avalanche L1 から送られてきたのかを識別する ID。  
+これは **P-Chain 上のブロックチェーン ID** であり、EVM の通常のチェーン ID とは異なります。  
+
+- **`originSenderAddress`（送信元アドレス）**  
+
+メッセージを送信したスマートコントラクトやユーザーアカウントのアドレス。  
+
+- **`message`（エンコードされたメッセージ）**  
+
+送信元で `abi.encode()` を使用してバイトデータに変換されたメッセージ。  
+受信側で `abi.decode()` を使用して元のデータに戻す必要があります。  
+
+---
+
+### **受信コントラクトの例**  
+
+以下のコントラクトは、**Interchain Messaging 経由でメッセージを受信し、送信元の情報とともに保存する** 仕組みを提供します。  
 
 ```solidity
 pragma solidity 0.8.18;
@@ -88,6 +114,20 @@ contract MessageReceiver is ITeleporterReceiver {
 }
 ```
 
-This contract stores the last `Message` and it's sender of each chain it has received. When it is instantiated, the address of the Interchain Messaging contract is supplied to the constructor. The contract implements the `ITelepoterReceiver` interface and therefore we also implement the `receiveTeleporterMessage` function. 
+---
+
+### **このコントラクトの動作**  
+
+1. **Interchain Messaging のアドレスをコンストラクタで受け取る**  
+   - `teleporterMessenger` という immutable 変数に、Interchain Messaging のコントラクトアドレスを設定。  
+   - これにより、どのメッセンジャーがメッセージを配信するのかを特定できるようにする。  
+
+2. **`receiveTeleporterMessage` を実装し、受信メッセージを保存する**  
+   - `msg.sender` をチェックし、**Interchain Messaging コントラクト以外からの呼び出しを拒否** する。  
+   - メッセージを `abi.decode()` を使ってデコードし、送信元のアドレスとともに `_messages` マッピングに保存。  
+
+---
+
+このように、`ITeleporterReceiver` を実装することで、Interchain Messaging を利用した **メッセージの受信と処理** を実行できます。  
 
 <Quiz quizId="305"/>

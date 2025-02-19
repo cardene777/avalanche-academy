@@ -1,16 +1,16 @@
 ---
-title: Incentivize an AWM relayer
-description: Add incentives to the basic send-receive contracts.
-updated: 2024-06-09
-authors: [andyvargtz]
-icon: Terminal
+title: AWM リレイヤーへのインセンティブ付与  
+description: 送受信コントラクトにインセンティブ機能を追加する  
+updated: 2024-06-09  
+authors: [andyvargtz]  
+icon: Terminal  
 ---
 
-## Add Incentives to our Sender Contract
+## 送信コントラクトにインセンティブを追加  
 
-Now that we have an ERC20 token deployed and some of those tokens in our account to incentivize our relayer, let's include the incentive in our Sender contract.
+ERC20 トークンをデプロイし、リレイヤーに支払うためのトークンを用意できたので、送信コントラクトにインセンティブを組み込みましょう。  
 
-In the following contract, make sure to update `destinationBlockchainID` with your current deployment
+以下のコントラクトを使用する際、**`destinationBlockchainID` を現在のデプロイ先のものに更新** することを忘れないでください。
 
 ```solidity title="contracts/interchain-messaging/incentivize-relayer/senderWithFees.sol"
 // (c) 2023, Ava Labs, Inc. All rights reserved.
@@ -49,10 +49,13 @@ contract SenderWithFeesOnCChain {
 }
 ```
 
-Notice, our contract implementing Fees now needs to include the functionality we described in the fee flow section:
+### 変更点と重要ポイント  
 
-- Import `IERC20` and create the fee contract interface instance 
-- 📜The Cross-Avalanche L1 dApp transfers the ERC20 fee amount to the control of the Cross-Chain dApp contract.
-- 📜Cross-Avalanche L1 dApp needs to implement the approval for the Interchain Messaging contract of these ERC20 tokens.
-- Include the `TeleporterFeeInfo` struct in the message. 
+このコントラクトは、インセンティブを適用するために以下の処理を追加しています：
 
+- **ERC20 トークンをインポート**（`IERC20` を使用）し、手数料用のトークンを扱うためのインターフェースを作成  
+- **📜 ユーザーから手数料をコントラクトに送付**（`transferFrom` を使用）  
+- **📜 インター・チェーン・メッセージングコントラクトが手数料を利用できるように承認**（`approve` を使用）  
+- **`TeleporterFeeInfo` 構造体を `sendCrossChainMessage` のパラメータに含める**  
+
+これにより、リレイヤーに対して適切な手数料を支払い、メッセージの確実な送信を行うことができます。

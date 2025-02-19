@@ -1,17 +1,19 @@
 ---
-title: Load Considerations
-description: Learn which chains experience a load increase when sending a Cross-Chain message.
-updated: 2024-05-31
-authors: [martineckardt]
-icon: BookOpen
+title: 負荷に関する考慮事項  
+description: クロスチェーンメッセージを送信するときに、どのチェーンに負荷がかかるのかを学ぶ  
+updated: 2024-05-31  
+authors: [martineckardt]  
+icon: BookOpen  
 ---
 
-Let's take a moment and determine where AWM takes up load:
+AWM によるクロスチェーンメッセージの送信時、どの部分に負荷がかかるのかを考えてみましょう。
 
-- **Source Avalanche L1**: Validators sign the message
-- **Relayer**: Signature aggregation
-- **Destination Avalanche L1**: Validators verify the message using the BLS Public Key registry on the P-Chain
+- **送信元の Avalanche L1**: バリデータがメッセージに署名する  
+- **リレイヤー**: 署名の集約を行う  
+- **送信先の Avalanche L1**: バリデータが P-チェーンの BLS 公開鍵レジストリを利用してメッセージを検証する  
 
-There is no record of the network communication, the signatures, or the message itself on the P-Chain. It solely functions as a registry of the BLS public keys where the destination Avalanche L1 validators read from. Since they each already validate the primary network, they are already tracking the P-Chain.
+P-チェーンには、ネットワーク通信の記録、署名、メッセージそのものは保存されません。P-チェーンは単に BLS 公開鍵のレジストリとして機能し、送信先 Avalanche L1 のバリデータがそれを参照します。  
+また、送信先のバリデータはもともとプライマリネットワーク（Primary Network）を検証しているため、P-チェーンの状態をすでに追跡しています。
 
-Thus, sending messages from one Avalanche L1 to another does not put any load on the P-Chain or another part of the Primary Network. This is a crucial feature, as there is no bottleneck or dependencies between Avalanche L1s for cross-chain communication. 
+したがって、1つの Avalanche L1 から別の Avalanche L1 へメッセージを送信しても、P-チェーンやプライマリネットワークの他の部分に負荷をかけることはありません。  
+これは非常に重要なポイントであり、Avalanche L1 間のクロスチェーン通信において、ボトルネックや依存関係が発生しないことを意味します。

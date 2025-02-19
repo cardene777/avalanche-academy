@@ -1,126 +1,138 @@
 import { Step, Steps } from 'fumadocs-ui/components/steps';
 
-> In the following commands, make sure to substitute the name of your Avalanche L1 for `<name>` (including the `<>`). You can choose whatever name you want, but I recommend using `myblockchain` as the name to avoid the need for some manual configuration.
+> 以下のコマンドでは、 **`<name>`** の部分を **自分が作成する Avalanche L1 の名前** に置き換えてください（`<>` を含めたまま）。  
+> どんな名前でも指定できますが、 **`myblockchain`** を使用すると、一部の手動設定が不要になるためおすすめです。  
 
-<Steps>
-<Step>
- 
-### Start Avalanche L1 Configuration
-To create an Avalanche L1 configuration run the following command:
+<Steps>  
 
-```bash
-avalanche blockchain create <name>
-```
+<Step>  
 
-For example:
+### Avalanche L1 の設定を開始する  
 
-```bash
-avalanche blockchain create myblockchain
-```
- 
-</Step>
+Avalanche L1 の設定を作成するには、以下のコマンドを実行します。  
 
-<Step>
- 
-### Select Virtual Machine
-You will be prompted a wizard to configure your Avalanche L1. In the first question, select `Subnet-EVM`:
+```bash  
+avalanche blockchain create <name>  
+```  
 
-```
-? Which Virtual Machine would you like to use?: 
-  ▸ Subnet-EVM
-    Custom VM
-    Explain the difference
-```
- 
-</Step>
+例えば、 `myblockchain` という名前で作成する場合は以下のコマンドを実行します。 
 
-<Step>
- 
-### Select Default EVM Configuration
-In the second question, select `I want to use defaults for a test environment`:
+```bash  
+avalanche blockchain create myblockchain  
+```  
+
+</Step>  
+
+<Step>  
+
+### 仮想マシン（VM）の選択  
+
+コマンドを実行すると、 **ウィザード形式の設定画面** が表示されます。  
+最初の質問では **「Subnet-EVM」** を選択してください。  
 
 ```
-? Do you want to use default values for the Blockchain configuration?: 
-  ▸ I want to use defaults for a test environment
-    I want to use defaults for a production environment
-    I don't want to use default values
-    Explain the difference
-```
+? Which Virtual Machine would you like to use?:  
+  ▸ Subnet-EVM  
+    Custom VM  
+    Explain the difference  
+```  
 
-After the completing the configuration, you should see something like this:
+</Step>  
 
-```
-@martineckardt ➜ /workspaces/avalanche-starter-kit (main) $ avalanche blockchain create myblockchain
-✔ Subnet-EVM
-✔ I want to use defaults for a test environment
-Chain ID: 9999
-Token Symbol: TOK
-✔ Token Symbol: TOK
-prefunding address 0x8db97C7cEcE249c2b98bDC0226Cc4C2A57BF52FC with balance 1000000000000000000000000
-Installing subnet-evm-v0.6.8...
-subnet-evm-v0.6.8 installation successful
-✓ Successfully created blockchain configuration
-```
+<Step>  
 
-This command creates the config files `genesis.json` and `sidecar.json` inside: `~/.avalanche-cli/subnets/<name>`. If you want, you can retrieve the current config with the following command:
+### デフォルトの EVM 設定を選択  
 
-```bash
-avalanche blockchain describe <name>
-```
-
-</Step>
-
-<Step>
- 
-### To deploy your Avalanche L1, run
-
-```bash
-avalanche blockchain deploy <name>
-```
-
-So in our case:
-
-```bash
-avalanche blockchain deploy myblockchain
-```
-
-When prompted select `Local Network` to deploy on. 
+次の質問では、 **「I want to use defaults for a test environment」** を選択してください。  
 
 ```
-? Choose a network for the operation: 
-  ▸ Local Network
-    Devnet
-    Fuji Testnet
-    Mainnet
+? Do you want to use default values for the Blockchain configuration?:  
+  ▸ I want to use defaults for a test environment  
+    I want to use defaults for a production environment  
+    I don't want to use default values  
+    Explain the difference  
+```  
+
+設定が完了すると、次のような出力が表示されます。  
+
 ```
+@martineckardt ➜ /workspaces/avalanche-starter-kit (main) $ avalanche blockchain create myblockchain  
+✔ Subnet-EVM  
+✔ I want to use defaults for a test environment  
+Chain ID: 9999  
+Token Symbol: TOK  
+✔ Token Symbol: TOK  
+prefunding address 0x8db97C7cEcE249c2b98bDC0226Cc4C2A57BF52FC with balance 1000000000000000000000000  
+Installing subnet-evm-v0.6.8...  
+subnet-evm-v0.6.8 installation successful  
+✓ Successfully created blockchain configuration  
+```  
 
-After the deployment your should see something like this:
+このコマンドによって、 **`genesis.json` と `sidecar.json` の設定ファイル** が  
+`~/.avalanche-cli/subnets/<name>` のフォルダ内に作成されます。  
+
+現在の設定を確認したい場合は、以下のコマンドを実行してください。  
+
+```bash  
+avalanche blockchain describe <name>  
+```  
+
+</Step>  
+
+<Step>  
+
+### Avalanche L1 をデプロイする  
+
+以下のコマンドを実行し、作成した Avalanche L1 をデプロイします。  
+
+```bash  
+avalanche blockchain deploy <name>  
+```  
+
+例えば、 `myblockchain` をデプロイする場合：  
+
+```bash  
+avalanche blockchain deploy myblockchain  
+```  
+
+次に、 **デプロイ先のネットワークを選択するよう求められます** 。  
+ここでは **「Local Network」** を選択してください。  
 
 ```
-@martineckardt ➜ /workspaces/avalanche-starter-kit (main) $ avalanche blockchain deploy myblockchain
-✔ Local Network
-Deploying [myblockchain] to Local Network
-Backend controller started, pid: 5317, output at: /home/vscode/.avalanche-cli/runs/server_20240808_164902/avalanche-cli-backend.log
-Installing avalanchego-v1.11.10...
-avalanchego-v1.11.10 installation successful
+? Choose a network for the operation:  
+  ▸ Local Network  
+    Devnet  
+    Fuji Testnet  
+    Mainnet  
+```  
 
-Booting Network. Wait until healthy...
-Node logs directory: /home/vscode/.avalanche-cli/runs/network_20240808_164903/node<i>/logs
-Network ready to use.
+デプロイが完了すると、次のような出力が表示されます。  
 
-Deploying Blockchain. Wait until network acknowledges...
+```
+@martineckardt ➜ /workspaces/avalanche-starter-kit (main) $ avalanche blockchain deploy myblockchain  
+✔ Local Network  
+Deploying [myblockchain] to Local Network  
+Backend controller started, pid: 5317, output at: /home/vscode/.avalanche-cli/runs/server_20240808_164902/avalanche-cli-backend.log  
+Installing avalanchego-v1.11.10...  
+avalanchego-v1.11.10 installation successful  
 
-Teleporter Messenger successfully deployed to c-chain (0x253b2784c75e510dD0fF1da844684a1aC0aa5fcf)
-Teleporter Registry successfully deployed to c-chain (0x17aB05351fC94a1a67Bf3f56DdbB941aE6c63E25)
+Booting Network. Wait until healthy...  
+Node logs directory: /home/vscode/.avalanche-cli/runs/network_20240808_164903/node<i>/logs  
+Network ready to use.  
 
-Teleporter Messenger successfully deployed to myblockchain (0x253b2784c75e510dD0fF1da844684a1aC0aa5fcf)
-Teleporter Registry successfully deployed to myblockchain (0x82EeEf8e31D4Bf95916219D7949D66c468Ac0681)
+Deploying Blockchain. Wait until network acknowledges...  
 
-using awm-relayer version (v1.3.3)
-Installing AWM-Relayer v1.3.3
-Executing AWM-Relayer...
+Teleporter Messenger successfully deployed to c-chain (0x253b2784c75e510dD0fF1da844684a1aC0aa5fcf)  
+Teleporter Registry successfully deployed to c-chain (0x17aB05351fC94a1a67Bf3f56DdbB941aE6c63E25)  
 
-Blockchain ready to use
+Teleporter Messenger successfully deployed to myblockchain (0x253b2784c75e510dD0fF1da844684a1aC0aa5fcf)  
+Teleporter Registry successfully deployed to myblockchain (0x82EeEf8e31D4Bf95916219D7949D66c468Ac0681)  
+
+using awm-relayer version (v1.3.3)  
+Installing AWM-Relayer v1.3.3  
+Executing AWM-Relayer...  
+
+Blockchain ready to use  
 
 +---------------------------------------------------------------------------------------------------------------+
 |                                                  MYBLOCKCHAIN                                                 |
@@ -220,20 +232,23 @@ Blockchain ready to use
 +-----------------+-------------------------------------------------------------------------------------+
 | Token Name      | TOK Token                                                                           |
 +-----------------+-------------------------------------------------------------------------------------+
-```
+```  
 
-</Step>
+デプロイ後、 `myblockchain` の設定や RPC エンドポイント情報などを確認できます。  
 
-<Step>
- 
-### Make RPC-Endpoint publicly accessible
+</Step>  
 
-The final part of the output shows the wallet connection details. You can use these to connect your wallet like Core or Metasmask to you newly created Avalanche L1.
+<Step>  
 
-import PublishPort from "@/content/common/codespaces/publish-port.mdx";
+### RPC エンドポイントをパブリックにする  
 
-<PublishPort />
- 
+出力の最後の部分に、 **ウォレット接続の詳細情報** が表示されます。  
+この情報を使用して、 **Core** や **MetaMask** などのウォレットを作成した Avalanche L1 に接続できます。  
+
+import PublishPort from "@/content/common/codespaces/publish-port.mdx";  
+
+<PublishPort />  
+
 </Step>
 
 </Steps>

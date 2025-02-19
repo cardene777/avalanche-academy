@@ -1,28 +1,31 @@
 ---
-title: Configuration
-description: Learn how to configure a Relayer 
-updated: 2024-05-31
-authors: [martineckardt]
-icon: BookOpen
+title: リレイヤーの設定  
+description: リレイヤーの設定方法を学ぶ  
+updated: 2024-05-31  
+authors: [martineckardt]  
+icon: BookOpen  
+
 ---
 
-A relayer is configured to relayer messages between certain source and destination L1s. Therefore, the configuration consists of three parts:
-- **General Config:** Configuration independent of the source and destination L1s concerning the network as a whole
-- **Source Blockchain Configs:** All parameters necessary for the relayer to pick up the messages 
-- **Destination Blockchain Configs:** All parameters necessary to deliver the messages
+リレイヤーは、特定の **送信元 L1** と **送信先 L1** の間でメッセージをリレーするように設定されます。そのため、設定は以下の **3 つの部分** で構成されます。  
 
-The configuration is supplied to the relayer as a JSON file. Let's open the one automatically created for the Avalanche-CLI relayer:
+- **全体設定:** ネットワーク全体に関する、送信元・送信先 L1 に依存しない設定  
+- **送信元ブロックチェーンの設定:** メッセージを取得するために必要なパラメータ  
+- **送信先ブロックチェーンの設定:** メッセージを送信するために必要なパラメータ  
+
+この設定は **JSON ファイル** でリレイヤーに提供されます。まず、Avalanche CLI によって自動生成された設定ファイルを開いてみましょう。  
 
 ```bash
-code ~/.avalanche-cli/runs/network_xxxx_xxxx/awm-relayer-config.json 
+code ~/.avalanche-cli/runs/network_xxxx_xxxx/awm-relayer-config.json
 ```
-Where the xxxx_xxxx will be a name automatically assigned to your local deployment.
 
-Let's go through the different values:
+`xxxx_xxxx` の部分は、ローカル環境でのデプロイ時に自動的に付与される名前になります。  
 
-## General Config
+---
 
-The general config contains among others the following parameters:
+## **全体設定**
+
+全体設定には、以下のようなパラメータが含まれます。  
 
 ```json
 {
@@ -40,12 +43,16 @@ The general config contains among others the following parameters:
 }
 ```
 
-- **info-api-url:** The URL of the [Info API](https://docs.avax.network/api-reference/info-api) node to which the relayer will connect to to receive information like the NetworkID.
-- **p-chain-api-url:** The URL of the Avalanche [P-Chain API](https://docs.avax.network/api-reference/p-chain/api) node to which the relayer will connect to query the validator sets. 
+- **info-api-url:**  
+  リレイヤーが接続し、`NetworkID` などの情報を取得するための [Info API](https://docs.avax.network/api-reference/info-api) の URL。  
+- **p-chain-api-url:**  
+  リレイヤーが接続し、**バリデータセット** を取得するための Avalanche [P-Chain API](https://docs.avax.network/api-reference/p-chain/api) の URL。  
 
-## Source Blockchain Configs
+---
 
-Next is the configuration for our source blockchain. This is the configuration of the blockchain where messages will be initiated and picked up. The relayer will aggregate the signatures of the validators of that Subnet. 
+## **送信元ブロックチェーンの設定**  
+
+この設定では、メッセージの送信元となるブロックチェーンを指定します。リレイヤーは、この L1 のバリデータの署名を収集し、署名を集約します。  
 
 ```json
 {
@@ -87,30 +94,28 @@ Next is the configuration for our source blockchain. This is the configuration o
 }
 ```
 
-- **subnet-id:** The Blockchain ID of the L1 that the source blockchain is part of. In this example this is the Blockchain ID of the Primary Network.
-- **blockchain-id:** The blockchain ID of the source. In this example this is the blockchain ID of Fuji's C-Chain.
-- **vm:** A string specifying the virtual machine of the destination L1's blockchain. Currently, only the EVM is supported, but this field has been added in anticipation of communication between blockchains powered by different virtual machines in the future.
-- **rpc-endpoint:** An API Config containing:
-<div class="pl-6">
-- **base-url:** RPC endpoint of the source L1's API node.
-- **query-parameters:** Additional query parameters to include in the API requests
-- **http-headers:** Additional HTTP headers to include in the API requests
-</div>
-- **wss-endpoint:** An API Config containing:
-<div class="pl-6">
-- **base-url**: The WebSocket endpoint of the source L1's API node
-- **query-parameters:** Additional query parameters to include in the API requests
-- **http-headers:** Additional HTTP headers to include in the API requests
-</div>
-- **message-contracts:** A map of contract addresses to the config options of the protocol (e.g. Teleporter) at that address. Each MessageProtocolConfig consists of a unique message-format name, and the raw JSON settings. "0x253b2784c75e510dD0fF1da844684a1aC0aa5fcf" is the address of the TeleporterMessenger on the Fuji C-Chain.
-<div class="pl-6">
-- **message-format:** should be set to Teleporter. Additional message formats next to Interchain Messaging may be developed in the future 
-- **settings > reward-address:** The address that will be rewarded if a L1 is incentivizing relayers to send messages on it's behalf. This is the address of the wallet you will create for this relayer. 
-</div>
+- **subnet-id:**  
+  送信元 L1 の **Subnet ID**（この例では **Primary Network**）。  
+- **blockchain-id:**  
+  送信元ブロックチェーンの **Blockchain ID**（この例では **Fuji の C-Chain**）。  
+- **vm:**  
+  ブロックチェーンの **仮想マシン（VM）タイプ** を指定（現在は `evm` のみ対応）。  
+- **rpc-endpoint:**  
+  `base-url:` 送信元 L1 の RPC エンドポイント。  
+- **ws-endpoint:**  
+  `base-url:` 送信元 L1 の WebSocket エンドポイント。  
+- **message-contracts:**  
+  `0x253b2784c75e510dD0fF1da844684a1aC0aa5fcf`: **Interchain Messaging コントラクト** のアドレス。  
+  `message-format:` メッセージフォーマット（`teleporter`）。  
+  `settings > reward-address:`  
+    **リレイヤーに報酬を支払うウォレットのアドレス**。リレイヤーに報酬を支払う場合、このウォレットにインセンティブが送られます。  
 
-## Destination Blockchains
+---
 
-Next is the configuration for our destination blockchain. This is the configuration of the blockchain where messages will be sent to. The relayer will aggregate the signatures of the validators of that L1. 
+## **送信先ブロックチェーンの設定**  
+
+メッセージの送信先となるブロックチェーンの設定を行います。  
+
 ```json
 {
   "destination-blockchains": [
@@ -131,16 +136,25 @@ Next is the configuration for our destination blockchain. This is the configurat
 }
 ```
 
-For each destination L1, the relayer has the following config parameter:
+- **subnet-id:**  
+  送信先 L1 の **Subnet ID**。  
+- **blockchain-id:**  
+  送信先ブロックチェーンの **Blockchain ID**（この例では **Fuji の Dispatch L1**）。  
+- **vm:**  
+  仮想マシンの種類（現在 `evm` のみ対応）。  
+- **rpc-endpoint:**  
+  `base-url:` 送信先 L1 の RPC エンドポイント。  
+- **kms-key-id:**  
+  **AWS KMS** を使用してリレイヤーの署名を行う場合、その **KMS キー ID** を指定。  
+- **kms-aws-region:**  
+  **KMS キーの AWS リージョン**。  
+- **account-private-key:**  
+  **ガストークンを保持するウォレットの秘密鍵**。リレイヤーは **トランザクションを送信** するために、この秘密鍵を使用します。  
 
-- **subnet-id:** The ID of the L1 that the destination blockchain is part of. 
-- **blockchain-id:** The blockchain ID of the destination blockchain. This is the Blockchain ID of Fuji's Dispatch L1.
-- **vm:** A string specifying the virtual machine of the destination L1's blockchain. Currently, only the EVM is supported, but this field has been added in anticipation of communication between blockchains powered by different virtual machines in the future.
-- **rpc-endpoint:** The RPC endpoint of the destination L1's API node. Used in favor of api-node-host, api-node-port, and encrypt-connection when constructing the endpoint.
-- **kms-key-id:** The ID of the KMS key to use for signing transactions on the destination blockchain. Only one of account-private-key or kms-key-id should be provided. If kms-key-id is provided, then kms-aws-region is required. Please note that the private key in KMS should be exclusive to the relayer. 
-- **kms-aws-region:** The AWS region in which the KMS key is located. Required if kms-key-id is provided. 
-- **account-private-key:** A private key for a wallet that holds gas tokens on the destination L1. This is required so the relayer can sign the transaction that delivers the warp message.
+---
 
-If you have been following all the course up to this point with the Avalanche-starter-kit and Avalanche-CLI will provide you with a relayer already funded to perform transactions between the local C-chain and your own chain
+## **追加情報**  
 
-Some configuration fields have been omitted for the purpose of this exercise. If you are interested to read the extensive list of relayer configurations, you can visit the awm-relayer GitHub repository [here](https://github.com/ava-labs/awm-relayer/tree/main?tab=readme-ov-file#configuration).
+もし **Avalanche Starter Kit** や **Avalanche CLI** を使用して本コースを進めている場合、リレイヤーはすでにローカルの C-Chain と自分のチェーンの間でメッセージを送受信できるように設定されています。  
+
+さらに詳細な設定を確認したい場合は、公式の [awm-relayer GitHub リポジトリ](https://github.com/ava-labs/awm-relayer/tree/main?tab=readme-ov-file#configuration) を参照してください。

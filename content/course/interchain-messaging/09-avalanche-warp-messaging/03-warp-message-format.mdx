@@ -1,18 +1,44 @@
 ---
-title: Warp Message Format
-description: Learn about the structure of a Warp Message.
-updated: 2024-05-31
-authors: [martineckardt]
-icon: BookOpen
+title: Warp メッセージのフォーマット  
+description: Warp メッセージの構造について学ぶ  
+updated: 2024-05-31  
+authors: [martineckardt]  
+icon: BookOpen  
 ---
 
-Warp Messages have a minimal message format that only contains the absolute necessary data for the transportation:
+Warp メッセージは、必要最小限のデータのみを含むシンプルなフォーマットになっています。これは、効率的なデータ転送を可能にするためです。
 
-- **NetworkID:** The ID of the Network (Mainnet, Fuji Test Network, Local Test Network). This is included as a security mechanisms, so messages from the Fuji Test Network cannot be replayed on the Mainnet.
-- **SourceChainID:** The chainID where the message originates from. This is not the EVM chain ID you may know from adding a network to a wallet, but the blockchain ID on the P-Chain. The P-Chain uses the transaction ID of the transaction that created those blockchain on the P-Chain for the chain ID, e.g.: 0xd7cdc6f08b167595d1577e24838113a88b1005b471a6c430d79c48b4c89cfc53
-- **SourceAddress:** The address of the message sender
-- **Payload:** The payload of the message
+- **NetworkID**
 
-Every Warp message can be uniquely identified by its ID: the SHA256 hash of the serialized message (NetworkID, SourceChainID, SourceAddress & Payload).
+ネットワークの ID（Mainnet、Fuji テストネットワーク、ローカルテストネットワーク）。  
+これは **セキュリティ対策** として含まれており、例えば Fuji テストネットワークのメッセージが Mainnet で再度実行されることを防ぎます。
 
-The fields above are actually an UnsignedMessage. Hence, it has not been attached an aggregated signature yet. We will examine this in the following sections. 
+- **SourceChainID**
+
+メッセージの送信元となるチェーン ID。  
+これは一般的な EVM のチェーン ID（ウォレットにネットワークを追加する際に使う ID）とは異なり、**P-Chain 上のブロックチェーン ID** です。  
+P-Chain では、新しいブロックチェーンが作成された際のトランザクション ID がチェーン ID になります。  
+例: `0xd7cdc6f08b167595d1577e24838113a88b1005b471a6c430d79c48b4c89cfc53`
+
+- **SourceAddress** 
+
+メッセージの送信元アドレス。  
+どのアドレスがメッセージを発信したかを識別するために使用されます。
+
+- **Payload**
+
+メッセージ自体（データ）。  
+送信したい情報や指示が含まれます。
+
+---
+
+各 Warp メッセージには **SHA256 ハッシュ** を用いた **一意の ID** が付与されます。  
+この ID は、以下の要素をシリアライズ（データを一定の形式に変換）したものをハッシュ化することで生成されます。
+
+> **Warp メッセージの ID = SHA256（NetworkID + SourceChainID + SourceAddress + Payload）**
+
+---
+
+このフィールドを含むメッセージは、まだ **署名されていない「UnsignedMessage」** の状態です。  
+Warp メッセージの **セキュリティと認証を確保するためには、バリデーターによる署名が必要** です。  
+この署名については、次のセクションで詳しく見ていきましょう。

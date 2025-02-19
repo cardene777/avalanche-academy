@@ -1,48 +1,61 @@
 ---
-title: Send a Roundtrip Message
-description: Send roundtrip message
-updated: 2024-05-31
-authors: [martineckardt]
-icon: BookOpen
+title: ラウンドトリップメッセージの送信
+description: ラウンドトリップメッセージを送信する
+updated: 2024-05-31  
+authors: [martineckardt]  
+icon: BookOpen  
 ---
+
 import { Step, Steps } from 'fumadocs-ui/components/steps';
 
-Alright, now let's send the message:
+いよいよ、**送信したメッセージを受信コントラクトで処理し、送信者に返信する流れ** をテストしてみます。  
 
-<Steps>
-<Step>
-### Send the Message:
+<Steps>  
+
+<Step>  
+
+### **メッセージを送信する**  
+
+以下のコマンドを実行し、送信コントラクトから受信コントラクトへメッセージを送信します。  
 
 ```bash 
 cast send --rpc-url local-c --private-key $PK $SENDER_ADDRESS "sendMessage(address)" $RECEIVER_ADDRESS
 ```
 
-</Step>
-<Step>
+</Step>  
 
-### Verify Message Receipt
+<Step>  
 
-To check whether the message has been received, we can call the `roundtripMessage()` function on the sender contract. 
+### **メッセージが正しく受信・返信されたか確認する**  
+
+送信した `"Hello"` が受信コントラクトで `"Hello World!"` に変換され、**送信コントラクトに返信されたかを確認** します。  
+以下のコマンドを実行してください。  
 
 ```bash
 cast call --rpc-url local-c $SENDER_ADDRESS "roundtripMessage()(string)"
 ```
-If successful, you should see the following output:
+
+もし **メッセージが正常に処理され、レスポンスが届いていれば、次のような出力が表示されます**。  
+
 ```bash
 "Hello World!"
 ```
 
-</Step>
-<Step>
+</Step>  
 
-### Check the Relayer Logs
+<Step>  
 
-To understand in more detail what happened, check out the relayer logs:
+### **リレイヤーのログを確認する**  
+
+メッセージがどのように処理されたのか、**リレイヤー（Relayer）のログをチェック** してみましょう。  
 
 ```bash
 avalanche teleporter relayer logs
 ```
 
+リレイヤーは **送信コントラクトからのメッセージを受信コントラクトに届け、さらに返信メッセージを再送信する処理を行っています**。  
+ログを確認することで、どのような流れでメッセージが処理されたのかを詳しく知ることができます。  
 
-</Step>
+</Step>  
+
 </Steps>

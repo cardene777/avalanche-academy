@@ -1,29 +1,54 @@
 ---
-title: Two-Way Communication
-description: Learn about roundtrip messages.
-updated: 2024-05-31
-authors: [martineckardt]
-icon: Book
+title: 双方向通信
+description: ラウンドトリップメッセージについて学ぶ
+updated: 2024-05-31  
+authors: [martineckardt]  
+icon: Book  
 ---
 
-When we send messages with Interchain Messaging, we can see check if a message has been delivered, but we do not get any feedback wether the message has been processed correctly or any return value. If we wanted to achieve this, we need to send a message back from the receiver to the original sender.
+Interchain Messaging を使用してメッセージを送信すると、**メッセージが送信先に届いたかどうかは確認できます**。  
+しかし、**メッセージが正しく処理されたかどうかや、処理の結果を取得することはできません**。  
 
-![](/common-images/teleporter/two-way-communication.png)
+この問題を解決するには、**受信側から再びメッセージを送り返し、元の送信者にレスポンスを返す** 仕組みを作る必要があります。  
 
-## What You Will Learn
+![](/common-images/teleporter/two-way-communication.png)  
 
-In this section, you will go through the following topics:
+---
 
-- **Sender & Receiver:** Understand how we need to change the contracts to send a message back
-- **Send & Track:** Send a roundtrip message and follow the logs
-- **Adapt the example:** Take what you learned and adapt the example
+## **学べること**  
 
-## Exercises
-You will apply your learned knowledge by building your first Cross-Chain application! This application will be deployed on two chains: C-Chain and your own Avalanche L1, both running on a Local Network.
+このセクションでは、次の内容を学びます。  
 
-Therefore, you will deploy two contracts:
+- **送信者 & 受信者の変更:** 送信メッセージに対するレスポンスを受け取るためのコントラクト変更  
+- **送信 & 追跡:** ラウンドトリップメッセージを送信し、ログを追跡する方法  
+- **例の応用:** 学んだことを活かして、異なるメッセージパターンに適用する  
 
-- **Sender on Local C-Chain:** Send a message with a simple string
-- **Receiver on your Avalanche L1:** Receives the message, adds something to the string and send it back
+---
 
-At the end of the section, you will be adapting the example to build a cross-chain Avalanche L1 dApp that send a number to a contract on another Avalanche L1 then receives the result of a mathematical operation. This application is similar to the example above, but the message will include a number. The receiving contract will perform a mathematical operation. 
+## **演習**  
+
+学んだ内容を活用し、**双方向通信（Two-Way Communication）を実装するクロスチェーンアプリケーションを構築** します。  
+このアプリケーションは、**ローカル C-Chain と Avalanche L1 にデプロイ** されます。  
+
+### **デプロイする 2 つのコントラクト**  
+
+- **ローカル C-Chain の送信コントラクト（Sender）**  
+
+文字列のメッセージを送信。
+
+- **Avalanche L1 の受信コントラクト（Receiver）**  
+
+メッセージを受信し、内容を処理して送り返す。
+
+---
+
+### **発展課題: 計算結果を受け取るクロスチェーン dApp の作成**  
+
+この課題では、**数値を送信して受信側で演算を行い、その結果を元の送信者に返すアプリケーション** を作成します。  
+このアプリケーションは、次のような動作を行います。  
+
+- 送信コントラクトが **数値を含むメッセージを送信**  
+- 受信コントラクトが **数値の演算を行い、結果を送り返す**  
+- 送信コントラクトが **受け取った結果を保存する**  
+
+この実装を通じて、**双方向通信の設計・実装方法をより深く理解できるようになります**。  

@@ -1,27 +1,30 @@
 ---
-title: Deploy Fee Token Contract
-description: Deploy an ERC20 to work as the Fee Token for incentives.
-updated: 2024-06-09
-authors: [andyvargtz]
-icon: Terminal
+title: 手数料トークンコントラクトのデプロイ  
+description: インセンティブ用の手数料トークン（ERC20）をデプロイする  
+updated: 2024-06-09  
+authors: [andyvargtz]  
+icon: Terminal  
 ---
 import { Steps, Step } from 'fumadocs-ui/components/steps';
 
+リレイヤーにインセンティブを提供するためには、**どの ERC20 トークンを使用するかを指定** する必要があります。現在、ローカル環境にはERC20トークンが存在していないため、まず **手数料として利用するトークンをデプロイ** する必要があります。  
 
-To add incentives for a relayer we need to specify the ERC20 contract we will be incentivizing with. Since we are working with an almost clean network deployed locally, we will need to first deploy this contract to later use it as the incentive token. 
+インセンティブの支払いは、**送信元のチェーンにデプロイされた ERC20 トークン** を使用して行います。例えば、ネイティブトークンをラップした ERC20 も使用可能ですが、ここでは **Avalanche-CLI に含まれているデモ用のシンプルな ERC20** を使います。  
 
-Incentives are set with ERC20 tokens deployed on the Source chain, in this case our local C-Chain. While this token can be a wrapped version of the native token, for this example we will be using just a simple ERC20 included as demo in the Avalanche-CLI. Let's deploy and mint some of these FEE tokens to later be used to incentivize the relayer.
-
+それでは、この **FEE トークン** をデプロイし、一部のトークンをMint（発行）して、リレイヤーにインセンティブを提供できるようにしましょう。
 
 <Steps>
 <Step>
 
-### Deploy your Fee Token Contract
+### 手数料トークンコントラクトのデプロイ  
+
+以下のコマンドを実行すると、デモ用の ERC20 コントラクトがデプロイされます。
 
 ```bash
 avalanche contract deploy erc20
 ```
-This command will deploy a demo ERC20. Add the following configuration
+
+このコマンドを実行すると、以下のような設定を求められます。次のように入力してください。  
 
 ```bash
 ✔ Local Network
@@ -49,7 +52,9 @@ ERC20 Contract Successfully Deployed!
 </Step>
 <Step>
 
-### Save the ERC20 Address
+### デプロイした ERC20 トークンのアドレスを保存  
+
+デプロイした手数料トークンのアドレスを環境変数に保存しておきましょう。  
 
 ```bash
 export ERC20_fee_address=0x768AF58E63775354938e9F3FEdB764F601c038b4

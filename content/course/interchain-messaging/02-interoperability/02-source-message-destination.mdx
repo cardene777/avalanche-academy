@@ -1,44 +1,61 @@
 ---
-title: Source, Message and Destination
-description:  Learn about interoperability and it's importance in multichain systems.
-updated: 2024-05-31
-authors: [martineckardt]
-icon: BookOpen
+title: Source、Message、Destination  
+description: ブロックチェーンの相互運用性と、その重要性について学ぶ  
+updated: 2024-05-31  
+authors: [martineckardt]  
+icon: BookOpen  
 ---
 
-Interoperability is achieved by enabling blockchains to pass messages to one another. Each message originates from a source chain and is sent to one or more destination chains. These messages encode arbitrary data that can attest some event on the source chains, such as the deposit of an asset or the result of a vote.
+ブロックチェーンの相互運用性（Interoperability）は、異なるブロックチェーン同士がメッセージをやり取りすることで実現されます。各メッセージは **ソースチェーン（送信元のチェーン）** から発信され、 **デスティネーションチェーン（受信先のチェーン）** に送られます。  
+このメッセージには、特定のイベント（例えば資産の入金や投票結果）が発行されたことを証明するデータがエンコードされています。  
 
-<div class="flex space-x-8">
-    <div class="flex-1">
-        ![](/common-images/teleporter/source.png)
+<div class="flex space-x-8">  
+    <div class="flex-1">  
+        ![](/common-images/teleporter/source.png)  
         # Source
-        - Origin of communication
-        - Sender calls contract
-    </div>
-    <div class="flex-1">
-        ![](/common-images/teleporter/message.png)
+        - メッセージの送信元
+        - ユーザーがスマートコントラクトを呼び出す
+    </div>  
+    <div class="flex-1">  
+        ![](/common-images/teleporter/message.png)  
         # Message
-        - Contains source, destination, and encoded data
-        - Signature guarantees  authenticity
-    </div>
-    <div class="flex-1">
-        ![](/common-images/teleporter/destination.png)
+        - 送信元チェーン情報、宛先チェーン情報、エンコードされたデータを含む
+        - 署名によってメッセージの正当性を保証
+    </div>  
+    <div class="flex-1">  
+        ![](/common-images/teleporter/destination.png)  
         # Destination
-        - Submission of message as transaction
-        - Verifies signatures
-    </div>
-</div>
+        - 受信したメッセージをトランザクションとして処理
+        - 署名を検証し、データの正当性を確認
+    </div>  
+</div>  
 
-## Source Chain
+## Source Chain（ソースチェーン）  
 
-The source chain in a cross-blockchain communication system refers to the original blockchain where data, assets, or information originate before being communicated to another blockchain. It acts as the starting point for initiating cross-chain interactions. When a user intends to communicate with another blockchain, they utilize protocols or smart contracts to initiate the communication process from the source chain.
+**ソースチェーン** とは、データや資産、情報を送る元となるブロックチェーンのことです。  
+ユーザーが他のブロックチェーンに情報を送信したい場合、 **ソースチェーン上のプロトコルやスマートコントラクトを通じてメッセージを送信** します。  
+これがクロスチェーン通信の開始点となります。  
 
-## Message
+## Message（メッセージ）  
 
-The message is the data structure that will be sent to to the destination chain. It contains some metadata, the encoded message, and a signature. The signature attests the authenticity of the message, meaning that whatever the message claims has actually happened on the source chain. 
+**メッセージ** とは、 **ソースチェーンからデスティネーションチェーンに送られるデータ構造** です。  
+メッセージには以下のような情報が含まれます。
 
-## Destination Chain
+- **メタデータ** （送信元や宛先の情報）  
+- **エンコードされたメッセージの内容** （送付するデータや処理命令）  
+- **署名（Signature）** （メッセージの正当性を証明）  
 
-Conversely, the destination chain is the recipient blockchain where the communicated data, assets, or instructions will be received and processed. Validators, nodes, or protocols associated with the cross-blockchain communication system on the destination chain receive and authenticate the information relayed from the source chain. Once validated, the destination chain processes the data or executes the specified instructions.
+この **署名** によって、メッセージが本当に **ソースチェーン上で作成された正当なものであること** を保証できます。  
+これにより、デスティネーションチェーン側で偽のメッセージが処理されることを防ぎます。  
 
-<Quiz quizId="301"/>
+## Destination Chain（デスティネーションチェーン）  
+
+**デスティネーションチェーン** とは、ソースチェーンから送信されたデータや資産、命令を受け取り、処理する側のブロックチェーンです。  
+受け取ったメッセージは、 **バリデータ（ノード）やクロスチェーン通信のプロトコル** によって検証されます。  
+
+### 処理の流れ  
+1. **メッセージの受信** ：デスティネーションチェーンがメッセージを受け取る。  
+2. **署名の検証** ：送信元が本物であるかを確認し、改ざんされていないことをチェック。  
+3. **データの処理** ：メッセージの内容に応じて、トークンの発行やデータの記録などを実行。  
+
+<Quiz quizId="301"/>  

@@ -1,18 +1,29 @@
 ---
-title: Install the AWM Relayer
-description: Learn about the different ways to run a relayer
-updated: 2024-05-31
-authors: [martineckardt]
-icon: BookOpen
+title: AWM リレイヤーのインストール  
+description: リレイヤーを実行する方法を学ぶ  
+updated: 2024-05-31  
+authors: [martineckardt]  
+icon: BookOpen  
+
 ---
 
-The binary for the Avalanche Warp Messaging (AWM) relayer can be acquired in multiple ways:
+Avalanche Warp Messaging (AWM) リレイヤーのバイナリは、**複数の方法で取得可能** です。  
 
-- **Download from GitHub Release:** For every release the binary is uploaded to the [GitHub releases page](https://github.com/ava-labs/awm-relayer/releases)
-- **Use Docker:** The Docker image is available under the tag `avaplatform/awm-relayer:latest` on the [Docker Hub](https://hub.docker.com/r/avaplatform/awm-relayer)
-- **Build from Source:** You can also build it from source directly if you want to make modifications or run it on a different platform. The source code is available on the [GitHub repository](https://github.com/ava-labs/awm-relayer?tab=readme-ov-file#building)
+- **GitHub リリースページからダウンロード:**  
 
-When using the [Avalanche Starter Kit](https://github.com/ava-labs/avalanche-starter-kit) the relayer is already included in the Dev Container. You can start the relayer by running the following command:
+各リリース時に、バイナリが [GitHub のリリースページ](https://github.com/ava-labs/awm-relayer/releases) にアップロードされます。  
+
+- **Docker を使用:**  
+
+[Docker Hub](https://hub.docker.com/r/avaplatform/awm-relayer) に `avaplatform/awm-relayer:latest` のタグでイメージが公開されています。  
+
+- **ソースコードからビルド:**  
+
+直接ソースコードをビルドすることも可能です。これにより、**独自の変更を加えたり、異なるプラットフォームで実行することができます。** ソースコードは [GitHub リポジトリ](https://github.com/ava-labs/awm-relayer?tab=readme-ov-file#building) で公開されています。  
+
+## Avalanche Starter Kit を利用する場合  
+
+[Avalanche Starter Kit](https://github.com/ava-labs/avalanche-starter-kit) を使用する場合、リレイヤーは **Dev Container** にすでに含まれています。リレイヤーを起動するには、以下のコマンドを実行してください。  
 
 ```bash
 avalanche teleporter relayer start

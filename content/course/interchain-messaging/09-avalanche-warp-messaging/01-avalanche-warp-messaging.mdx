@@ -1,25 +1,28 @@
 ---
-title: Avalanche Warp Messaging
-description: Learn about Avalanche Warp Messaging, the Cross-Chain communication primitives on Avalanche.
-updated: 2024-05-31
-authors: [martineckardt]
-icon: Book
+title: Avalanche Warp Messaging（AWM）  
+description: Avalanche のクロスチェーン通信技術である Avalanche Warp Messaging（AWM）について学ぶ  
+updated: 2024-05-31  
+authors: [martineckardt]  
+icon: Book  
 ---
 
 <YouTube id="95KB-JhQS2Y" />
 
-Avalanche Warp Messaging (AWM) was developed to make all Avalanche blockchains natively interoperable. Ideally, this solution would introduce as few trust assumptions as possible, meaning the blockchains would not depend on a third-party or intermediary that could risk centralization or single-point failures. 
+Avalanche Warp Messaging（AWM）は、**Avalanche のすべての L1 ブロックチェーンをネイティブに相互接続するため** に開発されました。  
+理想的には、クロスチェーン通信には **第三者や仲介者への依存を最小限に抑え**、中央集権化や単一障害点のリスクを回避することが望まれます。  
 
-AWM allows Avalanche L1s to communicate with one another via authenticated messages by providing signing and verification primitives in AvalancheGo. These are used by the blockchain VMs to sign outgoing messages and verify incoming messages. Any Virtual Machine (VM) on Avalanche can integrate AWM to send and receive messages across Avalanche Avalanche L1s. 
+AWM は、**認証付きメッセージ** による Avalanche L1 同士の通信を可能にします。  
+この仕組みは AvalancheGo に組み込まれた **署名・検証のプリミティブ（基本機能）** を利用します。  
+具体的には、各ブロックチェーンの **VM（バーチャルマシン）** が **送信メッセージに署名して受信メッセージを検証する** ことで安全な通信を実現しています。  
 
-Therefore, AWM is not EVM specific, but rather a general cross-Avalanche L1 communication protocol.
+そのため、AWM は **EVM に特化した技術ではなく、Avalanche 全体で利用できる一般的なクロス L1 通信プロトコル** です。  
 
-## What you will learn
+## 学習内容  
 
-In this section, you will go through the following topics:
+このセクションでは、次のトピックについて学びます。  
 
-- **P-Chain:** What is the role of the P-Chain in Avalanche Warp Messaging?
-- **Warp Message Format:** What does a Warp message consist of?
-- **Warp Message Signing:** How does AWM utilize the mutli-signature scheme BLS to create aggregated signatures?
-- **Warp Message Signature Verification:** How are the signatures of warp messages verified?
-- **Trust Assumptions:** What trust assumptions does AWM introduce?
+- **P-Chain の役割**：AWM において P-Chain はどのような役割を果たすのか？  
+- **Warp メッセージのフォーマット**：Warp メッセージはどのような構造になっているのか？  
+- **Warp メッセージの署名**：AWM はどのように BLS マルチシグを活用して集約署名を生成するのか？  
+- **Warp メッセージの署名検証**：Warp メッセージの署名はどのように検証されるのか？  
+- **信頼の前提**：AWM ではどのような信頼の前提が必要になるのか？

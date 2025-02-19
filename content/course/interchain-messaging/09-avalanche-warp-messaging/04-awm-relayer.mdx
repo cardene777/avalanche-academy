@@ -1,24 +1,39 @@
 ---
-title: AWM Relayer
-description: Learn the basic AWM role and configuration.
-updated: 2024-05-31
-authors: [martineckardt]
-icon: BookOpen
+title: AWM リレイヤー  
+description: AWM の基本的な役割と設定について学ぶ  
+updated: 2024-05-31  
+authors: [martineckardt]  
+icon: BookOpen  
 ---
 
-The AWM Relayer is an application run independently of the blockchain clients. Anyone can run their own AWM Relayer to create a communication channel between two Avalanche L1s, and there can be multiple relayers for the same communication channel. There is an open source implementation anyone can use [here](https://github.com/ava-labs/awm-relayer). 
+AWM リレイヤーは、ブロックチェーンクライアントとは独立して動作するアプリケーションです。  
+誰でも自分の AWM リレイヤーを運用し、2 つの Avalanche L1 の間に通信チャネルを構築できます。  
+また、1 つの通信チャネルに対して **複数のリレイヤーを運用** することも可能です。  
 
-[AvaCloud](https://www.avacloud.io) also offers their own hosted relayers.
+オープンソースの実装が公開されており、誰でも利用できます → [こちら](https://github.com/ava-labs/awm-relayer)  
+また、[AvaCloud](https://www.avacloud.io) では、ホスト型のリレイヤーサービスも提供されています。
 
-![AWM Relayer data flow](/course-images/teleporter/teleporter-source-destination-with-relayer.png)
+![AWM リレイヤーのデータフロー](/course-images/teleporter/teleporter-source-destination-with-relayer.png)
 
-The AWM Relayers are responsible for picking up the messages at the source Avalanche L1, aggregating the BLS signatures from a sufficiently large share of the source Avalanche L1's validators and submitting a transaction on the destination Avalanche L1.
+---
 
-It is up to the cross-chain application to decide if they allow any relayer to be part of the delivery process, or whether to restrict participation to certain Relayers.
+## AWM リレイヤーの役割  
 
-## AWM Relayer Config
+AWM リレイヤーの主な役割は以下の 3 つです。  
 
-The AWM Relayer can be configured so that it is reusable for different networks (Mainnet, Fuji Testnet, Local) and communication channels between Avalanche L1s. The following configurations are available:
+1. **送信元 Avalanche L1 でメッセージを取得**  
+2. **送信元の Avalanche L1 のバリデーターの BLS 署名を集約**  
+3. **宛先の Avalanche L1 にトランザクションを送信**  
+
+また、**どのリレイヤーを許可するか** は、クロスチェーンアプリケーション側で決めることができます。  
+特定のリレイヤーだけを許可することも、誰でもリレーできるようにすることも可能です。
+
+---
+
+## AWM リレイヤーの設定  
+
+AWM リレイヤーは、Mainnet・Fuji テストネット・ローカルネットワークなど、異なる環境でも利用できるように設定できます。  
+以下は、リレイヤーの設定ファイルのサンプルです。
 
 ```json title="https://github.com/ava-labs/awm-relayer/blob/main/sample-relayer-config.json"
 {
@@ -63,7 +78,34 @@ The AWM Relayer can be configured so that it is reusable for different networks 
 }
 ```
 
-- **Info API URL:** An RPC endpoint where the AWM Relayer can access the Info API to retrieve the information about the network
-- **P-Chain API URL:** An RPC endpoint where the AWM Relayer can access the P-Chain to retrieve the validators of the source Avalanche L1
-- **Source Avalanche L1 Configs:** An array of configurations for the source Avalanche L1s where the messages are picked up from
-- **Destination Avalanche L1 Configs:** An array of configurations for the destination Avalanche L1s where the messages are delivered to
+### 設定項目の説明  
+
+- **Info API URL**  
+
+ネットワークの情報を取得するための RPC エンドポイント  
+
+- **P-Chain API URL**  
+
+P-Chain の情報を取得し、送信元 Avalanche L1 のバリデーター情報を確認するための RPC エンドポイント  
+
+- **送信元 Avalanche L1 の設定**  
+
+メッセージを取得する Avalanche L1 の設定情報  
+
+`blockchain-id` → 送信元ブロックチェーンの ID  
+`rpc-endpoint` → EVM の RPC エンドポイント  
+`ws-endpoint` → WebSocket のエンドポイント  
+`message-contracts` → どのコントラクトのメッセージを処理するか  
+
+- **宛先 Avalanche L1 の設定**  
+
+メッセージを送信する Avalanche L1 の設定情報  
+
+`blockchain-id` → 宛先ブロックチェーンの ID  
+`rpc-endpoint` → 宛先の RPC エンドポイント  
+`account-private-key` → 送信に使用するアカウントの秘密鍵（ローカル環境でのみ使用）  
+
+---
+
+AWM リレイヤーは、Avalanche L1 間のメッセージ転送を効率的に処理できるよう設計されています。  
+次のセクションでは、リレイヤーを実際に設定し、運用する方法を見ていきましょう。

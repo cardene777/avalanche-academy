@@ -1,32 +1,40 @@
 ---
-title: Create the Sender Contract
-description: Deploy roundtrip sender contract
-updated: 2024-05-31
-authors: [martineckardt]
-icon: Terminal
+title: 送信コントラクトの作成
+description: ラウンドトリップ用の送信コントラクトをデプロイする
+updated: 2024-05-31  
+authors: [martineckardt]  
+icon: Terminal  
 ---
 
 import { Step, Steps } from 'fumadocs-ui/components/steps';
 
-Go ahead and deploy the sender contract on the C-Chain. 
+C-Chain 上に **ラウンドトリップ通信（往復メッセージ）対応の送信コントラクト** をデプロイします。  
 
-<Steps>
-<Step>
+<Steps>  
 
-### Adapt the Sender Contract
+<Step>  
 
-Perform the changes on `senderOnCChain.sol` described in the [previous section.](/course/interchain-messaging/04-icm-basics/04-create-sender-contract)
+### **送信コントラクトを修正する**  
 
-<Callout type="warn" title="Don't forget to replace the destinationBlockchainID with the Blockchain ID (HEX) from your Avalanche L1!" />
+[前のセクション](/course/interchain-messaging/04-icm-basics/04-create-sender-contract) で説明した通り、  
+**`senderOnCChain.sol` に変更を加えて、メッセージの受信機能を追加** します。  
 
-</Step>
-<Step>
+<Callout type="warn" title="送信先の `destinationBlockchainID` を必ず Avalanche L1 の Blockchain ID（HEX）に置き換えてください！" />  
 
-### Deploy the Sender Contract
+</Step>  
+
+<Step>  
+
+### **送信コントラクトをデプロイする**  
+
+以下のコマンドを実行して、修正した送信コントラクトを C-Chain にデプロイします。  
 
 ```bash
 forge create --rpc-url local-c --private-key $PK contracts/interchain-messaging/send-roundtrip/senderOnCChain.sol:SenderOnCChain
 ```
+
+実行すると、以下のような出力が得られます。  
+
 ```
 [⠊] Compiling...
 [⠢] Compiling 1 files with Solc 0.8.18
@@ -36,15 +44,19 @@ Deployer: 0x8db97C7cEcE249c2b98bDC0226Cc4C2A57BF52FC
 Deployed to: 0xA4cD3b0Eb6E5Ab5d8CE4065BcCD70040ADAB1F00 // [!code highlight]
 Transaction hash: 0x4f41cf829fbc525b64d9773c41dc9fabb3b93dfd03bf6c1568dcc4a4c6bdeb1a
 ```
-</Step>
-<Step>
 
-### Update the Sender Address
+</Step>  
 
-Overwrite the `SENDER_ADDRESS` environment variable with the new address:
+<Step>  
+
+### **送信コントラクトのアドレスを更新する**  
+
+デプロイ後、新しい送信コントラクトのアドレスを環境変数に保存します。  
 
 ```bash
 export SENDER_ADDRESS=0xA4cD3b0Eb6E5Ab5d8CE4065BcCD70040ADAB1F00
 ```
-</Step>
+
+</Step>  
+
 </Steps>

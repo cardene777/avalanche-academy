@@ -1,20 +1,24 @@
 ---
-title: How the ICM Registry works
-description: Learn about the different functionality available in the Interchain Messaging Registry.
-updated: 2024-05-31
-authors: [martineckardt]
-icon: BookOpen
+title: ICM レジストリの仕組み  
+description: インターチェーン・メッセージング・レジストリの機能について学ぶ  
+updated: 2024-05-31  
+authors: [martineckardt]  
+icon: BookOpen  
 ---
 
-TeleporterRegistry keeps track of TeleporterMessenger contract versions. Cross-Avalanche L1 dApps can request the latest or a specific version of the TeleporterMessenger:
+**TeleporterRegistry** は **TeleporterMessenger コントラクトのバージョン** を管理します。  
+クロス Avalanche L1 dApp は、**最新バージョン** または **特定のバージョン** の TeleporterMessenger を取得できます。  
 
 <img src="/common-images/teleporter/teleporter-registry.png" width="600" class="mx-auto"/>
 
-Internally the TeleporterRegistry maintains a mapping of TeleporterMessenger contract versions to their addresses.
+### 内部の仕組み  
+
+TeleporterRegistry は、**バージョンごとの TeleporterMessenger コントラクトのアドレスをマッピング** しています。  
 
 <img src="/common-images/teleporter/teleporter-registry-class-diagram.png" width="400" class="mx-auto"/>
 
-Each registry's mapping of version to contract address is independent of registries on other blockchains, and chains can decide on their own registry mapping entries. So the contract of version 4 on one chain does not have to be equal to that version on another chain.
+この **バージョンとアドレスの対応関係は、各ブロックチェーンごとに独立** しています。  
+そのため、**バージョン 4 の TeleporterMessenger が別のチェーンでは異なる内容** になっている可能性があります。  
 
 ```solidity title="/lib/teleporter/contracts/src/Teleporter/upgrades/TeleporterRegistry.sol"
 
@@ -31,7 +35,11 @@ contract TeleporterRegistry {
    // ...
 }
 ```
-In the `TeleporterRegistry` contract, the `latestVersion` state variable returns the highest version number that has been registered in the registry. The `getLatestTeleporter` function returns the `ITeleporterMessenger` that is registered with the corresponding version. Version zero is an invalid version, and is used to indicate that a `TeleporterMessenger` contract has not been registered yet.
+
+### 最新の TeleporterMessenger を取得する  
+
+この `TeleporterRegistry` コントラクトでは、`latestVersion` 変数が **最新のバージョン番号** を返します。  
+また、`getLatestTeleporter()` を呼び出すことで、**最新バージョンの TeleporterMessenger** を取得できます。  
 
 ```solidity title="/lib/teleporter/contracts/src/Teleporter/upgrades/TeleporterRegistry.sol"
 contract TeleporterRegistry {
@@ -58,7 +66,10 @@ contract TeleporterRegistry {
 }
 ```
 
-If a cross-Avalanche L1 dApps prefers a specific version, it can also call directly the `getAddressFromVersion` function:
+### 特定のバージョンを取得する  
+
+特定のバージョンの TeleporterMessenger を使用したい場合は、  
+`getAddressFromVersion()` を直接呼び出すこともできます。  
 
 ```solidity title="/lib/teleporter/contracts/src/Teleporter/upgrades/TeleporterRegistry.sol"
 contract TeleporterRegistry {
@@ -78,6 +89,12 @@ contract TeleporterRegistry {
 }
 ```
 
-If you are interested in the entire implementation, check it out [here](https://github.com/ava-labs/teleporter/blob/main/contracts/teleporter/registry/TeleporterRegistry.sol).
+この仕組みを利用することで、**スマートコントラクトをアップグレードせずに**  
+最新または特定のバージョンの **TeleporterMessenger にアクセス** できます。  
+
+### コードを確認する  
+
+`TeleporterRegistry` の **完全な実装** を見たい場合は、  
+[こちら](https://github.com/ava-labs/teleporter/blob/main/contracts/teleporter/registry/TeleporterRegistry.sol) を参照してください。  
 
 <Quiz quizId="308"/>

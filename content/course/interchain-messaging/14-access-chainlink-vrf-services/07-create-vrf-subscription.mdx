@@ -1,63 +1,74 @@
 ---
-title: Create Chainlink VRF Subscription
-description: Learn how to create a Chainlink VRF subscription to enable cross-chain randomness requests.
-updated: 2024-10-21
-authors: [0xstt]
-icon: BookOpen
+title: Chainlink VRF サブスクリプションの作成  
+description: クロスチェーンでのランダムネスリクエストを有効にするために、Chainlink VRF のサブスクリプションを作成する方法を学ぶ。  
+updated: 2024-10-21  
+authors: [0xstt]  
+icon: BookOpen  
 ---
 
-import { Step, Steps } from 'fumadocs-ui/components/steps';
+import { Step, Steps } from 'fumadocs-ui/components/steps';  
 
-Before you can request random words using Chainlink VRF, you need to set up a **Chainlink VRF subscription**. This subscription allows you to fund requests for randomness and manage the list of consumers that are authorized to use the VRF service.
+Chainlink VRF を使用してランダムな数値をリクエストする前に、**Chainlink VRF サブスクリプション**をセットアップする必要があります。  
+このサブスクリプションは、ランダムネスリクエストの資金を管理し、VRF サービスを利用するための許可されたコントラクト（コンシューマー）のリストを管理するものです。  
 
-<Steps>
-<Step>
+<Steps>  
+<Step>  
 
-## Access Chainlink's VRF Subscription Manager
+## Chainlink VRF サブスクリプションマネージャーにアクセスする  
 
-To create a subscription, go to the Chainlink VRF Subscription Manager on the network where you plan to request VRF (e.g., Avalanche Fuji). You can access the manager here: [VRF | Subscription Management for Fuji](https://vrf.chain.link/fuji).
-![](/common-images/chainlink-vrf/visit-subscription-management.png)
+サブスクリプションを作成するには、Chainlink VRF サブスクリプションマネージャー（リクエストを行うネットワーク上）にアクセスします。  
+たとえば、Avalanche Fuji で VRF を使用する場合は、以下のリンクからアクセスできます。  
 
-</Step>
-<Step>
+[VRF | Fuji 用サブスクリプション管理](https://vrf.chain.link/fuji)  
+![](/common-images/chainlink-vrf/visit-subscription-management.png)  
 
-## Create a New Subscription
+</Step>  
+<Step>  
 
-Once on the subscription manager, create a new subscription. The subscription will have a unique ID, which you'll need to reference in your `CrossChainVRFWrapper` contract. This ID is used to track your random word requests and the balance associated with them.
-![](/common-images/chainlink-vrf/create-subscription.png)
+## 新しいサブスクリプションを作成する  
 
-</Step>
-<Step>
+サブスクリプションマネージャーにアクセスしたら、新しいサブスクリプションを作成します。  
+作成後、このサブスクリプションには **ユニークな ID** が付与されます。  
+この ID は、`CrossChainVRFWrapper` コントラクトでリクエストを行う際に必要になります。  
 
-## Fund the Subscription
+![](/common-images/chainlink-vrf/create-subscription.png)  
 
-After creating the subscription, you need to fund it with LINK tokens. These tokens are used to pay for the randomness requests made through Chainlink VRF. Make sure your subscription has enough funds to cover your requests.
-You can get testnet LINK tokens from the Fuji Faucet: [Chainlink Faucet for Fuji](https://faucets.chain.link/fuji)
+</Step>  
+<Step>  
 
-![](/common-images/chainlink-vrf/faucet.png)
+## サブスクリプションに資金を追加する  
 
-![](/common-images/chainlink-vrf/add-funds.png)
+サブスクリプションを作成したら、**LINK トークン** で資金を補充します。  
+Chainlink VRF を通じてランダムネスリクエストを行う際に、このトークンが支払いとして使用されます。  
 
-</Step>
-<Step>
+テスト用の LINK トークンは、以下の **Fuji Faucet** から取得できます。  
+[Chainlink Faucet for Fuji](https://faucets.chain.link/fuji)  
 
-## Add Consumers
+![](/common-images/chainlink-vrf/faucet.png)  
+![](/common-images/chainlink-vrf/add-funds.png)  
 
-After funding your subscription, add the `CrossChainVRFWrapper` contract `($VRF_WRAPPER)` as a consumer. This step authorizes the contract to make randomness requests on behalf of your subscription. You can add other consumers, such as other contracts or addresses, depending on your use case.
-![](/common-images/chainlink-vrf/add-consumer.png)
+</Step>  
+<Step>  
 
-</Step>
-<Step>
+## コンシューマーを追加する  
 
-## Save Subscription ID
+サブスクリプションに資金を追加したら、**`CrossChainVRFWrapper` コントラクト `($VRF_WRAPPER)` をコンシューマーとして追加** します。  
+これにより、`CrossChainVRFWrapper` が VRF サービスをリクエストできるようになります。  
+必要に応じて、他のスマートコントラクトやアドレスをコンシューマーとして追加することも可能です。  
 
-After completing these steps, save your subscription ID. You will need this ID when configuring the `CrossChainVRFWrapper` contract to request random words.
+![](/common-images/chainlink-vrf/add-consumer.png)  
 
-```bash
-export VRF_SUBSCRIPTION_ID=<subscription_id>
-```
+</Step>  
+<Step>  
 
-</Step>
-</Steps>
+## サブスクリプション ID を保存する  
 
----
+すべての設定が完了したら、**サブスクリプション ID** を保存します。  
+この ID は、`CrossChainVRFWrapper` コントラクトでランダムネスをリクエストする際に使用します。  
+
+```bash  
+export VRF_SUBSCRIPTION_ID=<subscription_id>  
+```  
+
+</Step>  
+</Steps>  

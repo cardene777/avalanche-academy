@@ -1,17 +1,22 @@
 ---
-title: Sender Contract
-description: Adapt the sender contract to also receive messages
-updated: 2024-05-31
-authors: [martineckardt]
-icon: BookOpen
+title: 送信コントラクトの変更
+description: 送信コントラクトを変更し、メッセージを受信できるようにする  
+updated: 2024-05-31  
+authors: [martineckardt]  
+icon: BookOpen  
 ---
 
-The sender contract has now two tasks: 
+**送信コントラクト（Sender Contract）は、次の 2 つの処理を実行できるように変更** します。  
 
-- **Send a message to the receiver**: Same as in the last example
-- **Receive a message back from the receiver**: Now our sender contract needs to be able to receive a message back from the receiver.
+- **メッセージを受信側コントラクトに送信**（これまでと同じ処理）  
+- **受信側コントラクトからの返信メッセージを受け取る**  
 
-Therefore, we need to change the sender contract to be able to receive a message back. We will need to implement the same interface `ITeleporterReceiver` as the receiver contract and implement the `receiveTeleporterMessage` function. 
+そのため、送信コントラクトを **メッセージを受信できるように変更** する必要があります。  
+具体的には、**受信コントラクトと同じ `ITeleporterReceiver` インターフェースを実装し、`receiveTeleporterMessage` 関数を追加** します。  
+
+---
+
+### **変更後の送信コントラクト**
 
 ```solidity title="contracts/interchain-messaging/send-roundtrip/senderOnCChain.sol"
 // (c) 2023, Ava Labs, Inc. All rights reserved.
@@ -55,3 +60,19 @@ contract SenderOnCChain is ITeleporterReceiver { // [!code highlight]
     }
 }
 ```
+
+---
+
+### **変更点のポイント**
+
+1. **`ITeleporterReceiver` インターフェースを継承（5行目）**  
+   - `ITeleporterReceiver` を実装することで、**受信コントラクトと同じ `receiveTeleporterMessage` 関数** を持つことができる。  
+   - これにより、**受信側から送られたメッセージを処理できるようになる**。  
+
+2. **メッセージの送信（13行目）**  
+   - これまでと同様に、**受信コントラクトに "Hello" というメッセージを送信**。  
+   - `destinationBlockchainID` には、**送信先の Avalanche L1 の Blockchain ID を設定** する。  
+
+3. **メッセージの受信（29行目）**  
+   - `receiveTeleporterMessage` を実装し、**受信したメッセージを `roundtripMessage` に保存**。  
+   - **Interchain Messaging コントラクト以外からの呼び出しを防ぐため、`msg.sender` をチェック** している。  

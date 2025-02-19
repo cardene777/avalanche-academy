@@ -1,26 +1,33 @@
 ---
-title: Running a Relayer
-description: Learn how to run and manage a AWM Relayer.
-updated: 2024-05-31
-authors: [martineckardt]
-icon: Book
+title: リレイヤーの運用  
+description: AWM リレイヤーの運用方法と管理方法を学ぶ  
+updated: 2024-05-31  
+authors: [martineckardt]  
+icon: Book  
+
 ---
 
-As you now know Interchain Messaging requires a running relayer to deliver the warp messages underlying it. So far we just assumed a relayer is running and in fact Avalanche CLI automatically configures and runs a relayer for you if you deploy your L1 on a local network. However, in a production environment, you will either need to run a relayer yourself or have someone else run it for you.
+Interchain Messaging（ICM）を機能させるためには、Warp メッセージを送信するリレイヤーが必要です。これまでの説明では、リレイヤーがすでに稼働していることを前提としていました。実際に、**Avalanche CLI を使用してローカルネットワークに L1 をデプロイすると、自動的にリレイヤーが設定されて実行されます。**  
 
-![AWM Relayer data flow](/course-images/teleporter/teleporter-source-destination-with-relayer.png)
+しかし、**本番環境では、自分でリレイヤーを運用するか、第三者にリレイヤーを運用してもらう必要があります。**  
 
-In this section you will learn how to run a relayer for Avalanche Warp Messaging. As discussed in the section on AWM, the relayer is responsible for checking for outgoing warp messages on the source L1, aggregate the signatures and deliver it with a transaction on the destination L1.
+![AWM リレイヤーのデータフロー](/course-images/teleporter/teleporter-source-destination-with-relayer.png)  
 
-This chapter utilizes the reference relayer implementation created by Ava Labs. In this case the relayer is a standalone application written in Go. There may be different implementations in the future that are adapted to special use cases. Anyone can build and run a relayer.
+この章では、**Avalanche Warp Messaging（AWM）のリレイヤーを運用する方法** を学びます。AWM のセクションで説明したように、リレイヤーの役割は以下のとおりです。  
 
-## What you will learn
+1. **送信元 L1 での Warp メッセージの検出**  
+2. **バリデータの署名を集約**  
+3. **署名付きのメッセージをトランザクションとして送信先 L1 に配送**  
 
-In this section, you will go through the following topics:
+この章では、Ava Labs によって開発された **Go 言語で書かれたリファレンス実装のリレイヤー** を使用します。ただし、**将来的には、異なるユースケースに適したさまざまなリレイヤーの実装が登場する可能性があります。** 誰でも独自のリレイヤーを開発し、運用することが可能です。  
 
-- **Run a Relayer:** You will understand the basic commands to run a local relayer.
-- **Relayer Config:** Here, you will understand how to configure the relayer by creating a relayer config file. This file serves as a blueprint for the relayer's functionality and behavior.
-- **Wallet:** Create a wallet for the relayer, fund it with testnet tokens and add the wallet parameter to the relayer config.
-- **Run the Relayer:** Now you will execute the AWM Relayer with your configuration 
-- **Send Message:** Next you will issue a transaction triggering a cross-Avalanche L1 message, so we can observe how the message is delivered by the relayer.
-- **Verify Message Delivery:** You will learn how you can track the message delivery 
+## 学べること  
+
+このセクションでは、以下の内容について学びます。  
+
+- **リレイヤーの起動:** 基本的なコマンドを使用してローカル環境でリレイヤーを起動する方法  
+- **リレイヤーの設定:** リレイヤーの設定ファイルを作成し、リレイヤーの動作をカスタマイズする方法  
+- **ウォレットの作成:** リレイヤー用のウォレットを作成し、テストネットのトークンをチャージする方法  
+- **リレイヤーの実行:** 設定済みの AWM リレイヤーを起動し、運用を開始する方法  
+- **メッセージの送信:** クロスチェーンメッセージを送信し、リレイヤーがどのように処理するのかを確認  
+- **メッセージ配送の確認:** メッセージの配送状況を追跡し、正しく受信されたかを検証する方法  

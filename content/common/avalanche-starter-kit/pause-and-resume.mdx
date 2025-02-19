@@ -1,103 +1,75 @@
 import { Step, Steps } from 'fumadocs-ui/components/steps';
 
-In this section, you’ll learn how to pause and resume your deployed Avalanche L1 using GitHub Codespaces. This will allow you to preserve the state of your blockchains and easily restore them when you return to development.
+GitHub Codespaces を利用すると、**Avalanche L1 のネットワークを簡単に作成し、管理することができます**。  
+しかし、一定時間操作しないと Codespaces は自動的に一時停止されるため、開発を再開する際にはネットワークを復元する必要があります。  
+このセクションでは、**一時停止した Codespace を再開し、ブロックチェーンネットワークを復元する方法** を説明します。  
 
-### Restarting the Network After Codespace Pauses
+<Steps>  
 
-With **GitHub Codespaces**, you can easily spin up and manage your Avalanche L1 blockchains. However, after a period of inactivity, Codespace instances will automatically pause, or you can stop them manually.
+<Step>  
 
-When you want to resume your work, start the Codespace instance again and follow these steps to restore your network.
+### Avalanche ネットワークを再起動する  
 
-<Steps>
-<Step>
-### Start the Avalanche Network
-After restarting your Codespace instance, use the following command to restart your Avalanche network:
+Codespace を再開したら、以下のコマンドを実行して Avalanche ネットワークを再起動します。  
 
-```bash
-avalanche network start
-```
+このコマンドを実行すると、以前のネットワークスナップショットが復元され、ブロックチェーンが再び動作するようになります。  
+出力には、**ノードのログディレクトリや RPC エンドポイント** などの情報が表示されます。  
 
-Here’s what the output of this command looks like:
+</Step>  
 
-```bash
-$ avalanche network start
-Backend controller started, pid: 1781, output at: /home/vscode/.avalanche-cli/runs/server_20241007_035854/avalanche-cli-backend.log
-Starting previously deployed and stopped snapshot
-Booting Network. Wait until healthy...
-Node logs directory: /home/vscode/.avalanche-cli/runs/network_20241007_035856/node<i>/logs
+<Step>  
 
-Network ready to use.
+### ポートを再びパブリックにする  
 
-+------------------------------------------------------------------------------------------------------------------------------------+
-|                                                          TESTEXP RPC URLS                                                          |
-+-----------+------------------------------------------------------------------------------------------------------------------------+
-| Localhost | http://127.0.0.1:9650/ext/bc/testexp/rpc                                                                               |
-|           +------------------------------------------------------------------------------------------------------------------------+
-|           | http://127.0.0.1:9650/ext/bc/ZJ3iFLF2DJo31Koq7Ah2F7EwSmSCpXBG2LLX1bFhsdEfmxkWD/rpc                                     |
-+-----------+------------------------------------------------------------------------------------------------------------------------+
-| Codespace | https://musical-lamp-5rgwvggj75xh777g-9650.app.github.dev/ext/bc/testexp/rpc                                           |
-|           +------------------------------------------------------------------------------------------------------------------------+
-|           | https://musical-lamp-5rgwvggj75xh777g-9650.app.github.dev/ext/bc/ZJ3iFLF2DJo31Koq7Ah2F7EwSmSCpXBG2LLX1bFhsdEfmxkWD/rpc |
-+-----------+------------------------------------------------------------------------------------------------------------------------+
+ネットワークが再開された後、**Codespaces ではすべてのポートがデフォルトで閉じられています**。  
+そのため、RPC アクセスを有効にするには、ポート `9650` をパブリックにする必要があります。  
 
-+--------------------------------------------------------------------------------------------------------------------------------------+
-|                                                                 NODES                                                                |
-+-------+------------------------------------------+-----------------------+-----------------------------------------------------------+
-| NAME  | NODE ID                                  | LOCALHOST ENDPOINT    | CODESPACE ENDPOINT                                        |
-+-------+------------------------------------------+-----------------------+-----------------------------------------------------------+
-| node1 | NodeID-7Xhw2mDxuDS44j42TCB6U5579esbSt3Lg | http://127.0.0.1:9650 | https://musical-lamp-5rgwvggj75xh777g-9650.app.github.dev |
-+-------+------------------------------------------+-----------------------+-----------------------------------------------------------+
-| node2 | NodeID-MFrZFVCXPv5iCn6M9K6XduxGTYp891xXZ | http://127.0.0.1:9652 | https://musical-lamp-5rgwvggj75xh777g-9652.app.github.dev |
-+-------+------------------------------------------+-----------------------+-----------------------------------------------------------+
-| node3 | NodeID-NFBbbJ4qCmNaCzeW7sxErhvWqvEQMnYcN | http://127.0.0.1:9654 | https://musical-lamp-5rgwvggj75xh777g-9654.app.github.dev |
-+-------+------------------------------------------+-----------------------+-----------------------------------------------------------+
-| node4 | NodeID-GWPcbFJZFfZreETSoWjPimr846mXEKCtu | http://127.0.0.1:9656 | https://musical-lamp-5rgwvggj75xh777g-9656.app.github.dev |
-+-------+------------------------------------------+-----------------------+-----------------------------------------------------------+
-| node5 | NodeID-P7oB2McjBGgW2NXXWVYjV8JEDFoW9xDE5 | http://127.0.0.1:9658 | https://musical-lamp-5rgwvggj75xh777g-9658.app.github.dev |
-+-------+------------------------------------------+-----------------------+-----------------------------------------------------------+
+1. **Codespace の設定画面を開く**  
+2. **「Ports」タブに移動**  
+3. **ポート 9650 の行を選択し、右クリック**  
+4. **「Port Visibility」 > 「Public」 を選択**  
 
-using awm-relayer version (v1.4.0)
-Executing AWM-Relayer...
-```
-</Step>
+![](/common-images/codespaces/ports-publish.png)  
 
-<Step>
-### Make Ports Public Again
-After the network starts, all ports are closed by default in Codespaces. You need to make the necessary ports public, like port `9650` for RPC access:
+</Step>  
 
-- Open the Codespace settings.
-- Go to Ports.
-- Select the row with the port 9650.
-- Right Click > Port Visibility > Public.
+<Step>  
 
-![](/common-images/codespaces/ports-publish.png)
-</Step>
+### Codespaces のタイムアウト時間を変更する  
 
-<Step> 
-### Changing Timeout Duration for Codespaces
-By default, Codespaces will pause after 30 minutes of inactivity. You can extend this period to up to 4 hours to avoid frequent pauses during development.
+Codespaces は、**30分間操作がないと自動的に一時停止** されます。  
+ただし、開発中に頻繁に中断されるのを防ぐため、**最大4時間（240分）まで延長** することができます。  
 
-To configure the timeout duration:
+設定方法：  
 
-1. In the upper-right corner of any page on GitHub, click your profile photo, then click **"Settings"**.
-2. In the **"Code, planning, and automation"** section of the sidebar, click **"Codespaces"**.
-3. Under **"Default idle timeout"**, enter the time that you want, then click Save. The time must be between 5 minutes and 240 minutes (4 hours).
+1. **GitHub の右上にあるプロフィール画像をクリックし、「Settings（設定）」を開く**  
+2. **左側の「Code, planning, and automation」セクションで「Codespaces」を選択**  
+3. **「Default idle timeout」欄に希望する時間（5分〜240分）を入力し、「Save」をクリック**  
 
-![](/common-images/codespaces/specify-idle-timeout.png)
+![](/common-images/codespaces/specify-idle-timeout.png)  
 
-This will help keep your blockchain running for longer periods without interruption. 
-</Step>
+これにより、ブロックチェーンを **長時間稼働させることができ、開発の中断を防ぐことができます**。  
 
-<Step> 
-### Fee Considerations for Paid Users
-If you're a paid user, be cautious about the costs associated with running long-running Codespaces. It's important to avoid undesired fees, especially if you're keeping instances alive for extended periods but also the resource usage. Memory, storage, traffic, and bandwidth usage can significantly impact costs if not managed properly.
+</Step>  
 
-You can manage these settings in GitHub:
+<Step>  
 
-1. In the upper-right corner of any page on GitHub, click your profile photo, then click **"Settings"**.
-2. In the **"Access"** section of the sidebar, click **"Billing and Plans"**, and click **"Spending Limits"**.
-3. Set a budget or limitation on Codespace usage to prevent unexpected fees. Leaving it at $0.00 will avoid any extra expenses.
+### 有料ユーザー向けの費用管理について  
 
-![](/common-images/codespaces/specify-spending-limit.png)
-</Step>
-</Steps>
+**有料プランのユーザー** は、Codespaces を長時間稼働させることで追加料金が発生する可能性があります。  
+特に、長時間インスタンスを維持する場合は、**メモリ、ストレージ、トラフィック、帯域幅の使用量** に注意が必要です。  
+
+不意な追加料金を防ぐため、**GitHub の支出管理設定** で利用制限を設定できます。  
+
+1. **GitHub の右上にあるプロフィール画像をクリックし、「Settings（設定）」を開く**  
+2. **左側の「Access」セクションで「Billing and Plans（請求とプラン）」を選択**  
+3. **「Spending Limits（支出制限）」をクリックし、予算や制限を設定**  
+   - 予算を **$0.00** に設定すると、追加費用が発生しません。  
+
+![](/common-images/codespaces/specify-spending-limit.png)  
+
+この設定を行うことで、**予期せぬコストを防ぎながら、効率的に Codespaces を活用できます**。  
+
+</Step>  
+
+</Steps>  

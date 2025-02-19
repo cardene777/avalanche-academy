@@ -1,44 +1,53 @@
 ---
-title: Deploy Consumer
-description: Learn how to deploy the CrossChainVRFConsumer contract on any L1 that does not support Chainlink VRF.
-updated: 2024-10-21
-authors: [0xstt]
-icon: Terminal
+title: Consumer のデプロイ  
+description: Chainlink VRF をサポートしていない L1 に `CrossChainVRFConsumer` コントラクトをデプロイする方法を学ぶ。  
+updated: 2024-10-21  
+authors: [0xstt]  
+icon: Terminal  
 ---
 
-import { Step, Steps } from 'fumadocs-ui/components/steps';
+import { Step, Steps } from 'fumadocs-ui/components/steps';  
 
-Now that the `CrossChainVRFWrapper` is deployed on a Chainlink-supported L1, it’s time to deploy the `CrossChainVRFConsumer` contract on the L1 where Chainlink VRF is not supported. This contract will handle requests for random words and interact with the **TeleporterMessenger** to communicate with the supported L1.
+`CrossChainVRFWrapper` が Chainlink をサポートする L1 にデプロイされたので、次は **Chainlink VRF をサポートしていない L1** に `CrossChainVRFConsumer` コントラクトをデプロイします。  
+このコントラクトは、ランダムな数値をリクエストし、**TeleporterMessenger** を通じてサポートされている L1 と通信を行います。  
 
-<Steps>
-<Step>
-## Prerequisites
-Make sure you have:
-- The `TeleporterMessenger` contract address on the unsupported L1.
-- The deployed `CrossChainVRFWrapper` on the supported L1. `($VRF_WRAPPER)`
-</Step>
-<Step>
-## Deploy the Contract
-Use the following command to deploy the `CrossChainVRFConsumer` contract on your unsupported L1.
+<Steps>  
+<Step>  
 
-```bash
+## 前提条件  
+デプロイ前に、以下の準備が整っていることを確認してください。  
+
+- **サポートされていない L1 にデプロイされた `TeleporterMessenger` コントラクトのアドレス**  
+- **サポートされている L1 にデプロイされた `CrossChainVRFWrapper` のアドレス `($VRF_WRAPPER)`**  
+
+</Step>  
+<Step>  
+
+## コントラクトのデプロイ  
+以下のコマンドを使用して、**Chainlink VRF をサポートしていない L1** に `CrossChainVRFConsumer` コントラクトをデプロイします。  
+
+```bash  
 forge create --rpc-url <RPC_URL> --private-key <PRIVATE_KEY> src/CrossChainVRFConsumer.sol:CrossChainVRFConsumer --constructor-args <TELEPORTER_MESSENGER_ADDRESS> $VRF_WRAPPER
-```
+```  
 
-Replace the following:
+値を以下のように置き換えてください。  
 
-- `<RPC_URL>`: The RPC URL for the L1.
-- `<PRIVATE_KEY>`: The private key for the account used to deploy the contract.
-- `<TELEPORTER_MESSENGER_ADDRESS>`: The address of the `TeleporterMessenger` contract on your unsupported L1.
+- `<RPC_URL>`: L1 の RPC URL  
+- `<PRIVATE_KEY>`: デプロイに使用するアカウントのプライベートキー  
+- `<TELEPORTER_MESSENGER_ADDRESS>`: サポートされていない L1 にある `TeleporterMessenger` コントラクトのアドレス  
 
-After deployment, save the `Deployed to` address in an environment variable for future use.
+デプロイ後、出力される `Deployed to` のアドレスを保存しておきます。  
+環境変数に保存すると後で便利です。  
 
-```bash
+```bash  
 export VRF_CONSUMER=<address>
-```
-</Step>
-<Step>
-## Verify the Deployment
-Once the `CrossChainVRFConsumer` contract is deployed, verify the contract’s address and confirm that it has been successfully deployed on your L1 using a block explorer.
-</Step>
-</Steps>
+```  
+
+</Step>  
+<Step>  
+
+## デプロイの確認  
+`CrossChainVRFConsumer` コントラクトがデプロイされたら、そのアドレスをブロックエクスプローラーで確認し、L1 上で正常にデプロイされていることを検証します。  
+
+</Step>  
+</Steps>  

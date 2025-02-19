@@ -3,49 +3,67 @@ import { cn } from '@/utils/cn';
 import { buttonVariants } from '@/components/ui/button.tsx'
 import { Step, Steps } from 'fumadocs-ui/components/steps';
 
-The Avalanche Starter Kit contains everything you need to get started quickly with Avalanche. Among other tools it contains Avalanche CLI. With that you can set up a local network, create a Avalanche L1, customize the Avalanche L1/VM configuration, and so on. 
+**Avalanche スターターキット** には、Avalanche 開発をすぐに始めるために必要なツールがすべて含まれています。  
+その中でも特に重要なツールが **Avalanche CLI** です。  
 
-In this course we will run the Avalanche Starter Kit in a hosted environment on Github. This is the most quick way to get started.
+このツールを使用すると、以下のようなことが可能になります。  
 
-<Steps>
-<Step>
+- **ローカルネットワークの構築**  
+- **Avalanche L1（レイヤー1ブロックチェーン）の作成**  
+- **Avalanche L1/VM の設定カスタマイズ**  
 
-### Open the Avalanche Starter Kit Github Repository:
+このコースでは、 **GitHub 上のホスト環境で Avalanche スターターキットを実行** します。  
+これが最も簡単かつ迅速に開発を開始する方法です。  
 
-<Link
-    href="https://github.com/ava-labs/avalanche-starter-kit"
-    className={cn(
-    buttonVariants({ variant: 'default', className: 'mt-4' }),
-    )}
-    target='_blank'
->Open Avalanche Starter Kit</Link>
+<Steps>  
+<Step>  
 
-</Step>
-<Step>
+### Avalanche Starter Kit の GitHub リポジトリを開く  
 
-### Create a Codespace
-- Click the green **Code** button
-- Switch to the **Codespaces** tab
-- Click **Create Codespace on main** or if you already have a Codespace click the plus (**+**) button
+以下のリンクからリポジトリにアクセスしてください。  
 
-The Codespace will open in a new tab. Wait a few minutes until it's fully built.
+<Link  
+    href="https://github.com/ava-labs/avalanche-starter-kit"  
+    className={cn(  
+    buttonVariants({ variant: 'default', className: 'mt-4' }),  
+    )}  
+    target='_blank'  
+>Open Avalanche Starter Kit</Link>  
 
-</Step>
-<Step>
+</Step>  
+<Step>  
 
-### Verify everything is working correctly
+### Codespace を作成する  
 
-Open the terminal with `` Ctrl + ` `` or by opening it through the menu:
+GitHub 上で Avalanche Starter Kit の開発環境（Codespace）を作成するには、以下の手順を実行してください。  
 
-![](/common-images/avalanche-starter-kit/new-terminal.png)
+1. **緑色の「Code」ボタン** をクリック  
+2. **「Codespaces」タブ** に切り替える  
+3. **「Create Codespace on main」** をクリック  
+   - すでに Codespace を持っている場合は、 **「+（プラス）」ボタン** をクリック  
 
-Now enter avalanche -h to verify everything is working:
+作成が完了すると、新しいタブで Codespace が開きます。  
+ビルドが完了するまで数分待ちましょう。  
 
-```bash
-avalanche -h
-```
+</Step>  
+<Step>  
 
-As a result you should see the help of Avalanche CLI:
+### 全てが正しく動作しているか確認する  
+
+ターミナルを開くには、以下の方法のいずれかを使用してください。  
+
+- **キーボードショートカット** ： `Ctrl + \` `  
+- **メニューから開く**  
+
+![](/common-images/avalanche-starter-kit/new-terminal.png)  
+
+次に、以下のコマンドを入力し、Avalanche CLI が正しく動作するか確認します。  
+
+```bash  
+avalanche -h  
+```  
+
+このコマンドを実行すると、以下のような **Avalanche CLI のヘルプメッセージ** が表示されるはずです。  
 
 ```
 Avalanche-CLI is a command-line tool that gives developers access to
@@ -62,18 +80,23 @@ Available Commands:
   config                Modify configuration for Avalanche-CLI
   help                  Help about any command
   key                   Create and manage testnet signing keys
-```
+```  
 
-</Step>
-<Step>
+</Step>  
+<Step>  
 
-### Optional: Open Codespace locally in Visual Studio Code
+### （オプション）Codespace を Visual Studio Code で開く  
 
-You can switch any time from the browser IDE to Visual Studio Code:
+ブラウザ上の IDE ではなく、 **Visual Studio Code（VS Code）** で Codespace を開くことも可能です。  
 
-![](/course-images/codespaces/open-locally.png)
+![](/course-images/codespaces/open-locally.png)  
 
-The first time you switch, you will be asked to install the [Codespaces extension](https://marketplace.visualstudio.com/items?itemName=GitHub.codespaces) and connect VS Code to you GitHub account, if it is not already connceted.
+最初に切り替える際、次の操作が必要になる場合があります。  
 
-</Step>
-</Steps>
+- **[Codespaces 拡張機能](https://marketplace.visualstudio.com/items?itemName=GitHub.codespaces)** をインストール  
+- **GitHub アカウントと VS Code を接続**（未接続の場合）  
+
+これにより、ローカル環境でより柔軟な開発が可能になります。  
+
+</Step>  
+</Steps>  

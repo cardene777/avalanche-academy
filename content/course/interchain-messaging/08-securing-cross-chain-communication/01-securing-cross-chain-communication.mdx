@@ -1,23 +1,37 @@
 ---
-title: Securing Cross-Chain Communication
-description: Learn about Avalanche Warp Messaging and how it ensures secure communication between blockchains.
-updated: 2024-05-31
-authors: [martineckardt]
-icon: Book
+title: クロスチェーン通信のセキュリティ  
+description: Avalanche Warp Messaging とは何か、そしてブロックチェーン間の安全な通信をどのように実現するのかを学ぶ。  
+updated: 2024-05-31  
+authors: [martineckardt]  
+icon: Book  
 ---
 
 <YouTube id="rJ-G5ri65rs" />
 
-We can achieve interoperability through sending messages across blockchains. In blockchain systems there are often vast amounts of money involved, which can render attacking the systems very profitable. For instance, we've seen bridge hacks where criminals stole billions of dollars in digital assets.
+ブロックチェーン間のメッセージ送信によって **相互運用性（interoperability）** を実現できます。しかし、ブロックチェーンの世界では **膨大な資産が動くため、攻撃の対象となることが多い** です。  
+実際に、これまでに **数十億ドル規模のブリッジハッキング** が発生しており、多くの資産が盗まれました。
 
-Ensuring the security of the communication between blockchain is critical when building cross-chain dApps. But how can we do that? How can we ensure that a received message is actually from the claimed sender and that no one changed the contents on the way?
+そのため、クロスチェーン dApp を開発する際には、**ブロックチェーン間の通信をどのように保護するかが非常に重要** になります。  
 
-This is where Avalanche Warp Messaging comes into play. It is not EVM specific, but rather a general cross-Avalanche L1 communication protocol. In this section you will learn about the underlying cryptographic primitives that make Avalanche Warp Messaging secure.
+では、どのようにして通信の安全性を確保すれば良いのでしょうか？  
+- 受信したメッセージが **本当に送信者と主張する人物からのものか** をどのように保証するのか？  
+- **送信途中でメッセージが改ざんされていないことをどのように検証するのか？**  
 
-## What you will learn
+この問題を解決するために **Avalanche Warp Messaging（AWM）** が登場しました。  
+AWM は **EVM に限定されない** 汎用的な Avalanche L1 間の通信プロトコルです。  
 
-In this section, you will go through the following topics:
+このセクションでは、AWM のセキュリティを支える **暗号技術の基礎** について学びます。
 
-- **Signature Schemes:** What can be achieved using signature schemes and how do they work?
-- **Multi-Signature Schemes:** How can a group of participants sign a message
-- **Signature Aggregation:** How can we increase the efficiency of multi-signature schemes
+---
+
+## **このセクションで学べること**
+- **署名スキーム（Signature Schemes）**  
+  - 署名によって何が達成できるのか？  
+  - どのような仕組みでメッセージの真正性を保証するのか？  
+- **マルチシグネチャ（Multi-Signature Schemes）**  
+  - 複数の参加者がどのようにしてメッセージに署名できるのか？  
+- **署名の集約（Signature Aggregation）**  
+  - マルチシグネチャをより効率的にする方法とは？  
+
+このセクションを通じて、Avalanche Warp Messaging の **信頼性と安全性の根幹を理解** し、  
+より安全なクロスチェーンアプリケーションを開発できるようになります。

@@ -48,13 +48,13 @@ export const GenerateKeysButton: React.FC = () => {
       </button>
 
       {privKey && (
-        <CodeBlock title="🗝️ Private Key" lang="bash" allowCopy={true}>
+        <CodeBlock title="🗝️ 秘密鍵" lang="bash" allowCopy={true}>
           <Pre>{privKey}</Pre>
         </CodeBlock>
       )}
 
       {pubKey && (
-        <CodeBlock title="🔑 Public Key:" lang="bash" allowCopy={true}>
+        <CodeBlock title="🔑 公開鍵" lang="bash" allowCopy={true}>
           <Pre>{pubKey}</Pre>
         </CodeBlock>
       )}
@@ -80,16 +80,16 @@ export const SignMessageButton: React.FC = () => {
     <div>
       <Input
         id="privatekey"
-        label="🗝️ Private Key"
-        description="Enter private key to sign message with"
+        label="🗝️ 秘密鍵"
+        description="メッセージに署名するための秘密鍵を入力してください"
         placeholder="3a408d0..."
         onChange={(e) => setPrivKey(e.target.value)}
       />
 
       <Input
         id="message"
-        label="📝 Message"
-        description="Enter any Message you want to sign with the Private Key"
+        label="📝 メッセージ"
+        description="秘密鍵を使って署名するメッセージを入力してください"
         placeholder="Hello"
         onChange={(e) => setMessage(e.target.value)}
       />
@@ -136,24 +136,24 @@ export const VerifySignatureButton: React.FC<{ aggregated?: boolean }> = ({
     <div>
       <Input
         id="pubKey"
-        label={`🔑 ${aggregated ? "Aggregated " : ""}Public Key`}
-        description="Enter the Public Key that signed the Message."
+        label={`🔑 ${aggregated ? "集約された " : ""}公開鍵`}
+        description="メッセージに署名した公開鍵を入力してください。"
         placeholder="8f65ab..."
         onChange={(e) => setPubKey(e.target.value)}
       />
 
       <Input
         id="message"
-        label="📝 Message"
-        description="Enter the Message that was signed."
+        label="📝 メッセージ"
+        description="署名されたメッセージを入力してください。"
         placeholder="Hello"
         onChange={(e) => setMessage(e.target.value)}
       />
 
       <Input
         id="signature"
-        label={`🔏 ${aggregated ? "Aggregated " : ""}Signature`}
-        description="Enter the Signature of the Message."
+        label={`🔏 ${aggregated ? "集約された " : ""}署名`}
+        description="メッセージの署名を入力してください。"
         placeholder="8495e11..."
         onChange={(e) => setSignature(e.target.value)}
       />
@@ -167,7 +167,7 @@ export const VerifySignatureButton: React.FC<{ aggregated?: boolean }> = ({
       </button>
 
       {isValid !== null && (
-        <p>{isValid ? "✅ Signature is valid!" : "❌ Signature is invalid!"}</p>
+        <p>{isValid ? "✅ 署名は有効です！" : "❌ 署名は無効です！"}</p>
       )}
     </div>
   );
@@ -185,15 +185,15 @@ export const AggregateSignaturesButton: React.FC = () => {
     <div>
       <Input
         id="signature"
-        label="🔏 First Signature"
-        description="Enter the first Signature of the Message."
+        label="🔏 1つ目の署名"
+        description="メッセージの1つ目の署名を入力してください。"
         placeholder="8495e11..."
         onChange={(e) => setSignature1(e.target.value)}
       />
       <Input
         id="signature2"
-        label="🔏 Second Signature"
-        description="Enter the second Signature of the Message."
+        label="🔏 2つ目の署名"
+        description="メッセージの2つ目の署名を入力してください。"
         placeholder="a3d1e34..."
         onChange={(e) => setSignature2(e.target.value)}
       />
@@ -208,14 +208,14 @@ export const AggregateSignaturesButton: React.FC = () => {
           }
         }}
       >
-        Aggregate Signatures
+        署名を集約
       </button>
 
       {showAggregatedSignature && (
         <>
           {aggregatedSignature && (
             <CodeBlock
-              title="🔏 Aggregated Signature:"
+              title="🔏 集約された署名:"
               lang="bash"
               allowCopy={true}
             >
@@ -238,15 +238,15 @@ export const AggregatePublicKeysButton: React.FC = () => {
     <div>
       <Input
         id="pubkey1"
-        label="🔑 First Public Key"
-        description="Enter the first Public Key to aggregate."
+        label="🔑 1つ目の公開鍵"
+        description="集約するための最初の公開鍵を入力してください。"
         placeholder="04ae67..."
         onChange={(e) => setPubKey1(e.target.value)}
       />
       <Input
         id="pubkey2"
-        label="🔑 Second Public Key"
-        description="Enter the second Public Key to aggregate."
+        label="🔑 2つ目の公開鍵"
+        description="集約するための2つ目の公開鍵を入力してください。"
         placeholder="04ae67..."
         onChange={(e) => setPubKey2(e.target.value)}
       />
@@ -262,14 +262,14 @@ export const AggregatePublicKeysButton: React.FC = () => {
           }
         }}
       >
-        Aggregate Public Keys
+        公開鍵を集約
       </button>
 
       {showAggregatedPubKey && (
         <>
           {aggregatedPubKey && (
             <CodeBlock
-              title="🔑 Aggregated Public Key:"
+              title="🔑 集約された公開鍵:"
               lang="bash"
               allowCopy={true}
             >

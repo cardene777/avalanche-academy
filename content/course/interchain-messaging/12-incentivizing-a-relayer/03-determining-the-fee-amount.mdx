@@ -1,63 +1,68 @@
 ---
-title: Determining the Fee
-description: Calculate a fair incentive amount.
-updated: 2024-06-09
-authors: [andyvargtz]
-icon: BookOpen
+title: 手数料の決定  
+description: 適正なインセンティブ額を計算する  
+updated: 2024-06-09  
+authors: [andyvargtz]  
+icon: BookOpen  
+
 ---
 
-## Economic Considerations for Relayers
+## **リレイヤーの経済的考慮事項**  
 
-### Determining Relayer Incentives
+### **リレイヤーへのインセンティブの決定**  
 
-The first question to address is: How much should you pay a Relayer to ensure they are incentivized to deliver the message? The answer is straightforward but requires some analysis. The incentive should at least cover the expenses the Relayer will incur by delivering your message.
+最初に考えるべきことは、 「メッセージを確実に届けてもらうために、リレイヤーにどれくらい支払うべきか？」 という点です。この答えはシンプルですが、ある程度の分析が必要です。インセンティブ額は、最低でもリレイヤーがメッセージを送信するために負担するコストを上回る必要があります。  
 
-As mentioned in previous lessons, a message will be considered delivered in the destination Chain if the Relayer sends at least the `requiredGasLimit` stated in the message, regardless of whether the execution succeeds or fails. Thus, the associated cost in $USD (or another asset like AVAX) that the Relayer will face to deliver your message is:  
+これまでのレッスンで述べたように、リレイヤーがメッセージを宛先チェーンに届けるためには、メッセージ内で指定された `requiredGasLimit` 分のガスを送信する必要があります。メッセージの実行が成功するかどうかに関係なく、このガスが使用されるため、リレイヤーが負担するコストは次のように計算できます。  
 
-*Cost = requiredGasLimit * gas_price_in_native_token * native_token_price*
+**コスト = requiredGasLimit × ガス価格（ネイティブトークン単位） × ネイティブトークン価格**  
 
-While the income the Relayer will be paid for delivering your message is:  
+一方、リレイヤーがメッセージを送信することで得られる収益は以下のようになります。  
 
-*Income = Fee_Amount * ERC20_Price*
+**収益 = Fee_Amount × ERC20トークンの価格**  
 
-Excluding the Relayer's hosting costs, any Fee amount where *Costs < Income* will be profitable for the Relayer. Different types of messages or actions available in a cross-chain dApp may require different amounts of gas to deliver successfully. For instance, in a cross-chain ERC20 minter, creating the token contract is more expensive than minting new tokens, simply because creation requires deploying a new contract. Thus, it makes sense to reward the Relayer with a higher amount for delivering a creation message compared to a minting message (assuming both `requiredGasLimit` are set accordingly).
+リレイヤーの運用コストを考慮しない場合、**コスト < 収益** となるように設定すれば、リレイヤーにとってメッセージを送信することが利益につながります。  
 
-### Example Calculation
+クロスチェーン dApp 内で実行するメッセージの種類やアクションによって、必要なガス量が異なるため、適正な報酬を設定することが重要です。例えば、ERC20 トークンのMintを行うにあたって、新しいトークンコントラクトをデプロイする方がトークンの新規ミントよりも多くのガスが必要となります。そのため、作成メッセージの送信には、Mint処理を行うメッセージよりも高い報酬を設定するのが妥当です（`requiredGasLimit` に基づく）。  
 
-Let's calculate the minimum fee that could incentivize a Relayer to pick and deliver a message.
+---
 
-To simplify, consider the following assumptions:
-- We are sending a message from C-Chain to Dispatch.
-- ERC20 incentives will be paid in TLP.
-- DIS is the fee token in Bulletin.
-- Assume *DIS_price = TLP_price*.
-- Relayer will only take your message if it can make at least 10% profit.
-- The `requiredGasLimit` for sending our message is 10,000 gas units.
-- Gas price in Dispatch = 50 nDIS (DIS * 10^-9).
+### **具体的な計算例**  
 
-### Calculating the Fee
+リレイヤーがメッセージを送信するための最低限の手数料を計算してみましょう。  
 
-The cost of relaying this message will be:  
+以下の前提条件を考えます。  
+- C-Chain から Dispatch にメッセージを送信する。  
+- インセンティブは ERC20 トークン TLP で支払われる。  
+- Dispatch チェーンでは DIS トークンが手数料として使用される。  
+- *DIS の価格 = TLP の価格* とする。  
+- リレイヤーは最低 10% の利益が見込める場合にのみメッセージを処理する。  
+- メッセージの `requiredGasLimit` は **10,000 ガス** に設定。  
+- Dispatch チェーンのガス価格 = **50 nDIS（DIS × 10⁻⁹）**  
 
-*Cost = 10,000 * 50 * DIS_price*
+<Callout>TLPトークンはとDISトークンはERC-20形式のトークンです。</Callout>  
 
-The Relayer will take your message only if it can make a 10% profit:  
 
-*Income = 1.1 * Cost*
+#### **手数料の計算**  
 
-Therefore:  
+リレイヤーがこのメッセージを送信するためにかかるコストは以下の通り。  
 
-*TLP_price * Amount = 1.1 * 10,000 * 50 * DIS_price*
+**コスト = 10,000 × 50 × DIS価格**  
 
-Knowing that *TLP_price = DIS_price*:  
+リレイヤーが 10% の利益を確保するため、収益は以下のように計算されます。  
 
-*Amount = 1.1 * 10,000 * 50*
+**収益 = 1.1 × コスト**  
 
-Then:  
+したがって、  
 
-*Amount = 550,000 nTLP*  
-*Amount = 550,000,000,000,000 weiTLP*
+**TLP価格 × 送信量 = 1.1 × 10,000 × 50 × DIS価格**  
 
-All amounts in Solidity need to be declared in wei, so use a unit converter to convert from nTLP to wei (10^-18).
+前提として **TLP価格 = DIS価格** であるため、  
 
-<Quiz quizId="316"/>
+**送信量 = 1.1 × 10,000 × 50**  
+**送信量 = 550,000 nTLP**  
+**送信量 = 550,000,000,000,000 weiTLP**  
+
+Solidity ではすべての金額を `wei` 単位で記述する必要があるため、`nTLP`（10⁻⁹）から `wei`（10⁻¹⁸）へ変換する際には単位変換ツールを使用してください。  
+
+<Quiz quizId="316"/>  

@@ -1,42 +1,54 @@
 ---
-title: Call simple Calculator
-description: Execute a function in one chain from another chain
-updated: 2024-05-31
-authors: [martineckardt]
-icon: Terminal
+title: シンプルな計算処理の実行  
+description: 異なるチェーン間で関数を実行する  
+updated: 2024-05-31  
+authors: [martineckardt]  
+icon: Terminal  
 ---
 
 import { Step, Steps } from 'fumadocs-ui/components/steps';
 
-Alright, now let's call our Calculators:
+作成した **クロスチェーン計算処理** を実際に実行してみましょう！  
+送信コントラクトを呼び出して、**異なる Avalanche L1 上で計算を実行** します。  
 
-<Steps>
-<Step>
+<Steps>  
 
-### Call the Sender Contract
+<Step>  
+
+### **送信コントラクトを呼び出す**  
 
 ```bash 
 cast send --rpc-url local-c --private-key $PK $SENDER_ADDRESS "sendAddMessage(address, uint256, uint256)" $RECEIVER_ADDRESS 2 3
 ```
 
-We need to call the `sendAddMessage` function on the sender contract with the address of the receiver contract and the two numbers we want to add. 
+**📌 ポイント**  
+- `sendAddMessage` 関数を呼び出し、受信コントラクトのアドレス `$RECEIVER_ADDRESS` を指定  
+- 送信する数値 `2` と `3` を引数として渡す  
+- **このリクエストが送信されると、受信側で計算が実行されて結果が保存される**  
 
-For this example we will add 2 + 3.
+</Step>  
 
-</Step>
-<Step>
+<Step>  
 
-### Verify Message Receipt
+### **計算結果を確認する**  
 
-To check wether the message has been received, we can call the `result_num()` function on the `Receiver` contract. 
+受信コントラクトに送られたメッセージが正しく処理されたかどうかを確認します。  
+受信コントラクトの `result_num()` 関数を呼び出し、計算結果を取得します。  
 
 ```bash
 cast call --rpc-url myblockchain $RECEIVER_ADDRESS "result_num()(uint)"
 ```
 
+実行すると、以下のような結果が返ってきます。  
+
 ```bash
 5
 ```
-2 + 3 = 5. Our cross-chain calculation was successful!
-</Step>
+
+送信した `2` と `3` を加算した結果が `5` になっていることが確認できます。  
+
+✅ **クロスチェーン計算が成功しました！ 🎉**  
+
+</Step>  
+
 </Steps>

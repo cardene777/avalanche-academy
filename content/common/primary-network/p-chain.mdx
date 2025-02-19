@@ -1,7 +1,21 @@
-In the Avalanche Network, the P-Chain of the Primary Network is responsible for all validator and Avalanche L1-level operations. The P-Chain supports the creation of new blockchains and Avalanche L1s, the addition of validators to Avalanche L1s, staking operations, and other platform-level operations. 
+Avalanche ネットワークでは、**プライマリネットワーク（Primary Network）の P-Chain** が、すべての **バリデーター管理や Avalanche L1 レベルのオペレーション** を担当しています。  
+P-Chain は、次のような **プラットフォームレベルの操作** をサポートします。  
+
+- 新しい **ブロックチェーンや Avalanche L1 の作成**  
+- Avalanche L1 の **バリデーター追加・管理**  
+- **ステーキング関連の処理**  
+- その他、Avalanche ネットワークの基盤となるオペレーション  
 
 ![P-Chain](/common-images/primary-network/p-chain.png)
 
-Each Avalanche validator can register a BLS public key alongside its NodeID on the Avalanche P-Chain. Validators of Avalanche L1s can stake different amounts of the Avalanche L1's staking token. Through the P-Chain, we can determine a weighted set of BLS Public Keys that correspond to the validators of each Avalanche L1 on the Avalanche Network.
+## P-Chain での BLS 公開鍵の登録  
 
-Anyone can see on the P-Chain the current weighted validator sets of every Avalanche L1 and how the set has evolved over time.
+各 Avalanche バリデーターは、**自身の NodeID とともに BLS 公開鍵を Avalanche の P-Chain に登録** することができます。  
+また、Avalanche L1 のバリデーターは、**その L1 のステーキングトークンを異なる金額でステーク** できます。  
+
+この P-Chain の情報を活用することで、**Avalanche ネットワーク内の各 Avalanche L1 のバリデーターセット（BLS 公開鍵の重み付きリスト）を取得** できます。  
+
+## P-Chain を利用したバリデーターセットの管理  
+
+P-Chain では、**どの Avalanche L1 にどのバリデーターが所属しているか、その構成が時間とともにどのように変化したか** を誰でも確認することができます。  
+これにより、**信頼性の高いバリデーターセットを動的に取得し、最新の状態で管理することが可能** になります。

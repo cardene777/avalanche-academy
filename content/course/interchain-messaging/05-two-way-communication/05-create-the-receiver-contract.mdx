@@ -1,23 +1,29 @@
 ---
-title: Create the Receiver Contract
-description: Deploy roundtrip receiver contract
-updated: 2024-05-31
-authors: [martineckardt]
-icon: Terminal
+title: 受信コントラクトの作成
+description: ラウンドトリップ用の受信コントラクトをデプロイする  
+updated: 2024-05-31  
+authors: [martineckardt]  
+icon: Terminal  
 ---
 
 import { Step, Steps } from 'fumadocs-ui/components/steps';
 
-Go ahead and deploy the receiver contract:
+ラウンドトリップ通信（往復メッセージ）を可能にする **受信コントラクト** をデプロイします。  
 
-<Steps>
-<Step>
+<Steps>  
 
-### Deploy the Receiver Contract
+<Step>  
+
+### **受信コントラクトをデプロイする**  
+
+以下のコマンドを実行して、修正した受信コントラクトを Avalanche L1 にデプロイします。  
 
 ```bash
 forge create --rpc-url myblockchain --private-key $PK contracts/interchain-messaging/send-roundtrip/receiverOnSubnet.sol:ReceiverOnSubnet
 ```
+
+実行すると、以下のような出力が得られます。  
+
 ```
 [⠊] Compiling...
 [⠢] Compiling 1 files with Solc 0.8.18
@@ -28,15 +34,18 @@ Deployed to: 0x17aB05351fC94a1a67Bf3f56DdbB941aE6c63E25 // [!code highlight]
 Transaction hash: 0x11df9e14bdae4af60a618a900faa955d75e0ce7dd0f2ccc1ea6a764c149ef805
 ```
 
-</Step>
-<Step>
+</Step>  
 
-### Update the Receiver Address
+<Step>  
 
-Update the `RECEIVER_ADDRESS` environment variable with the new address:
+### **受信コントラクトのアドレスを更新する**  
+
+デプロイ後、新しい受信コントラクトのアドレスを環境変数に保存します。  
+
 ```bash
 export RECEIVER_ADDRESS=0x17aB05351fC94a1a67Bf3f56DdbB941aE6c63E25
 ```
 
-</Step>
-</Steps> 
+</Step>  
+
+</Steps>  

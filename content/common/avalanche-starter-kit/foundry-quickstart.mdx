@@ -1,12 +1,20 @@
-Foundry serves as a comprehensive toolchain for smart contract development. It handles dependency management, project compilation, testing, deployment, and facilitates interaction with the blockchain through both command-line interface and Solidity scripts. 
 
-In this course we will mainly use three commands:
+**Foundry** は、スマートコントラクト開発のための **包括的なツールチェーン** です。  
+以下の機能を提供し、開発を効率化します。  
 
-- **forge create:** Deploying smart contracts
-- **cast send:** Issuing transactions interacting with a smart contract
-- **cast call:** Read-only operations on the blockchain
+- **依存関係の管理**  
+- **プロジェクトのコンパイル**  
+- **テストの実行**  
+- **デプロイメント（展開）**  
+- **コマンドラインや Solidity スクリプトを通じたブロックチェーンとのやり取り**  
 
-Let's look at these three in a little more detail for this example contract:
+このコースでは、以下の **3つの主要なコマンド** を使用します。  
+
+- **forge create:** スマートコントラクトのデプロイ  
+- **cast send:** トランザクションの送信（スマートコントラクトの関数を呼び出す）  
+- **cast call:** 読み取り専用の関数を実行（ブロックチェーンの状態を確認する）  
+
+以下のサンプルコントラクトを例に、それぞれのコマンドを詳しく見ていきます。  
 
 ```solidity
 // SPDX-License-Identifier: MIT
@@ -27,105 +35,82 @@ contract NumberStorage {
 }
 ```
 
-## forge create
+## forge create（スマートコントラクトのデプロイ）  
 
-This command can be used to deploy smart contracts from a solidity file. The syntax is:
+このコマンドを使用すると、Solidity ファイルからスマートコントラクトをデプロイできます。  
 
-```bash
-forge create [options] contract
-```
+コマンドの構成要素は以下の通りです。  
 
-An example usage could look something like this:
+- **--rpc-url:** 送信先の RPC サーバーの URL  
+  - 各ブロックチェーンには複数の RPC サーバーがあり、どの RPC を利用するか指定できます。  
+- **--private-key:** スマートコントラクトをデプロイする際に使用する秘密鍵  
+- **contract:** コントラクトのパスを `<パス>:<コントラクト名>` の形式で指定  
+  - 1つの Solidity ファイルに複数のコントラクトを含めることができるため、**ファイルパスだけでなく、コントラクト名も指定** する必要があります。  
 
-```
-forge create --rpc-url local-c --private-key $PK src/my-contracts/NumberStorage.sol:NumberStorage 
-```
+## cast send（トランザクションの発行）  
 
-Let's look at the different parameters:
+**cast send** コマンドは、トランザクションを発行するために使用します。  
+これを利用して、 **スマートコントラクトの関数を呼び出したり、アカウント間で資金を送信** できます。  
 
-- **--rpc-url:** The URL of the RPC server that the transaction will be sent to. Every blockchain can have multiple RPC servers. You will learn more about what RPCs are below.
-- **--private-key:** The private key that will be used for signing the transaction for the smart contract deployment
-- **contract:** The path to the contract is in the format `<path>:<contract>`, e.g. src/Contract.sol:Contract. A single solidity file can contain multiple contracts, therefore we have to also specify the contract name and not only the path to the file here.
+コマンドの構成要素は以下の通りです。  
 
-## cast send
-When we want to sign and publish a transaction we will use cast send. We can either issue simple value transfers or call smart contracts The syntax is:
+- **--rpc-url:** 使用する RPC サーバーの URL  
+- **--private-key:** トランザクションの署名に使用する秘密鍵  
+- **to:** 送信先のアカウントまたはスマートコントラクトのアドレス  
+- **sig:** 実行する関数のシグネチャ（例: `"setNum(uint)"`）  
+- **args:** 関数の引数（複数可）  
 
-```bash
-cast send [options] to [sig] [args…]
-```
+## cast call（読み取り専用の関数を実行）  
 
-An example usage could look something like this:
+**cast call** は、**スマートコントラクトの状態を確認するためのコマンド** です。  
+ブロックチェーンの状態を変更しないため、**トランザクション手数料は不要** で、秘密鍵も必要ありません。  
 
-```bash
-cast send --rpc-url local-c --private-key $PK 0x17aB05351fC94a1a67Bf3f56DdbB941aE6c63E25 "setNum(uint)" 42
-```
+コマンドの構成要素は以下の通りです。  
 
-Let's look at the different parameters:
-- **--rpc-url:** See above
-- **--private-key:** See above
-- **to:** address of an account or a smart contract
-- **sig:** The function signature of a function of the smart contract, e.g. "setNum(uint)"
-- **args:** The arguments of that function (can be multiple or none)
+- **--rpc-url:** 使用する RPC サーバーの URL  
+- **to:** スマートコントラクトのアドレス  
+- **sig:** 実行する関数のシグネチャ（例: `"getNum()(uint)"`）  
+- **args:** 関数の引数（必要に応じて指定）  
 
-## cast call
+この例では、**引数なしで `getNum()` を実行し、uint 型の値を取得** しています。  
 
-Call a read-only function of a smart contract. We do not have to issue a transaction for reading state from the blockchain, since the state won't change. Therefore we don't have to pay for a transaction and don't need a private key. The syntax is:
+## Foundry における秘密鍵管理  
 
-```bash
-cast call [options] to sig [args…]
-```
+ブロックチェーンの状態を変更するトランザクション（コントラクトのデプロイ、資産の送信など）を実行するには、手数料を支払う必要があります。  
 
-An example usage could look something like this:
+開発環境では、**ewoq アドレス** を使用すると便利です。  
+このアドレスの秘密鍵は **公開されている** ため、開発用の Avalanche L1 で簡単に使用できます。  
 
-```bash
-cast call --rpc-url local-c 0x17aB05351fC94a1a67Bf3f56DdbB941aE6c63E25 "getNum()(uint)"
-```
+- **アドレス:** `0x8db97C7cEcE249c2b98bDC0226Cc4C2A57BF52FC`  
+- **秘密鍵:** `56289e99c94b6912bfc12adc093c9b51124f0dc54ac7a766b2bc5ccf558d8027`  
 
-Let's look at the different parameters:
-- **--rpc-url:** See above
-- **--private-key:** See above
-- **to:** address of an account or a smart contract
-- **sig:** The function signature of a function of the smart contract, e.g. "getNum()(uint)". In this example our function does not have any arguments and returns a single value of type uint.
-- **args:** The arguments of that function (can be multiple or none)
+> **注意:** ewoq アドレスに **パブリックブロックチェーン上で資金を送らないでください**。  
+> 秘密鍵が公開されているため、資金はすぐに失われる可能性があります。  
 
+Avalanche L1 を作成する際、トークンの初期配布オプションで **1M トークンを ewoq アドレスに割り当てる** ことが可能です。  
+これにより、**ewoq アドレスを使用してスマートコントラクトのデプロイやトランザクションを簡単に実行できます**。  
 
-## Private Key Management with Foundry
-
-We need to pay for the fees of transactions that manipulate the state (deploying a contract, sending tokens or calling a non-view function of a smart contract). The ewoq address is an address where the private key is commonly known:
-
-**Address:** 0x8db97C7cEcE249c2b98bDC0226Cc4C2A57BF52FC
-**Private Key:** 56289e99c94b6912bfc12adc093c9b51124f0dc54ac7a766b2bc5ccf558d8027
-
-> Do not send any funds on any public blockchain to the ewoq address. The funds will most likely be lost immediately.
-
-When you create an Avalanche L1 you will be offered an option to configure the initial token allocation. The second option will allocate 1m tokens to that address so you can easily deploy all contracts and pay for the transactions from that address:
-
-```bash
-? How would you like to distribute funds: 
-    Airdrop 1 million tokens to a newly generate address (stored key)
-  ▸ Airdrop 1 million tokens to the default ewoq address (do not use in production)
-    Customize your airdrop
-    Go back to previous step
-```
-
-The private key for the ewoq address is already stored in the environment variable $PK in the Avalanche Starter Kit. Therefore, we can easily access it by using the following flag for the transactions:
+環境変数 `$PK` に秘密鍵が保存されているため、以下のように簡単にアクセスできます。  
 
 ```bash
 --private-key $PK
 ```
 
-This address is obviously not suitable for any production use, since the private key is publicly known. We will look into how we can manage key for the deployment to the Fuji Testnet and the Mainnet later in this course.
+ただし、このアドレスは **本番環境（メインネット）には絶対に使用しないでください**。  
+本番環境向けの秘密鍵管理については、後の章で詳しく説明します。  
 
+## RPC URLs（リモートプロシージャコール）  
 
-## RPC URLs
+トランザクションを発行するには、**RPC サーバー** に送信する必要があります。  
+RPC の URL は `--rpc-url` フラグの後に指定できます。  
 
-To issue our transactions, we need to send them to an RPC server. You can put the RPC URL directly after the --rpc-url flag. Foundry also allows to configure aliases for the URLs to make it more simple for you to send the transactions in shorter commands.
+また、Foundry では **エイリアスを設定できるため、簡単なコマンドで RPC を指定可能** です。  
 
 ```bash
 --rpc-url local-c
 ```
 
-These aliases are defined in the foundry.toml file in the root of the Avalanche Starter Kit.
+これらのエイリアスは **`foundry.toml` ファイル** 内に定義されています。  
 
 ```toml
 [rpc_endpoints]
@@ -135,16 +120,18 @@ fuji-c = "https://api.avax-test.network/ext/bc/C/rpc"
 dispatch = "https://subnets.avax.network/dispatch/testnet/rpc"
 ```
 
-The RPC URLs defined by default are the following:
-- **local-c:** The C-Chain of your local Avalanche network
-- **myblockchain:** An Avalanche L1 on your local Avalanche network called myblockchain
-- **fuji-c:** The C-Chain of the Fuji Testnet
-- **dispatch:** An Avalanche L1 on the Fuji Testnet called Dispatch. It was specifically created for testing Avalanche Interchain Messaging dApps. 
+### **デフォルトで設定されている RPC エンドポイント**
+- **local-c:** ローカル Avalanche ネットワークの C-Chain  
+- **myblockchain:** ローカル Avalanche ネットワークの L1（`myblockchain`）  
+- **fuji-c:** Fuji Testnet の C-Chain  
+- **dispatch:** Fuji Testnet にデプロイされた Avalanche L1（Dispatch）  
 
-The ability to use an RPC with the name of our L1 comes from the alias API in our nodes. You can read more about it [here](https://docs.avax.network/api-reference/admin-api#methods).
+このエイリアス機能を利用することで、L1 名を指定して簡単にトランザクションを送信できます。  
+詳細については、[公式ドキュメント](https://docs.avax.network/api-reference/admin-api#methods) を参照してください。  
 
-Feel free to add more RPC URLs to Avalanche L1s you create. You can also add more aliases for the RPC URLs to make it easier for you to send transactions to them.
+新しい Avalanche L1 を作成する際には、適切な RPC URL を `foundry.toml` に追加すると便利です。  
 
-## Learn more about Foundry
+## Foundry の詳細な学習  
 
-Foundry has an extensive documentation collected in the [Foundry Book](https://book.getfoundry.sh/).
+Foundry の公式ドキュメントは [Foundry Book](https://book.getfoundry.sh/) にまとまっています。  
+より深く理解したい場合は、こちらを参考にしてください。  
